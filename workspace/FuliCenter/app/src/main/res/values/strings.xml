@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">FuliCenter</string>
+    <string name="FuliCenter">福利社</string>
+    <string name="new_goods">新品</string>
+    <string name="boutique">精选</string>
+    <string name="cart">购物车</string>
+    <string name="category">分类</string>
+    <string name="personal">个人中心</string>
 </resources>
