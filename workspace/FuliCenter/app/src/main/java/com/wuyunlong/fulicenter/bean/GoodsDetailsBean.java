@@ -1,11 +1,9 @@
 package com.wuyunlong.fulicenter.bean;
 
-/**
- * Created by Administrator on 2016/10/13.
- * 商品详情类
- */
-public class GoodsDetailsBean {
+import java.io.Serializable;
+import java.util.Arrays;
 
+public class GoodsDetailsBean implements Serializable {
 
     private int id;
     private int goodsId;
@@ -17,11 +15,12 @@ public class GoodsDetailsBean {
     private String currencyPrice;
     private String promotePrice;
     private String rankPrice;
-    private boolean isPromote;
     private String goodsThumb;
     private String goodsImg;
     private long addTime;
     private String shareUrl;
+    private boolean isPromote;
+    private PropertiesBean[] properties;
 
     public int getId() {
         return id;
@@ -103,14 +102,6 @@ public class GoodsDetailsBean {
         this.rankPrice = rankPrice;
     }
 
-    public boolean isIsPromote() {
-        return isPromote;
-    }
-
-    public void setIsPromote(boolean isPromote) {
-        this.isPromote = isPromote;
-    }
-
     public String getGoodsThumb() {
         return goodsThumb;
     }
@@ -143,9 +134,25 @@ public class GoodsDetailsBean {
         this.shareUrl = shareUrl;
     }
 
+    public boolean isPromote() {
+        return isPromote;
+    }
+
+    public void setPromote(boolean promote) {
+        this.isPromote = promote;
+    }
+
+    public PropertiesBean[] getProperties() {
+        return properties;
+    }
+
+    public void setProperties(PropertiesBean[] properties) {
+        this.properties = properties;
+    }
+
     @Override
     public String toString() {
-        return "GoodsDetailsBean{" +
+        return "GoodDetailsBean{" +
                 "id=" + id +
                 ", goodsId=" + goodsId +
                 ", catId=" + catId +
@@ -156,11 +163,12 @@ public class GoodsDetailsBean {
                 ", currencyPrice='" + currencyPrice + '\'' +
                 ", promotePrice='" + promotePrice + '\'' +
                 ", rankPrice='" + rankPrice + '\'' +
-                ", isPromote=" + isPromote +
                 ", goodsThumb='" + goodsThumb + '\'' +
                 ", goodsImg='" + goodsImg + '\'' +
                 ", addTime=" + addTime +
                 ", shareUrl='" + shareUrl + '\'' +
+                ", promote=" + isPromote +
+                ", properties=" + Arrays.toString(properties) +
                 '}';
     }
 }

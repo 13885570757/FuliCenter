@@ -1,16 +1,10 @@
 package com.wuyunlong.fulicenter.bean;
 
-/**
- * Created by Administrator on 2016/10/13.
- *
- * 返回信息类
- */
 public class MessageBean {
-
 
     /**
      * success : true
-     * msg : 35
+     * msg : 添加收藏成功
      */
 
     private boolean success;
