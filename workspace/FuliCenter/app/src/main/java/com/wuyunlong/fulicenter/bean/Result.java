@@ -4,23 +4,15 @@ package com.wuyunlong.fulicenter.bean;
  * Created by Administrator on 2016/10/13.
  */
 public class Result {
-  String retCode;
+  int retCode;
     String retMsg;
     String retData;
 
-    public String getRetData() {
-        return retData;
-    }
-
-    public void setRetData(String retData) {
-        this.retData = retData;
-    }
-
-    public String getRetCode() {
+    public int getRetCode() {
         return retCode;
     }
 
-    public void setRetCode(String retCode) {
+    public void setRetCode(int retCode) {
         this.retCode = retCode;
     }
 
@@ -32,10 +24,18 @@ public class Result {
         this.retMsg = retMsg;
     }
 
+    public String getRetData() {
+        return retData;
+    }
+
+    public void setRetData(String retData) {
+        this.retData = retData;
+    }
+
     @Override
     public String toString() {
         return "Result{" +
-                "retCode='" + retCode + '\'' +
+                "retCode=" + retCode +
                 ", retMsg='" + retMsg + '\'' +
                 ", retData='" + retData + '\'' +
                 '}';
