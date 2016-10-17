@@ -148,7 +148,7 @@ public class OkHttpUtils<T> {
 
     private void initHandler() {
         //消息队列
-        mHandler = new Handler(FuLiCenterApplication.getInstance().getMainLooper()) {
+        mHandler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
                 switch (msg.what) {

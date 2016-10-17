@@ -27,9 +27,10 @@ public class NewGoodsAdapter extends RecyclerView.Adapter {
     List<NewGoodsBean> mlist;
 
 
-    public NewGoodsAdapter(Context mContext, List<NewGoodsBean> mlist) {
+    public NewGoodsAdapter(Context mContext, List<NewGoodsBean> list) {
         this.mContext = mContext;
-        this.mlist = mlist;
+        this.mlist = list;
+        mlist.addAll(list);//仅仅显示数据
     }
 
     /**
@@ -97,6 +98,8 @@ public class NewGoodsAdapter extends RecyclerView.Adapter {
     }
 
 
+
+
     class FooterViewHolder extends RecyclerView.ViewHolder {
         TextView lvFooter;
 
@@ -104,6 +107,14 @@ public class NewGoodsAdapter extends RecyclerView.Adapter {
             super(layout);
             lvFooter = (TextView) itemView.findViewById(R.id.tvFooter);
         }
+    }
+
+    public void initData(ArrayList<NewGoodsBean> list) {
+        if (mlist!=null){
+            mlist.clear();//清空所有数据
+        }
+        mlist.addAll(list);
+        notifyDataSetChanged();
     }
 
 

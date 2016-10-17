@@ -19,6 +19,7 @@ import com.wuyunlong.fulicenter.bean.NewGoodsBean;
 import com.wuyunlong.fulicenter.dao.NetDao;
 import com.wuyunlong.fulicenter.utils.ConvertUtils;
 import com.wuyunlong.fulicenter.utils.I;
+import com.wuyunlong.fulicenter.utils.L;
 import com.wuyunlong.fulicenter.utils.OkHttpUtils;
 
 import java.util.ArrayList;
@@ -66,13 +67,10 @@ public class NewGoodsFragment extends Fragment {
                     ArrayList<NewGoodsBean> list = ConvertUtils.array2List(result);
                     mAdapter.initData(list);
                 }
-
-
             }
-
             @Override
             public void onError(String error) {
-
+                L.e("error"+error);
             }
         });
     }

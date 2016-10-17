@@ -2,6 +2,7 @@ package com.wuyunlong.fulicenter;
 
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -19,7 +20,6 @@ public class MainActivity extends AppCompatActivity {
     NewGoodsFragment mNewGoodsFragment;//新品
 
 
-
     @Bind(R.id.radio_btn_newGoods)
     RadioButton radioBtnNewGoods;
     @Bind(R.id.radio_btn_boutique)
@@ -35,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
 
     int index = 0;
 
+    Fragment[] mFragments;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +44,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         initView();
+        initFragment();
+    }
+
+    private void initFragment() {
+        mFragments = new Fragment[5];
+        mNewGoodsFragment = new NewGoodsFragment();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.fragment_container, new NewGoodsFragment())
+                .show(mNewGoodsFragment)
+                .commit();
     }
 
     private void initView() {
@@ -69,12 +82,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void onCheckedChange(View v) {
         FragmentManager manager = getSupportFragmentManager();
-       android.support.v4.app.FragmentTransaction transaction = manager.beginTransaction();
+        android.support.v4.app.FragmentTransaction transaction = manager.beginTransaction();
         switch (v.getId()) {
             case R.id.radio_btn_newGoods://选中新品
                 index = 0;
-        mNewGoodsFragment = new NewGoodsFragment();
-                transaction.add(R.id.srl,mNewGoodsFragment);
+                mNewGoodsFragment = new NewGoodsFragment();
+                transaction.add(R.id.srl, mNewGoodsFragment);
                 break;
             case R.id.radio_btn_boutique://选择精选
                 index = 1;

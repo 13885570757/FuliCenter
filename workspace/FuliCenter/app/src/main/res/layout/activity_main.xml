@@ -82,4 +82,9 @@
         android:layout_height="2dp"
         android:layout_above="@id/main_bottom"
         android:background="#D6DCDC"/>
+    <RelativeLayout
+        android:layout_above="@id/vLine"
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </RelativeLayout>
