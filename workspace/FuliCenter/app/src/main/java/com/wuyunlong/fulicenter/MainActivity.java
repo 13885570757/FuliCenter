@@ -1,71 +1,85 @@
 package com.wuyunlong.fulicenter;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.Switch;
 
-public class MainActivity extends AppCompatActivity{
+import java.util.ArrayList;
 
-    RadioButton radio_btn_newGoods, radio_btn_boutique, radio_btn_category, radio_btn_cart, radio_btn_personal;
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+public class MainActivity extends AppCompatActivity {
+
+
+    @Bind(R.id.radio_btn_newGoods)
+    RadioButton radioBtnNewGoods;
+    @Bind(R.id.radio_btn_boutique)
+    RadioButton radioBtnBoutique;
+    @Bind(R.id.radio_btn_category)
+    RadioButton radioBtnCategory;
+    @Bind(R.id.radio_btn_cart)
+    RadioButton radioBtnCart;
+    @Bind(R.id.radio_btn_personal)
+    RadioButton radioBtnPersonal;
+
+    RadioButton[] rbs;
+
+    int index = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
         initView();
     }
 
-    public void initView() {
-        radio_btn_newGoods = (RadioButton) findViewById(R.id.radio_btn_newGoods);
-        radio_btn_boutique = (RadioButton) findViewById(R.id.radio_btn_boutique);
-        radio_btn_category = (RadioButton) findViewById(R.id.radio_btn_category);
-        radio_btn_cart = (RadioButton) findViewById(R.id.radio_btn_cart);
-        radio_btn_personal = (RadioButton) findViewById(R.id.radio_btn_personal);
-
+    private void initView() {
+        rbs = new RadioButton[5];
+        rbs[0] = radioBtnNewGoods;
+        rbs[1] = radioBtnBoutique;
+        rbs[2] = radioBtnCategory;
+        rbs[3] = radioBtnCart;
+        rbs[4] = radioBtnPersonal;
     }
 
-    private void seletor(RadioButton button) {
-        if (button != radio_btn_newGoods) {
-            radio_btn_newGoods.setChecked(false);
-        }
-        if (button != radio_btn_boutique) {
-            radio_btn_boutique.setChecked(false);
-        }
-        if (button != radio_btn_category) {
-            radio_btn_category.setChecked(false);
-        }
-        if (button != radio_btn_cart) {
-            radio_btn_cart.setChecked(false);
-        }
-        if (button != radio_btn_personal) {
-            radio_btn_personal.setChecked(false);
-        }
+    public void seletor() {
 
+        for (int i = 0; i < rbs.length; i++) {
+            if (index == i) {
+                rbs[i].setChecked(true);
+            } else {
+                rbs[i].setChecked(false);
+            }
+
+        }
     }
 
     public void onCheckedChange(View v) {
         switch (v.getId()) {
             case R.id.radio_btn_newGoods://选中新品
-                seletor((RadioButton) v);
+                index = 0;
                 break;
             case R.id.radio_btn_boutique://选择精选
-                seletor((RadioButton) v);
+                index = 1;
                 break;
             case R.id.radio_btn_category://分类
-                seletor((RadioButton) v);
+                index = 2;
                 break;
             case R.id.radio_btn_cart://购物车
-                seletor((RadioButton) v);
+                index = 3;
                 break;
             case R.id.radio_btn_personal://个人中心
-                seletor((RadioButton) v);
+                index = 4;
                 break;
 
         }
     }
+
 }
+
