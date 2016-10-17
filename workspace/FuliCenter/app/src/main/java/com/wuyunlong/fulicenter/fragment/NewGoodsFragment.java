@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,8 @@ import com.wuyunlong.fulicenter.R;
 import com.wuyunlong.fulicenter.adapter.NewGoodsAdapter;
 import com.wuyunlong.fulicenter.bean.NewGoodsBean;
 import com.wuyunlong.fulicenter.dao.NetDao;
+import com.wuyunlong.fulicenter.utils.ConvertUtils;
+import com.wuyunlong.fulicenter.utils.I;
 import com.wuyunlong.fulicenter.utils.OkHttpUtils;
 
 import java.util.ArrayList;
@@ -59,7 +62,10 @@ public class NewGoodsFragment extends Fragment {
         NetDao.downloadNewGoods(mContext, pageId, new OkHttpUtils.OnCompleteListener<NewGoodsBean[]>() {
             @Override
             public void onSuccess(NewGoodsBean[] result) {
-                if (result.g)
+                if (result != null && result.length > 0) {
+                    ArrayList<NewGoodsBean> list = ConvertUtils.array2List(result);
+                    mAdapter.initData(list);
+                }
 
 
             }
@@ -72,10 +78,16 @@ public class NewGoodsFragment extends Fragment {
     }
 
     private void initView() {
-        srl.setColorScheme(getResources().getColor(R.color.google_blue));
-        srl.setColorScheme(getResources().getColor(R.color.google_green));
-        srl.setColorScheme(getResources().getColor(R.color.google_red));
-        srl.setColorScheme(getResources().getColor(R.color.google_yellow));
+        srl.setColorSchemeColors(
+                getResources().getColor(R.color.google_blue),
+                getResources().getColor(R.color.google_green),
+                getResources().getColor(R.color.google_red),
+                getResources().getColor(R.color.google_yellow)
+        );
+        GridLayoutManager glm = new GridLayoutManager(mContext, I.COLUM_NUM);
+        rv.setLayoutManager(glm);
+        rv.setHasFixedSize(true);//修复大小
+        rv.setAdapter(mAdapter);
 
 
     }
