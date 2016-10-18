@@ -64,22 +64,32 @@ public class NewGoodsFragment extends Fragment {
         NetDao.downloadNewGoods(mContext, pageId, new OkHttpUtils.OnCompleteListener<NewGoodsBean[]>() {
             @Override
             public void onSuccess(NewGoodsBean[] result) {
+                srl.setRefreshing(false);
+                tvRefresh.setVisibility(View.GONE);//刷新消失
+                mAdapter.setMore(true);
                 if (result != null && result.length > 0) {
                     ArrayList<NewGoodsBean> list = ConvertUtils.array2List(result);
                     mAdapter.initData(list);
+                    if (list.size() < I.PAGE_ID_DEFAULT) {
+                        mAdapter.setMore(false);
+                    }
+                } else {
+                    mAdapter.setMore(false);
                 }
             }
+
             @Override
             public void onError(String error) {
                 srl.setRefreshing(false);
                 tvRefresh.setVisibility(View.GONE);
-                CommonUtils.showLongToast(error);
-                L.e("error"+error);
+                CommonUtils.showLongToast(error);//关于Toast的工具类
+                L.e("error" + error);
             }
         });
     }
 
     private void initView() {
+        //修改刷新时圆圈的颜色
         srl.setColorSchemeColors(
                 getResources().getColor(R.color.google_blue),
                 getResources().getColor(R.color.google_green),
@@ -90,10 +100,7 @@ public class NewGoodsFragment extends Fragment {
         rv.setLayoutManager(glm);
         rv.setHasFixedSize(true);//修复大小
         rv.setAdapter(mAdapter);
-
-
     }
-
 
     @Override
     public void onDestroyView() {

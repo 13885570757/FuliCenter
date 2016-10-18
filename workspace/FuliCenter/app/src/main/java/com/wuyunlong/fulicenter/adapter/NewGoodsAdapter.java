@@ -2,7 +2,6 @@ package com.wuyunlong.fulicenter.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -12,6 +11,7 @@ import com.wuyunlong.fulicenter.R;
 import com.wuyunlong.fulicenter.bean.NewGoodsBean;
 import com.wuyunlong.fulicenter.utils.I;
 import com.wuyunlong.fulicenter.utils.ImageLoader;
+import com.wuyunlong.fulicenter.utils.L;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +26,17 @@ public class NewGoodsAdapter extends RecyclerView.Adapter {
     Context mContext;
     List<NewGoodsBean> mlist;
 
+    boolean isMore;//通知
+
+
+    public boolean isMore() {
+        return isMore;
+    }
+
+    public void setMore(boolean more) {
+        isMore = more;
+        notifyDataSetChanged();
+    }
 
     public NewGoodsAdapter(Context mContext, List<NewGoodsBean> list) {
         this.mContext = mContext;
@@ -35,6 +46,7 @@ public class NewGoodsAdapter extends RecyclerView.Adapter {
 
     /**
      * 绑定布局文件
+     *
      * @param parent
      * @param viewType
      * @return
@@ -44,10 +56,10 @@ public class NewGoodsAdapter extends RecyclerView.Adapter {
         RecyclerView.ViewHolder holder = null;
         switch (viewType) {
             case I.TYPE_FOOTER:
-                holder = new FooterViewHolder(View.inflate(mContext,R.layout.item_footer,null));
+                holder = new FooterViewHolder(View.inflate(mContext, R.layout.item_footer, null));
                 break;
             case I.TYPE_ITEM:
-                holder = new NewGoodsViewHolder(View.inflate(mContext,R.layout.item_newgoods,null));
+                holder = new NewGoodsViewHolder(View.inflate(mContext, R.layout.item_newgoods, null));
                 break;
         }
         return holder;
@@ -61,13 +73,14 @@ public class NewGoodsAdapter extends RecyclerView.Adapter {
      */
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (getItemViewType(position)==I.TYPE_FOOTER){
-            FooterViewHolder footerViewHolder = (FooterViewHolder) holder;
-        }else {
+        if (getItemViewType(position) == I.TYPE_FOOTER) {
+            FooterViewHolder vh = (FooterViewHolder) holder;
+            // vh.tvFooter.setText(getFooterString());
+        } else {
             NewGoodsViewHolder vh = (NewGoodsViewHolder) holder;
             NewGoodsBean goods = mlist.get(position);
             //setImage
-            ImageLoader.downloadImg(mContext,vh.newgoodsPic,goods.getGoodsImg());
+            ImageLoader.downloadImg(mContext, vh.newgoodsPic, goods.getGoodsImg());
             vh.newgoodsName.setText(goods.getGoodsName());
             vh.newgoodsPrice.setText(goods.getCurrencyPrice());
         }
@@ -75,6 +88,7 @@ public class NewGoodsAdapter extends RecyclerView.Adapter {
 
     /**
      * 商品总量
+     *
      * @return
      */
     @Override
@@ -85,6 +99,7 @@ public class NewGoodsAdapter extends RecyclerView.Adapter {
 
     /**
      * 判断返回数据
+     *
      * @param position
      * @return
      */
@@ -97,28 +112,30 @@ public class NewGoodsAdapter extends RecyclerView.Adapter {
         }
     }
 
-
+    private int getFooterString() {
+        return isMore ? R.string.load_more : R.string.no_more;
+    }
 
 
     class FooterViewHolder extends RecyclerView.ViewHolder {
-        TextView lvFooter;
+        @Bind(R.id.tvFooter)
+        TextView tvFooter;
 
         public FooterViewHolder(View layout) {
             super(layout);
-            lvFooter = (TextView) itemView.findViewById(R.id.tvFooter);
+            tvFooter = (TextView) itemView.findViewById(R.id.tvFooter);
         }
     }
 
     public void initData(ArrayList<NewGoodsBean> list) {
-        if (mlist!=null){
-            mlist.clear();//清空所有数据
+        if (mlist != null) {
+            mlist.clear();
         }
         mlist.addAll(list);
         notifyDataSetChanged();
     }
 
-
-   class NewGoodsViewHolder extends RecyclerView.ViewHolder{
+    class NewGoodsViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.newgoods_pic)
         ImageView newgoodsPic;
         @Bind(R.id.newgoods_name)
