@@ -17,6 +17,7 @@ import com.wuyunlong.fulicenter.R;
 import com.wuyunlong.fulicenter.adapter.NewGoodsAdapter;
 import com.wuyunlong.fulicenter.bean.NewGoodsBean;
 import com.wuyunlong.fulicenter.dao.NetDao;
+import com.wuyunlong.fulicenter.utils.CommonUtils;
 import com.wuyunlong.fulicenter.utils.ConvertUtils;
 import com.wuyunlong.fulicenter.utils.I;
 import com.wuyunlong.fulicenter.utils.L;
@@ -70,6 +71,9 @@ public class NewGoodsFragment extends Fragment {
             }
             @Override
             public void onError(String error) {
+                srl.setRefreshing(false);
+                tvRefresh.setVisibility(View.GONE);
+                CommonUtils.showLongToast(error);
                 L.e("error"+error);
             }
         });
