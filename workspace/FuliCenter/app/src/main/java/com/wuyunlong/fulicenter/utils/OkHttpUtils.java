@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.google.gson.Gson;
+import com.wuyunlong.fulicenter.I;
 import com.wuyunlong.fulicenter.bean.Result;
 
 import java.io.File;

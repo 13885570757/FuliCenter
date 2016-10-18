@@ -3,10 +3,8 @@ package com.wuyunlong.fulicenter.dao;
 import android.content.Context;
 
 import com.wuyunlong.fulicenter.bean.NewGoodsBean;
-import com.wuyunlong.fulicenter.utils.I;
+import com.wuyunlong.fulicenter.I;
 import com.wuyunlong.fulicenter.utils.OkHttpUtils;
-
-import okhttp3.OkHttpClient;
 
 /**
  * Created by Administrator on 2016/10/17.

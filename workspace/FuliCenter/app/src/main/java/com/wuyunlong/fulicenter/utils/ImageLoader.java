@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.wuyunlong.fulicenter.I;
 import com.wuyunlong.fulicenter.R;
 
 import java.io.IOException;

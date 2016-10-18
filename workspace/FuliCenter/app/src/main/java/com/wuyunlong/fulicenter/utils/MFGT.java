@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.wuyunlong.fulicenter.GoodsDetails;
+import com.wuyunlong.fulicenter.I;
 import com.wuyunlong.fulicenter.MainActivity;
 import com.wuyunlong.fulicenter.R;
 

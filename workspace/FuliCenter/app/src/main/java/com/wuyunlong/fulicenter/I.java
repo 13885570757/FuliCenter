@@ -1,4 +1,4 @@
-package com.wuyunlong.fulicenter.utils;
+package com.wuyunlong.fulicenter;
 
 
 public interface I {

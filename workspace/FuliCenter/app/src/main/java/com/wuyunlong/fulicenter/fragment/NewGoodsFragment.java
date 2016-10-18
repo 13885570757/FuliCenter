@@ -1,7 +1,6 @@
 package com.wuyunlong.fulicenter.fragment;
 
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -19,7 +18,7 @@ import com.wuyunlong.fulicenter.bean.NewGoodsBean;
 import com.wuyunlong.fulicenter.dao.NetDao;
 import com.wuyunlong.fulicenter.utils.CommonUtils;
 import com.wuyunlong.fulicenter.utils.ConvertUtils;
-import com.wuyunlong.fulicenter.utils.I;
+import com.wuyunlong.fulicenter.I;
 import com.wuyunlong.fulicenter.utils.L;
 import com.wuyunlong.fulicenter.utils.OkHttpUtils;
 
@@ -41,7 +40,7 @@ public class NewGoodsFragment extends Fragment {
     @Bind(R.id.srl)
     SwipeRefreshLayout srl;
     GridLayoutManager glm;
-    
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

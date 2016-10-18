@@ -1,7 +1,6 @@
 package com.wuyunlong.fulicenter.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,11 +8,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.wuyunlong.fulicenter.GoodsDetails;
-import com.wuyunlong.fulicenter.MainActivity;
 import com.wuyunlong.fulicenter.R;
 import com.wuyunlong.fulicenter.bean.NewGoodsBean;
-import com.wuyunlong.fulicenter.utils.I;
+import com.wuyunlong.fulicenter.I;
 import com.wuyunlong.fulicenter.utils.ImageLoader;
 import com.wuyunlong.fulicenter.utils.MFGT;
 
