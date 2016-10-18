@@ -116,6 +116,11 @@ public class NewGoodsAdapter extends RecyclerView.Adapter {
         return isMore ? R.string.load_more : R.string.no_more;
     }
 
+    public void addData(ArrayList<NewGoodsBean> list) {
+        mlist.addAll(list);
+        notifyDataSetChanged();
+    }
+
 
     class FooterViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.tvFooter)
