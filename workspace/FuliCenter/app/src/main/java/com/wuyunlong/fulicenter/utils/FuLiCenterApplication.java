@@ -1,4 +1,4 @@
-package com.wuyunlong.fulicenter;
+package com.wuyunlong.fulicenter.utils;
 
 import android.app.Application;
 

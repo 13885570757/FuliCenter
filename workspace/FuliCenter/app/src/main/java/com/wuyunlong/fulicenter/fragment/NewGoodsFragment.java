@@ -41,6 +41,7 @@ public class NewGoodsFragment extends Fragment {
     @Bind(R.id.srl)
     SwipeRefreshLayout srl;
     GridLayoutManager glm;
+    
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -127,6 +128,9 @@ public class NewGoodsFragment extends Fragment {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
+                //当位置为0时，才可刷新。
+                int firstPosition = glm.findFirstVisibleItemPosition();
+                srl.setEnabled(firstPosition==0);
             }
         });
         

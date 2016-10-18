@@ -1,23 +1,28 @@
 package com.wuyunlong.fulicenter.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.wuyunlong.fulicenter.GoodsDetails;
+import com.wuyunlong.fulicenter.MainActivity;
 import com.wuyunlong.fulicenter.R;
 import com.wuyunlong.fulicenter.bean.NewGoodsBean;
 import com.wuyunlong.fulicenter.utils.I;
 import com.wuyunlong.fulicenter.utils.ImageLoader;
-import com.wuyunlong.fulicenter.utils.L;
+import com.wuyunlong.fulicenter.utils.MFGT;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Administrator on 2016/10/17.
@@ -27,6 +32,14 @@ public class NewGoodsAdapter extends RecyclerView.Adapter {
     List<NewGoodsBean> mlist;
 
     boolean isMore;//通知
+    @Bind(R.id.newgoods_pic)
+    ImageView newgoodsPic;
+    @Bind(R.id.newgoods_name)
+    TextView newgoodsName;
+    @Bind(R.id.newgoods_price)
+    TextView newgoodsPrice;
+    @Bind(R.id.onclick)
+    RelativeLayout onclick;
 
 
     public boolean isMore() {
@@ -83,6 +96,7 @@ public class NewGoodsAdapter extends RecyclerView.Adapter {
             ImageLoader.downloadImg(mContext, vh.newgoodsPic, goods.getGoodsImg());
             vh.newgoodsName.setText(goods.getGoodsName());
             vh.newgoodsPrice.setText(goods.getCurrencyPrice());
+            vh.relativeLayout.setTag(goods.getGoodsId());
         }
     }
 
@@ -122,6 +136,8 @@ public class NewGoodsAdapter extends RecyclerView.Adapter {
     }
 
 
+
+
     class FooterViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.tvFooter)
         TextView tvFooter;
@@ -147,10 +163,18 @@ public class NewGoodsAdapter extends RecyclerView.Adapter {
         TextView newgoodsName;
         @Bind(R.id.newgoods_price)
         TextView newgoodsPrice;
+        @Bind(R.id.onclick)
+                RelativeLayout relativeLayout;
 
         NewGoodsViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
         }
+        @OnClick(R.id.onclick)
+        public void onClick() {
+            int id = (int) relativeLayout.getTag();
+            MFGT.gotogoodsDeatilsActivity(mContext,id);
+        }
+
     }
 }

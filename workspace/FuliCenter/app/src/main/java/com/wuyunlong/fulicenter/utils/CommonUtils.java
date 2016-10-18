@@ -2,8 +2,6 @@ package com.wuyunlong.fulicenter.utils;
 
 import android.widget.Toast;
 
-import com.wuyunlong.fulicenter.FuLiCenterApplication;
-
 
 public class CommonUtils {
     public static void showLongToast(String msg) {

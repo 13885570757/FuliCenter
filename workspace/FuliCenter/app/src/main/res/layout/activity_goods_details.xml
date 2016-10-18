@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_margin="50dp"
+    android:layout_height="match_parent">
+
+
+    <TextView
+        android:id="@+id/goods_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="商品名称"
+        android:textSize="18sp"/>
+
+    <TextView
+        android:id="@+id/goods_attr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/goods_name"
+        android:layout_marginTop="20dp"
+        android:text="商品属性"
+        android:textSize="18dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:text="商品价格"/>
+
+    <ImageView
+        android:id="@+id/goods_pic"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_below="@+id/goods_attr"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/nopic"/>
+
+    <TextView
+        android:id="@+id/goods_brief"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/goods_pic"
+        android:gravity="center_horizontal"
+        android:text="商品简介"
+        android:textSize="18sp"/>
+</RelativeLayout>
