@@ -21,6 +21,7 @@ import com.wuyunlong.fulicenter.utils.ConvertUtils;
 import com.wuyunlong.fulicenter.I;
 import com.wuyunlong.fulicenter.utils.L;
 import com.wuyunlong.fulicenter.utils.OkHttpUtils;
+import com.wuyunlong.fulicenter.views.SpaceItemDecoration;
 
 import java.util.ArrayList;
 
@@ -154,6 +155,7 @@ public class NewGoodsFragment extends Fragment {
         rv.setLayoutManager(glm);
         rv.setHasFixedSize(true);//修复大小
         rv.setAdapter(mAdapter);
+        rv.addItemDecoration(new SpaceItemDecoration(12));
     }
 
     @Override
