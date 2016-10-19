@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wuyunlong.fulicenter.I;
+import com.wuyunlong.fulicenter.MainActivity;
 import com.wuyunlong.fulicenter.R;
 import com.wuyunlong.fulicenter.bean.BoutiqueBean;
 import com.wuyunlong.fulicenter.utils.ImageLoader;
@@ -26,7 +27,7 @@ public class BoutiqueAdapter extends RecyclerView.Adapter {
     Context mContext;
     ArrayList<BoutiqueBean> mList;
 
-    public BoutiqueAdapter(ArrayList<BoutiqueBean> list, Context mContext) {
+    public BoutiqueAdapter(MainActivity list, ArrayList<BoutiqueBean> mContext) {
         mList = new ArrayList<>();
         mList.addAll(list);
         this.mContext = mContext;
@@ -89,6 +90,19 @@ public class BoutiqueAdapter extends RecyclerView.Adapter {
         } else {
             return I.TYPE_ITEM;
         }
+    }
+
+    public void initData(ArrayList<BoutiqueBean> list) {
+        if (mList!=null){
+            mList.clear();
+        }
+        mList.addAll(list);
+        notifyDataSetChanged();
+    }
+
+    public void addData(ArrayList<BoutiqueBean> list) {
+        mList.addAll(list);
+        notifyDataSetChanged();
     }
 
     static class BoutiqueViewHolder extends RecyclerView.ViewHolder {

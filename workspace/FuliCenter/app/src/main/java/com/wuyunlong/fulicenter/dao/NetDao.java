@@ -34,10 +34,10 @@ public class NetDao {
 
         public static void downloadBoutique(
                 Context context, OkHttpUtils.
-                OnCompleteListener<BoutiqueBean> listener){
+                OnCompleteListener<BoutiqueBean[]> listener){
                 OkHttpUtils utils = new OkHttpUtils(context);
                 utils.setRequestUrl(I.REQUEST_FIND_BOUTIQUES)
-                        .addParam(I.Boutique.KEY_GOODS,
-                                String.valueOf())
+                        .targetClass(BoutiqueBean[].class)
+                        .execute(listener);
         }
 }
