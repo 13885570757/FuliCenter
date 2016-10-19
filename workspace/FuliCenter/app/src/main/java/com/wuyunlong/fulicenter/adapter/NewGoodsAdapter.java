@@ -13,6 +13,7 @@ import com.wuyunlong.fulicenter.bean.NewGoodsBean;
 import com.wuyunlong.fulicenter.I;
 import com.wuyunlong.fulicenter.utils.ImageLoader;
 import com.wuyunlong.fulicenter.utils.MFGT;
+import com.wuyunlong.fulicenter.views.FooterViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,7 +86,7 @@ public class NewGoodsAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (getItemViewType(position) == I.TYPE_FOOTER) {
             FooterViewHolder vh = (FooterViewHolder) holder;
-            // vh.tvFooter.setText(getFooterString());
+            vh.tvFooter.setText(getFooterString());
         } else {
             NewGoodsViewHolder vh = (NewGoodsViewHolder) holder;
             NewGoodsBean goods = mlist.get(position);
@@ -135,15 +136,7 @@ public class NewGoodsAdapter extends RecyclerView.Adapter {
 
 
 
-   static class FooterViewHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.tvFooter)
-        TextView tvFooter;
 
-        public  FooterViewHolder(View layout) {
-            super(layout);
-            tvFooter = (TextView) itemView.findViewById(R.id.tvFooter);
-        }
-    }
 
     public void initData(ArrayList<NewGoodsBean> list) {
         if (mlist != null) {

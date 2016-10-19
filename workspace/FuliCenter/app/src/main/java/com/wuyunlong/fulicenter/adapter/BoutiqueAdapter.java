@@ -12,6 +12,7 @@ import com.wuyunlong.fulicenter.I;
 import com.wuyunlong.fulicenter.R;
 import com.wuyunlong.fulicenter.bean.BoutiqueBean;
 import com.wuyunlong.fulicenter.utils.ImageLoader;
+import com.wuyunlong.fulicenter.views.FooterViewHolder;
 
 import java.util.ArrayList;
 
@@ -45,7 +46,7 @@ public class BoutiqueAdapter extends RecyclerView.Adapter {
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder holder = null;
         if (viewType == I.TYPE_FOOTER) {
-            holder = new NewGoodsAdapter.FooterViewHolder(LayoutInflater.
+            holder = new FooterViewHolder(LayoutInflater.
                     from(mContext).inflate(R.layout.item_footer, parent, false));
         } else {
             holder = new BoutiqueViewHolder(LayoutInflater.
@@ -56,8 +57,8 @@ public class BoutiqueAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof NewGoodsAdapter.FooterViewHolder) {
-            ((NewGoodsAdapter.FooterViewHolder) holder).tvFooter.setText(getFooterString());
+        if (holder instanceof FooterViewHolder) {
+            ((FooterViewHolder) holder).tvFooter.setText(getFooterString());
         }
         if (holder instanceof BoutiqueViewHolder) {
             BoutiqueBean boutiqueBean = mList.get(position);
