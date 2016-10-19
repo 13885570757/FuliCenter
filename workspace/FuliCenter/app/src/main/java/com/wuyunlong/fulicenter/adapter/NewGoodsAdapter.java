@@ -12,7 +12,7 @@ import com.wuyunlong.fulicenter.I;
 import com.wuyunlong.fulicenter.R;
 import com.wuyunlong.fulicenter.bean.NewGoodsBean;
 import com.wuyunlong.fulicenter.utils.ImageLoader;
-import com.wuyunlong.fulicenter.views.FooterViewHolder;
+import com.wuyunlong.fulicenter.view.FooterViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +77,7 @@ public class NewGoodsAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (getItemViewType(position) == I.TYPE_FOOTER) {
             FooterViewHolder vh = (FooterViewHolder) holder;
-            vh.mtvFooter.setText(getFooterString());
+            vh.mTvFooter.setText(getFooterString());
         } else {
             NewGoodsViewHolder vh = (NewGoodsViewHolder) holder;
             NewGoodsBean goods = mlist.get(position);

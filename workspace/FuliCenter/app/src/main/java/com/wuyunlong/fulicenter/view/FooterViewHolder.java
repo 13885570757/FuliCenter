@@ -1,23 +1,22 @@
-package com.wuyunlong.fulicenter.views;
+package com.wuyunlong.fulicenter.view;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
+
 import com.wuyunlong.fulicenter.R;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 
-/**
- * Created by Administrator on 2016/10/19.
- */
+
 public class FooterViewHolder extends RecyclerView.ViewHolder {
     @Bind(R.id.tvFooter)
-    public
-    TextView mtvFooter;
+    public TextView mTvFooter;
 
-    public FooterViewHolder(View layout) {
-        super(layout);
-        mtvFooter = (TextView) layout.findViewById(R.id.tvFooter);
+    public FooterViewHolder(View view) {
+        super(view);
+        ButterKnife.bind(this, view);
     }
 }

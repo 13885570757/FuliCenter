@@ -1,4 +1,4 @@
-package com.wuyunlong.fulicenter.views;
+package com.wuyunlong.fulicenter.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;

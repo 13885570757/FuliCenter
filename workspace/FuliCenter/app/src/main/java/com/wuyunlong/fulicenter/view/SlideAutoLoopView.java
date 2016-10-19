@@ -1,4 +1,4 @@
-package com.wuyunlong.fulicenter.views;
+package com.wuyunlong.fulicenter.view;
 
 import android.content.Context;
 import android.os.Handler;
@@ -19,6 +19,7 @@ import com.wuyunlong.fulicenter.utils.ImageLoader;
 import java.lang.reflect.Field;
 import java.util.Timer;
 import java.util.TimerTask;
+
 
 
 /**
