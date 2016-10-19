@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.wuyunlong.fulicenter.I;
-import com.wuyunlong.fulicenter.MainActivity;
+import com.wuyunlong.fulicenter.activity.MainActivity;
 import com.wuyunlong.fulicenter.R;
 import com.wuyunlong.fulicenter.adapter.BoutiqueAdapter;
 import com.wuyunlong.fulicenter.bean.BoutiqueBean;
@@ -20,7 +20,7 @@ import com.wuyunlong.fulicenter.dao.NetDao;
 import com.wuyunlong.fulicenter.utils.CommonUtils;
 import com.wuyunlong.fulicenter.utils.ConvertUtils;
 import com.wuyunlong.fulicenter.utils.L;
-import com.wuyunlong.fulicenter.utils.OkHttpUtils;
+import com.wuyunlong.fulicenter.dao.OkHttpUtils;
 
 import java.util.ArrayList;
 
@@ -32,7 +32,7 @@ import butterknife.ButterKnife;
  */
 public class BoutiqueFragment extends Fragment {
 
-    @Bind(R.id.tvRefresh)
+    @Bind(R.id.tv_refresh)
     TextView tvRefresh;
     @Bind(R.id.rv)
     RecyclerView rv;
@@ -48,9 +48,10 @@ public class BoutiqueFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View layout = inflater.inflate
-                (R.layout.fragment_new_goods, container, false);
+                (R.layout.fragment_newgoods, container, false);
         ButterKnife.bind(this, layout);
         mContext = (MainActivity) getContext();
+        mList = new ArrayList<>();
         mAdapter = new BoutiqueAdapter(mContext,mList);
         initView();
         initData();
@@ -74,7 +75,8 @@ public class BoutiqueFragment extends Fragment {
                 srl.setRefreshing(false);
                 tvRefresh.setVisibility(View.GONE);//刷新消失
                 mAdapter.setMore(true);
-                if (result != null && result.length > 0) {if (action== I.ACTION_DOWNLOAD||action ==I.ACTION_PULL_DOWN){
+                if (result != null && result.length > 0)
+                {if (action== I.ACTION_DOWNLOAD||action ==I.ACTION_PULL_DOWN){
                     mAdapter.initData(list);
                 }else {
                     mAdapter.addData(list);

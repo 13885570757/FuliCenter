@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.wuyunlong.fulicenter.MainActivity;
+import com.wuyunlong.fulicenter.activity.MainActivity;
 import com.wuyunlong.fulicenter.R;
 import com.wuyunlong.fulicenter.adapter.NewGoodsAdapter;
 import com.wuyunlong.fulicenter.bean.NewGoodsBean;
@@ -20,7 +20,7 @@ import com.wuyunlong.fulicenter.utils.CommonUtils;
 import com.wuyunlong.fulicenter.utils.ConvertUtils;
 import com.wuyunlong.fulicenter.I;
 import com.wuyunlong.fulicenter.utils.L;
-import com.wuyunlong.fulicenter.utils.OkHttpUtils;
+import com.wuyunlong.fulicenter.dao.OkHttpUtils;
 import com.wuyunlong.fulicenter.views.SpaceItemDecoration;
 
 import java.util.ArrayList;
@@ -34,7 +34,7 @@ public class NewGoodsFragment extends Fragment {
     NewGoodsAdapter mAdapter;
     ArrayList<NewGoodsBean> mList;
     int pageId = 1;
-    @Bind(R.id.tvRefresh)
+    @Bind(R.id.tv_refresh)
     TextView tvRefresh;
     @Bind(R.id.rv)
     RecyclerView rv;
@@ -46,12 +46,13 @@ public class NewGoodsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        View view = inflater.inflate(R.layout.fragment_new_goods, container, false);
+        L.e("=!=!=!=!");
+        View view = inflater.inflate(R.layout.fragment_newgoods, container, false);
         ButterKnife.bind(this, view);
         mContext = (MainActivity) getContext();
         mList = new ArrayList<>();
         mAdapter = new NewGoodsAdapter(mContext, mList);
+        //super.onCreateView(inflater,container,savedInstanceState);
         initView();
         initData();
         setListener();
@@ -69,12 +70,12 @@ public class NewGoodsFragment extends Fragment {
             @Override
             public void onRefresh() {
                 srl.setRefreshing(true);
-                tvRefresh.setVisibility(View.GONE);
+                tvRefresh.setVisibility(View.VISIBLE);
                 pageId = 1;
                 downloadNewGoods(I.ACTION_PULL_DOWN);
             }
 
-            
+
         });
     }
 
@@ -85,11 +86,14 @@ public class NewGoodsFragment extends Fragment {
                 srl.setRefreshing(false);
                 tvRefresh.setVisibility(View.GONE);//刷新消失
                 mAdapter.setMore(true);
+                L.e(""+result);
+
                 if (result != null && result.length > 0) {
+                    mAdapter.setMore(true);
                     ArrayList<NewGoodsBean> list = ConvertUtils.array2List(result);
-                    if (action==I.ACTION_DOWNLOAD||action ==I.ACTION_PULL_DOWN){
-                    mAdapter.initData(list);
-                    }else {
+                    if (action == I.ACTION_DOWNLOAD || action == I.ACTION_PULL_DOWN) {
+                        mAdapter.initData(list);
+                    } else {
                         mAdapter.addData(list);
                     }
                     if (list.size() < I.PAGE_ID_DEFAULT) {
@@ -116,10 +120,10 @@ public class NewGoodsFragment extends Fragment {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                int lastPosition   = glm.findLastVisibleItemPosition();
-                if (newState==RecyclerView.SCROLL_STATE_IDLE
-                        &&lastPosition==mAdapter.getItemCount()-1
-                        &&mAdapter.isMore()){
+                int lastPosition = glm.findLastVisibleItemPosition();
+                if (newState == RecyclerView.SCROLL_STATE_IDLE
+                        && lastPosition == mAdapter.getItemCount() - 1
+                        && mAdapter.isMore()) {
                     pageId++;
                     downloadNewGoods(I.ACTION_PULL_UP);
                 }
@@ -130,17 +134,17 @@ public class NewGoodsFragment extends Fragment {
                 super.onScrolled(recyclerView, dx, dy);
                 //当位置为0时，才可刷新。
                 int firstPosition = glm.findFirstVisibleItemPosition();
-                srl.setEnabled(firstPosition==0);
+                srl.setEnabled(firstPosition == 0);
             }
         });
-        
+
     }
 
     /**
      * 获取数据
      */
     private void initData() {
-       downloadNewGoods(I.ACTION_DOWNLOAD);
+        downloadNewGoods(I.ACTION_DOWNLOAD);
     }
 
     private void initView() {
@@ -153,7 +157,7 @@ public class NewGoodsFragment extends Fragment {
         );
         glm = new GridLayoutManager(mContext, I.COLUM_NUM);
         rv.setLayoutManager(glm);
-        rv.setHasFixedSize(true);//修复大小
+        //  rv.setHasFixedSize(true);//修复大小
         rv.setAdapter(mAdapter);
         rv.addItemDecoration(new SpaceItemDecoration(12));
     }

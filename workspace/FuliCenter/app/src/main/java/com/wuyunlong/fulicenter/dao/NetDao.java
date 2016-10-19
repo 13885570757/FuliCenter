@@ -2,16 +2,14 @@ package com.wuyunlong.fulicenter.dao;
 
 import android.content.Context;
 
-import com.wuyunlong.fulicenter.GoodsDetails;
 import com.wuyunlong.fulicenter.bean.BoutiqueBean;
 import com.wuyunlong.fulicenter.bean.GoodsDetailsBean;
 import com.wuyunlong.fulicenter.bean.NewGoodsBean;
 import com.wuyunlong.fulicenter.I;
-import com.wuyunlong.fulicenter.utils.OkHttpUtils;
 
 /**
  * Created by Administrator on 2016/10/17.
- * 数据操作,拼接URL语句
+ * 请求网络，拼接URL语句
  */
 public class NetDao {
         public static void downloadNewGoods(Context context, int pageId, OkHttpUtils.OnCompleteListener<NewGoodsBean[]> listener) {

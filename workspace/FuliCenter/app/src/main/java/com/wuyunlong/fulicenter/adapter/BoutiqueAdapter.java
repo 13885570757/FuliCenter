@@ -9,11 +9,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wuyunlong.fulicenter.I;
-import com.wuyunlong.fulicenter.MainActivity;
 import com.wuyunlong.fulicenter.R;
 import com.wuyunlong.fulicenter.bean.BoutiqueBean;
 import com.wuyunlong.fulicenter.utils.ImageLoader;
-import com.wuyunlong.fulicenter.views.FooterViewHolder;
+//import com.wuyunlong.fulicenter.views.FooterViewHolder;
 
 import java.util.ArrayList;
 
@@ -27,10 +26,11 @@ public class BoutiqueAdapter extends RecyclerView.Adapter {
     Context mContext;
     ArrayList<BoutiqueBean> mList;
 
-    public BoutiqueAdapter(MainActivity list, ArrayList<BoutiqueBean> mContext) {
+    public BoutiqueAdapter(Context context, ArrayList<BoutiqueBean> list) {
+        mContext = context;
         mList = new ArrayList<>();
         mList.addAll(list);
-        this.mContext = mContext;
+
     }
 
     boolean isMore;
@@ -38,9 +38,9 @@ public class BoutiqueAdapter extends RecyclerView.Adapter {
     public boolean isMore() {
         return isMore;
     }
-
     public void setMore(boolean more) {
         isMore = more;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -59,7 +59,7 @@ public class BoutiqueAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof FooterViewHolder) {
-            ((FooterViewHolder) holder).tvFooter.setText(getFooterString());
+           ((FooterViewHolder) holder).mtvFooter.setText("加载更多...");
         }
         if (holder instanceof BoutiqueViewHolder) {
             BoutiqueBean boutiqueBean = mList.get(position);
@@ -74,9 +74,9 @@ public class BoutiqueAdapter extends RecyclerView.Adapter {
         }
     }
 
-    private int getFooterString() {
-       return isMore()?R.string.load_more:R.string.no_more;
-    }
+   // private int getFooterString() {
+    //   return isMore()?R.string.load_more:R.string.no_more;
+    //}
 
     @Override
     public int getItemCount() {
@@ -110,7 +110,7 @@ public class BoutiqueAdapter extends RecyclerView.Adapter {
         ImageView ivBoutiqueImg;
         @Bind(R.id.tvBoutiqueTitle)
         TextView tvBoutiqueTitle;
-        @Bind(R.id.tvBoutiqueBrief)
+        @Bind(R.id.tvBoutiqueDescription)
         TextView tvBoutiqueBrief;
         @Bind(R.id.tvBoutiqueName)
         TextView tvBoutiqueName;
@@ -120,4 +120,15 @@ public class BoutiqueAdapter extends RecyclerView.Adapter {
             ButterKnife.bind(this, view);
         }
     }
+    public class FooterViewHolder extends RecyclerView.ViewHolder {
+        @Bind(R.id.tvFooter)
+        TextView mtvFooter;
+
+        public FooterViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this,itemView);
+            mtvFooter= (TextView) itemView.findViewById(R.id.tvFooter);
+        }
+    }
+
 }

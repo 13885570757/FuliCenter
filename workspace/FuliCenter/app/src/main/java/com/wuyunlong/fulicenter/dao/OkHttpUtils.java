@@ -1,4 +1,4 @@
-package com.wuyunlong.fulicenter.utils;
+package com.wuyunlong.fulicenter.dao;
 
 import android.content.Context;
 import android.os.Handler;
@@ -7,6 +7,7 @@ import android.os.Message;
 import com.google.gson.Gson;
 import com.wuyunlong.fulicenter.I;
 import com.wuyunlong.fulicenter.bean.Result;
+import com.wuyunlong.fulicenter.utils.L;
 
 import java.io.File;
 import java.io.FileOutputStream;
