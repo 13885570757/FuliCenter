@@ -135,11 +135,11 @@ public class NewGoodsAdapter extends RecyclerView.Adapter {
 
 
 
-    class FooterViewHolder extends RecyclerView.ViewHolder {
+   static class FooterViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.tvFooter)
         TextView tvFooter;
 
-        public FooterViewHolder(View layout) {
+        public  FooterViewHolder(View layout) {
             super(layout);
             tvFooter = (TextView) itemView.findViewById(R.id.tvFooter);
         }
