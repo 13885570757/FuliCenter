@@ -54,7 +54,7 @@ public class CategoryFragment extends BaseFragment {
         mGroupList = new ArrayList<>();
         mChildList = new ArrayList<>();
 
-        super.onCreateView(inflater,container,savedInstanceState);
+        super.onCreateView(inflater, container, savedInstanceState);
         return view;
     }
 
@@ -73,7 +73,7 @@ public class CategoryFragment extends BaseFragment {
     protected void initData() {
         downloadGroup();
         mElvCategory.setGroupIndicator(null);//取消默认箭头
-        mAdapter = new CategoryAdapter(mContext,mGroupList,mChildList);
+        mAdapter = new CategoryAdapter(mContext, mGroupList, mChildList);
         mElvCategory.setAdapter(mAdapter);
 
     }
@@ -83,47 +83,51 @@ public class CategoryFragment extends BaseFragment {
             @Override
             public void onSuccess(CategoryGroupBean[] result) {
                 L.e("=========>downloadGroup下载方法");
-                if (result!=null&&result.length>0){
-                   ArrayList<CategoryGroupBean> groupList= ConvertUtils.array2List(result);
-                   mGroupList.addAll(groupList);
-                    for (CategoryGroupBean groupBean:groupList){
-                       downloadChild(groupBean.getId());
-                   }
+                if (result != null && result.length > 0) {
+                    ArrayList<CategoryGroupBean> groupList = ConvertUtils.array2List(result);
+                   L.e("groupList="+groupList.size());
+                    mGroupList.addAll(groupList);
+                    //根据大类的角标，知道大类下载顺序
+                    for (int i = 0; i < groupList.size(); i++) {
+                        mChildList.add(new ArrayList<CategoryChildBean>());
+                        CategoryGroupBean groupBean = groupList.get(i);
+                        downloadChild(groupBean.getId(), i);
+                    }
                 }
             }
 
 
             @Override
             public void onError(String error) {
-                L.e("downloadGroup"+error);
+                L.e("downloadGroup" + error);
             }
         });
     }
 
-    private void downloadChild(int id) {
+    private void downloadChild(int id, final int index) {//index为指定小类的顺序
         NetDao.downloadCategoryChild(mContext, id, new OkHttpUtils.OnCompleteListener<CategoryChildBean[]>() {
             @Override
             public void onSuccess(CategoryChildBean[] result) {
                 groupCount++;
                 L.e("=========>downloadChild");
-                if (result!=null&&result.length>0){
+                if (result != null && result.length > 0) {
                     ArrayList<CategoryChildBean> childList = ConvertUtils.array2List(result);
-                    mChildList.add(childList);
+                    mChildList.set(index,childList);
                     //L.e(childList.toString());
-                   // mAdapter.initData(mGroupList,mChildList);
+                    // mAdapter.initData(mGroupList,mChildList);
                 }
                 //添加判断，防止一直刷新界面。
-              if (groupCount==mGroupList.size()){
+                if (groupCount == mGroupList.size()) {
 //                  mElvCategory.setGroupIndicator(null);//取消默认箭头
 //                  mAdapter = new CategoryAdapter(mContext,mGroupList,mChildList);
 //                  mElvCategory.setAdapter(mAdapter);
-                  mAdapter.initData(mGroupList,mChildList);
-              }
+                    mAdapter.initData(mGroupList, mChildList);
+                }
             }
 
             @Override
             public void onError(String error) {
-                    L.e("=======" +error);
+                L.e("=======" + error);
             }
         });
     }

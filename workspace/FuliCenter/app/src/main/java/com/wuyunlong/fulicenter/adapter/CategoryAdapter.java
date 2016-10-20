@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.wuyunlong.fulicenter.R;
@@ -12,6 +13,7 @@ import com.wuyunlong.fulicenter.bean.CategoryChildBean;
 import com.wuyunlong.fulicenter.bean.CategoryGroupBean;
 import com.wuyunlong.fulicenter.utils.ImageLoader;
 import com.wuyunlong.fulicenter.utils.L;
+import com.wuyunlong.fulicenter.utils.MFGT;
 
 import java.util.ArrayList;
 
@@ -25,6 +27,7 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
     Context mContext;
     ArrayList<CategoryGroupBean> mGroupList;//大类数量
     ArrayList<ArrayList<CategoryChildBean>> mChildList;//小类数量
+
 
     //构造方法
     public CategoryAdapter(Context mContext, ArrayList<CategoryGroupBean> groupList,
@@ -92,7 +95,7 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         GroupViewHolder holder;
         if (convertView == null) {
-            L.e("===============>GroupView");
+
             convertView = View.inflate(mContext, R.layout.item_category_group, null);
             holder = new GroupViewHolder(convertView);
             convertView.setTag(holder);
@@ -104,7 +107,6 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
         CategoryGroupBean groupBean = getGroup(groupPosition);
         if (groupBean != null) {
             //下载图片
-            L.e("===============>GroupView下载图片");
             ImageLoader.downloadImg(mContext, holder.mIvGroupImage, groupBean.getImageUrl());
             holder.mTvGroupName.setText(groupBean.getName());
             holder.mIvExpandImage.setImageResource(isExpanded ? R.mipmap.expand_off : R.mipmap.expand_on);
@@ -116,24 +118,30 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         ChildViewHolder holder;
         if (convertView == null) {
-            L.e("===============>ChildView");
             convertView = View.inflate(mContext, R.layout.item_category_child, null);
             holder = new ChildViewHolder(convertView);
             convertView.setTag(holder);
-        }else{
+        } else {
             holder = (ChildViewHolder) convertView.getTag();
         }
-        CategoryChildBean childBean = getChild(groupPosition,childPosition);
-        if (childBean!=null){
-            L.e("===============>ChildImage");
-            ImageLoader.downloadImg(mContext,holder.mIvChildIamge,childBean.getImageUrl());
+        final CategoryChildBean childBean = getChild(groupPosition, childPosition);
+        if (childBean != null) {
+            ImageLoader.downloadImg(mContext, holder.mIvChildIamge, childBean.getImageUrl());
             holder.mTvChildName.setText(childBean.getName());
+            //点击事件
+            holder.layoutChild.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MFGT.gotoCategoryChildActivity(mContext, childBean.getId());
+                }
+            });
         }
         return convertView;
     }
 
     /**
      * 如果为falsew，则小类不可点击
+     *
      * @param groupPosition
      * @param childPosition
      * @return
@@ -145,17 +153,18 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
 
     /**
      * 清空数据，然后加入数据，再刷新页面
+     *
      * @param groupList
      * @param childList
      */
     public void initData(ArrayList<CategoryGroupBean> groupList,
                          ArrayList<ArrayList<CategoryChildBean>> childList) {
-        if (groupList!=null){
+        if (groupList != null) {
             L.e("initData");
             mGroupList.clear();
         }
         mGroupList.addAll(groupList);
-        if (childList!=null){
+        if (childList != null) {
             mChildList.clear();
         }
         mChildList.addAll(childList);
@@ -163,7 +172,7 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
 
     }
 
-     class GroupViewHolder {
+    class GroupViewHolder {
         @Bind(R.id.ivGroupImage)
         ImageView mIvGroupImage;
         @Bind(R.id.tvGroupName)
@@ -176,12 +185,13 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
         }
     }
 
-     class ChildViewHolder {
+    class ChildViewHolder {
         @Bind(R.id.ivChildIamge)
         ImageView mIvChildIamge;
         @Bind(R.id.tvChildName)
         TextView mTvChildName;
-
+        @Bind(R.id.layout_child)
+        RelativeLayout layoutChild;
         ChildViewHolder(View view) {
             ButterKnife.bind(this, view);
         }

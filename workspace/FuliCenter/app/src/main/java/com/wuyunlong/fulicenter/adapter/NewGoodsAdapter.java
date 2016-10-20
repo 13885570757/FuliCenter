@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.wuyunlong.fulicenter.I;
 import com.wuyunlong.fulicenter.R;
+import com.wuyunlong.fulicenter.activity.CategoryChildActivity;
+import com.wuyunlong.fulicenter.bean.CategoryChildBean;
 import com.wuyunlong.fulicenter.bean.NewGoodsBean;
 import com.wuyunlong.fulicenter.utils.ImageLoader;
 import com.wuyunlong.fulicenter.view.FooterViewHolder;
@@ -35,6 +37,8 @@ public class NewGoodsAdapter extends RecyclerView.Adapter {
     }
 
     boolean isMore;//通知
+
+
 
     public boolean isMore() {
         return isMore;
@@ -77,7 +81,7 @@ public class NewGoodsAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (getItemViewType(position) == I.TYPE_FOOTER) {
             FooterViewHolder vh = (FooterViewHolder) holder;
-            vh.mTvFooter.setText(getFooterString());
+            vh.mTvFooter.setText(isMore?"加载中":"没有更多");
         } else {
             NewGoodsViewHolder vh = (NewGoodsViewHolder) holder;
             NewGoodsBean goods = mlist.get(position);
