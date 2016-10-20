@@ -130,6 +130,13 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
         return false;
     }
 
+    public void initData(ArrayList<CategoryGroupBean> groupList) {
+        if (groupList!=null){
+            groupList.clear();
+            groupList.addAll(groupList);
+        }
+    }
+
     static class GroupViewHolder {
         @Bind(R.id.ivGroupImage)
         ImageView mIvGroupImage;
