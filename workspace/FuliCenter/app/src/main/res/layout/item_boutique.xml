@@ -37,7 +37,7 @@
             android:layout_marginTop="20dp"
             android:ellipsize="end"
             android:textSize="20sp"
-            android:text="冬秋衣橱大换血"/>
+            android:text="商品名称"/>
         <TextView
             android:id="@+id/tvBoutiqueDescription"
             android:layout_width="match_parent"
@@ -47,6 +47,6 @@
             android:textSize="18sp"
             android:maxLines="2"
             android:ellipsize="end"
-            android:text="2015F/W Trends Report"/>
+            android:text="商品简介"/>
     </LinearLayout>
 </RelativeLayout>

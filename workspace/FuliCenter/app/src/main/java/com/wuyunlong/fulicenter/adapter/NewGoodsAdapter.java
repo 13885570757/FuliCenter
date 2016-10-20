@@ -88,9 +88,9 @@ public class NewGoodsAdapter extends RecyclerView.Adapter {
         }
     }
 
-    private String getFooterString() {
-
-        return isMore ? "加载中" : "没有更多";
+    private int getFooterString() {
+        //return isMore ? "加载中" : "没有更多";
+        return isMore?R.string.load_more:R.string.no_more;
     }
 
     /**

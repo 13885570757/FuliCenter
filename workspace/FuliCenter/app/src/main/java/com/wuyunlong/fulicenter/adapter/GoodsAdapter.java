@@ -64,7 +64,7 @@ public class GoodsAdapter extends Adapter {
     public void onBindViewHolder(ViewHolder holder, int position) {
         if (getItemViewType(position) == I.TYPE_FOOTER) {
             FooterViewHolder vh = (FooterViewHolder) holder;
-           // vh.mTvFooter.setText(getFootString());
+            vh.mTvFooter.setText(isMore?"加载中":"没有更多");
         } else {
             GoodsViewHolder vh = (GoodsViewHolder) holder;
             NewGoodsBean goods = mList.get(position);
@@ -75,9 +75,9 @@ public class GoodsAdapter extends Adapter {
         }
     }
 
-    private int getFootString() {
-        return isMore ? R.string.load_more : R.string.no_more;
-    }
+    //private int getFootString() {
+      //  return isMore ? R.string.load_more : R.string.no_more;
+    //}
 
     @Override
     public int getItemCount() {

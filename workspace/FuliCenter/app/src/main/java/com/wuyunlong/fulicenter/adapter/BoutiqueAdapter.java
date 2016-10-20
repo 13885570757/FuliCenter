@@ -84,7 +84,7 @@ public class BoutiqueAdapter extends Adapter<BoutiqueAdapter.BoutiqueViewHolder>
         @OnClick(R.id.layout_boutique_item)
         public void onBoutiqueClick() {
             BoutiqueBean bean = (BoutiqueBean) mLayoutBoutiqueItem.getTag();
-            MFGT.gotoBoutiqueChildActivity(mContext,bean);
+            MFGT.gotoBoutiqueChildActivity(mContext, bean);
         }
     }
 }
