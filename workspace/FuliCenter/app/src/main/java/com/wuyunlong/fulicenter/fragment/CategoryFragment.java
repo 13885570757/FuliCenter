@@ -38,6 +38,8 @@ public class CategoryFragment extends BaseFragment {
     ArrayList<CategoryGroupBean> mGroupList;
     ArrayList<ArrayList<CategoryChildBean>> mChildList;
 
+    int groupCount;
+
 
     public CategoryFragment() {
     }
@@ -51,34 +53,45 @@ public class CategoryFragment extends BaseFragment {
         mContext = (MainActivity) getContext();
         mGroupList = new ArrayList<>();
         mChildList = new ArrayList<>();
-        mAdapter = new CategoryAdapter(mContext,mGroupList,mChildList);
+
         super.onCreateView(inflater,container,savedInstanceState);
         return view;
     }
 
     @Override
     protected void initView() {
-        mElvCategory.setGroupIndicator(null);//取消默认箭头
-        mElvCategory.setAdapter(mAdapter);
-
+        mElvCategory.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                mElvCategory.expandGroup(groupPosition);
+                return false;
+            }
+        });
     }
 
     @Override
     protected void initData() {
         downloadGroup();
+        mElvCategory.setGroupIndicator(null);//取消默认箭头
+        mAdapter = new CategoryAdapter(mContext,mGroupList,mChildList);
+        mElvCategory.setAdapter(mAdapter);
 
     }
 
     private void downloadGroup() {
-        NetDao.downloadCategoruGroup(mContext, new OkHttpUtils.OnCompleteListener<CategoryGroupBean[]>() {
+        NetDao.downloadCategoryGroup(mContext, new OkHttpUtils.OnCompleteListener<CategoryGroupBean[]>() {
             @Override
             public void onSuccess(CategoryGroupBean[] result) {
+                L.e("=========>downloadGroup下载方法");
                 if (result!=null&&result.length>0){
                    ArrayList<CategoryGroupBean> groupList= ConvertUtils.array2List(result);
-                    mAdapter.initData(groupList);
-
+                   mGroupList.addAll(groupList);
+                    for (CategoryGroupBean groupBean:groupList){
+                       downloadChild(groupBean.getId());
+                   }
                 }
             }
+
 
             @Override
             public void onError(String error) {
@@ -87,8 +100,37 @@ public class CategoryFragment extends BaseFragment {
         });
     }
 
+    private void downloadChild(int id) {
+        NetDao.downloadCategoryChild(mContext, id, new OkHttpUtils.OnCompleteListener<CategoryChildBean[]>() {
+            @Override
+            public void onSuccess(CategoryChildBean[] result) {
+                groupCount++;
+                L.e("=========>downloadChild");
+                if (result!=null&&result.length>0){
+                    ArrayList<CategoryChildBean> childList = ConvertUtils.array2List(result);
+                    mChildList.add(childList);
+                    //L.e(childList.toString());
+                   // mAdapter.initData(mGroupList,mChildList);
+                }
+                //添加判断，防止一直刷新界面。
+              if (groupCount==mGroupList.size()){
+//                  mElvCategory.setGroupIndicator(null);//取消默认箭头
+//                  mAdapter = new CategoryAdapter(mContext,mGroupList,mChildList);
+//                  mElvCategory.setAdapter(mAdapter);
+                  mAdapter.initData(mGroupList,mChildList);
+              }
+            }
+
+            @Override
+            public void onError(String error) {
+                    L.e("=======" +error);
+            }
+        });
+    }
+
     @Override
     protected void setListener() {
+
 
     }
 

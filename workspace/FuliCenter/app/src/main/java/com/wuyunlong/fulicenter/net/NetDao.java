@@ -40,7 +40,7 @@ public class NetDao {
                 .execute(listener);
     }
 
-    public static void downloadCategoruGroup(Context context,
+    public static void downloadCategoryGroup(Context context,
                                              OkHttpUtils.OnCompleteListener<CategoryGroupBean[]> listener) {
         OkHttpUtils utils = new OkHttpUtils(context);
         utils.setRequestUrl(I.REQUEST_FIND_CATEGORY_GROUP)
@@ -48,10 +48,11 @@ public class NetDao {
                 .execute(listener);
     }
 
-    public static void downloadCategoruChild(Context context,
+    public static void downloadCategoryChild(Context context,int parentId,
                                              OkHttpUtils.OnCompleteListener<CategoryChildBean[]> listener) {
         OkHttpUtils utils = new OkHttpUtils(context);
         utils.setRequestUrl(I.REQUEST_FIND_CATEGORY_CHILDREN)
+                .addParam(I.CategoryChild.PARENT_ID,String.valueOf(parentId))
                 .targetClass(CategoryChildBean[].class)
                 .execute(listener);
     }
