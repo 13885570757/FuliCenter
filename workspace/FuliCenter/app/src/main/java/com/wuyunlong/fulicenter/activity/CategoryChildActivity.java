@@ -98,7 +98,7 @@ public class CategoryChildActivity extends BaseActivity {
                 mSrl.setRefreshing(false);
                 mTvRefresh.setVisibility(View.GONE);
                 mAdapter.setMore(true);
-                L.e("result=" + result);
+                L.e("==========分类商品详情下载");
                 if (result != null && result.length > 0) {
                     ArrayList<NewGoodsBean> list = ConvertUtils.array2List(result);
                     if (action == I.ACTION_DOWNLOAD || action == I.ACTION_PULL_DOWN) {

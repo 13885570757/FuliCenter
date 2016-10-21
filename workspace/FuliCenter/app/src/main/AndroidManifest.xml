@@ -25,6 +25,10 @@
         <activity android:name=".activity.BoutiqueChildActivity"/>
         <activity android:name=".activity.CategoryChildActivity">
         </activity>
+        <activity android:name=".activity.LoginActivity">
+        </activity>
+        <activity android:name=".activity.RegisterActivity">
+        </activity>
     </application>
 
 </manifest>

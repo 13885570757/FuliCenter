@@ -15,6 +15,13 @@ import com.wuyunlong.fulicenter.bean.NewGoodsBean;
  */
 
 public class NetDao {
+    /**
+     * 新品下载方法
+     * @param context
+     * @param catId
+     * @param pageId
+     * @param listener
+     */
     public static void downloadNewGoods(Context context, int catId, int pageId, OkHttpUtils.OnCompleteListener<NewGoodsBean[]> listener) {
         OkHttpUtils utils = new OkHttpUtils(context);
         utils.setRequestUrl(I.REQUEST_FIND_NEW_BOUTIQUE_GOODS)
@@ -25,6 +32,12 @@ public class NetDao {
                 .execute(listener);
     }
 
+    /**
+     * 新品详情下载方法
+     * @param context
+     * @param goodsId
+     * @param listener
+     */
     public static void downloadGoodsDetail(Context context, int goodsId, OkHttpUtils.OnCompleteListener<GoodsDetailsBean> listener) {
         OkHttpUtils utils = new OkHttpUtils(context);
         utils.setRequestUrl(I.REQUEST_FIND_GOOD_DETAILS)
@@ -33,6 +46,11 @@ public class NetDao {
                 .execute(listener);
     }
 
+    /**
+     * 精选下载方法
+     * @param context
+     * @param listener
+     */
     public static void downloadBuotique(Context context, OkHttpUtils.OnCompleteListener<BoutiqueBean[]> listener) {
         OkHttpUtils utils = new OkHttpUtils(context);
         utils.setRequestUrl(I.REQUEST_FIND_BOUTIQUES)
@@ -40,6 +58,11 @@ public class NetDao {
                 .execute(listener);
     }
 
+    /**
+     * 分类列表下载方法
+     * @param context
+     * @param listener
+     */
     public static void downloadCategoryGroup(Context context,
                                              OkHttpUtils.OnCompleteListener<CategoryGroupBean[]> listener) {
         OkHttpUtils utils = new OkHttpUtils(context);
@@ -48,6 +71,12 @@ public class NetDao {
                 .execute(listener);
     }
 
+    /**
+     * 二级分类下载方法
+     * @param context
+     * @param parentId
+     * @param listener
+     */
     public static void downloadCategoryChild(Context context,int parentId,
                                              OkHttpUtils.OnCompleteListener<CategoryChildBean[]> listener) {
         OkHttpUtils utils = new OkHttpUtils(context);
@@ -57,6 +86,13 @@ public class NetDao {
                 .execute(listener);
     }
 
+    /**
+     * 分类物品下载方法
+     * @param context
+     * @param catId
+     * @param pageId
+     * @param listener
+     */
     public static void downloadCategoryGoods(Context context, int catId, int pageId, OkHttpUtils.OnCompleteListener<NewGoodsBean[]> listener) {
         OkHttpUtils utils = new OkHttpUtils(context);
         utils.setRequestUrl(I.REQUEST_FIND_GOODS_DETAILS)
