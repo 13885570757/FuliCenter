@@ -95,6 +95,9 @@ public class BoutiqueFragment extends BaseFragment {
         });
     }
 
+    /**
+     * 获取加载时，刷新圆圈的颜色。
+     */
     @Override
     protected  void initView() {
         mSrl.setColorSchemeColors(

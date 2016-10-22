@@ -8,7 +8,7 @@ import com.wuyunlong.fulicenter.R;
 import com.wuyunlong.fulicenter.utils.MFGT;
 
 
-public class SplashActivity extends AppCompatActivity {
+public class  SplashActivity extends AppCompatActivity {
 
     private final long sleepTime = 2000;
 

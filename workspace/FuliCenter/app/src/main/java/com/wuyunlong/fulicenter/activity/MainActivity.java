@@ -7,11 +7,13 @@ import android.view.View;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import com.wuyunlong.fulicenter.FuLiCenterApplication;
 import com.wuyunlong.fulicenter.R;
 import com.wuyunlong.fulicenter.fragment.BoutiqueFragment;
 import com.wuyunlong.fulicenter.fragment.CategoryFragment;
 import com.wuyunlong.fulicenter.fragment.NewGoodsFragment;
 import com.wuyunlong.fulicenter.utils.L;
+import com.wuyunlong.fulicenter.utils.MFGT;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -104,7 +106,12 @@ public class MainActivity extends BaseActivity {
                 index = 3;
                 break;
             case R.id.layout_personal_center:
-                index = 4;
+                //如果无用户名，跳转到注册界面
+                if(FuLiCenterApplication.getUsername() ==null){
+                    MFGT.gotoLogin(this);
+                }else{
+                    index 4;
+                }
                 break;
         }
         setFragment();

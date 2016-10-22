@@ -8,11 +8,8 @@ import com.wuyunlong.fulicenter.bean.CategoryChildBean;
 import com.wuyunlong.fulicenter.bean.CategoryGroupBean;
 import com.wuyunlong.fulicenter.bean.GoodsDetailsBean;
 import com.wuyunlong.fulicenter.bean.NewGoodsBean;
+import com.wuyunlong.fulicenter.bean.Result;
 
-
-/**
- * Created by clawpo on 2016/10/17.
- */
 
 public class NetDao {
     /**
@@ -23,7 +20,7 @@ public class NetDao {
      * @param listener
      */
     public static void downloadNewGoods(Context context, int catId, int pageId, OkHttpUtils.OnCompleteListener<NewGoodsBean[]> listener) {
-        OkHttpUtils utils = new OkHttpUtils(context);
+        OkHttpUtils utils = new OkHttpUtils<>(context);
         utils.setRequestUrl(I.REQUEST_FIND_NEW_BOUTIQUE_GOODS)
                 .addParam(I.NewAndBoutiqueGoods.CAT_ID, String.valueOf(catId))
                 .addParam(I.PAGE_ID, String.valueOf(pageId))
@@ -100,6 +97,18 @@ public class NetDao {
                 .addParam(I.PAGE_ID, String.valueOf(pageId))
                 .addParam(I.PAGE_SIZE, String.valueOf(I.PAGE_SIZE_DEFAULT))
                 .targetClass(NewGoodsBean[].class)
+                .execute(listener);
+    }
+
+    public  static void register (Context context, String username, String nickname,
+                                  String password, OkHttpUtils.OnCompleteListener<Result> listener){
+        OkHttpUtils <Result> utils = new OkHttpUtils<>(context);
+        utils.setRequestUrl(I.REQUEST_REGISTER)
+                .addParam(I.User.USER_NAME,username)
+                .addParam(I.User.NICK,nickname)
+                .addParam(I.User.PASSWORD,password)
+                .targetClass(Result.class)
+                .post()
                 .execute(listener);
     }
 }

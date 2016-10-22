@@ -130,6 +130,7 @@ public class CategoryChildActivity extends BaseActivity {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
+                L.e("============下拉刷新方法被调用");
                 int lastPosition = glm.findLastVisibleItemPosition();
                 if (newState == RecyclerView.SCROLL_STATE_IDLE
                         && lastPosition == mAdapter.getItemCount() - 1
@@ -152,7 +153,6 @@ public class CategoryChildActivity extends BaseActivity {
     protected void initData() {
         downloadCategoryGoods(I.ACTION_DOWNLOAD);
     }
-
 
     @OnClick(R.id.backClickArea)
     public void onClick() {
