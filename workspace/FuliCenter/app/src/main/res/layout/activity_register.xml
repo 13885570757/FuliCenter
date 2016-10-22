@@ -110,7 +110,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/btn_ragister"
+        android:id="@+id/btn_register"
         android:layout_marginTop="15dp"
         android:text="免费注册"
         android:textSize="18sp"

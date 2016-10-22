@@ -73,7 +73,7 @@ public class MFGT {
         startActivityForResult(context, intent,I.REQUEST_CODE_REGISTER);//接口
     }
 
-    public static void startActivityForResult(Activity context, Intent intent,int request) {
+    public static void startActivityForResult(Activity context, Intent intent,int requestCode) {
         context.startActivityForResult(intent,requestCode);
         context.overridePendingTransition(R.anim.push_left_in,R.anim.push_left_out);
 

@@ -66,6 +66,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <Button
+        android:id="@+id/register"
         android:layout_marginTop="10dp"
         android:text="免费注册"
         android:background="@drawable/btn_bg_orange"

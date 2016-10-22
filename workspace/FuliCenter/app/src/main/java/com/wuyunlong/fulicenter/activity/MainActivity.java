@@ -110,7 +110,7 @@ public class MainActivity extends BaseActivity {
                 if(FuLiCenterApplication.getUsername() ==null){
                     MFGT.gotoLogin(this);
                 }else{
-                    index 4;
+                    index= 4;
                 }
                 break;
         }

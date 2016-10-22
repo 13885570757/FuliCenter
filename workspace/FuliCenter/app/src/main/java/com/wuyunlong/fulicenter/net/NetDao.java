@@ -9,6 +9,7 @@ import com.wuyunlong.fulicenter.bean.CategoryGroupBean;
 import com.wuyunlong.fulicenter.bean.GoodsDetailsBean;
 import com.wuyunlong.fulicenter.bean.NewGoodsBean;
 import com.wuyunlong.fulicenter.bean.Result;
+import com.wuyunlong.fulicenter.utils.MD5;
 
 
 public class NetDao {
@@ -100,13 +101,36 @@ public class NetDao {
                 .execute(listener);
     }
 
+    /**
+     * 登录请求，MD5加密密码
+     * @param context
+     * @param username
+     * @param userpassword
+     * @param listener
+     */
+    public static void login(Context context,String username,String userpassword,OkHttpUtils.OnCompleteListener<Result>listener){
+    OkHttpUtils<Result> utils = new OkHttpUtils<>(context);
+    utils.setRequestUrl(I.REQUEST_LOGIN)
+            .addParam(I.User.USER_NAME,username)
+            .addParam(I.User.PASSWORD, MD5.getMessageDigest(userpassword))
+            .targetClass(Result.class)
+            .execute(listener);
+}
+    /**
+     * 注册
+     * @param context
+     * @param username
+     * @param nickname
+     * @param password
+     * @param listener
+     */
     public  static void register (Context context, String username, String nickname,
                                   String password, OkHttpUtils.OnCompleteListener<Result> listener){
         OkHttpUtils <Result> utils = new OkHttpUtils<>(context);
         utils.setRequestUrl(I.REQUEST_REGISTER)
                 .addParam(I.User.USER_NAME,username)
                 .addParam(I.User.NICK,nickname)
-                .addParam(I.User.PASSWORD,password)
+                .addParam(I.User.PASSWORD,MD5.getMessageDigest(password))
                 .targetClass(Result.class)
                 .post()
                 .execute(listener);
