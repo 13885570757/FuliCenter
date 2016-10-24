@@ -28,16 +28,16 @@ import butterknife.ButterKnife;
 
 
 public class BoutiqueFragment extends BaseFragment {
+    LinearLayoutManager llm;
+    MainActivity mContext;
+    BoutiqueAdapter mAdapter;
+    ArrayList<BoutiqueBean> mList;
     @Bind(R.id.tv_refresh)
     TextView mTvRefresh;
     @Bind(R.id.rv)
     RecyclerView mRv;
     @Bind(R.id.srl)
     SwipeRefreshLayout mSrl;
-    LinearLayoutManager llm;
-    MainActivity mContext;
-    BoutiqueAdapter mAdapter;
-    ArrayList<BoutiqueBean> mList;
 
     @Nullable
     @Override
@@ -46,8 +46,11 @@ public class BoutiqueFragment extends BaseFragment {
         ButterKnife.bind(this, layout);
         mContext = (MainActivity) getContext();
         mList = new ArrayList<>();
-        mAdapter = new BoutiqueAdapter(mContext,mList);
-        super.onCreateView(inflater,container,savedInstanceState);
+        mAdapter = new BoutiqueAdapter(mContext, mList);
+      /*  mRv = (RecyclerView) layout.findViewById(R.id.rv);
+        mSrl = (SwipeRefreshLayout) layout.findViewById(R.id.srl);
+        mTvRefresh = (TextView) layout.findViewById(R.id.tv_refresh);*/
+        super.onCreateView(inflater, container, savedInstanceState);
         return layout;
     }
 
@@ -68,7 +71,7 @@ public class BoutiqueFragment extends BaseFragment {
     }
 
     @Override
-    protected  void initData() {
+    protected void initData() {
         downloadBoutique();
     }
 
@@ -78,8 +81,8 @@ public class BoutiqueFragment extends BaseFragment {
             public void onSuccess(BoutiqueBean[] result) {
                 mSrl.setRefreshing(false);
                 mTvRefresh.setVisibility(View.GONE);
-                L.e("result="+result);
-                if(result!=null && result.length>0){
+                L.e("result=" + result);
+                if (result != null && result.length > 0) {
                     ArrayList<BoutiqueBean> list = ConvertUtils.array2List(result);
                     mAdapter.initData(list);
                 }
@@ -90,26 +93,31 @@ public class BoutiqueFragment extends BaseFragment {
                 mSrl.setRefreshing(false);
                 mTvRefresh.setVisibility(View.GONE);
                 CommonUtils.showShortToast(error);
-                L.e("error:"+error);
+                L.e("error:" + error);
             }
         });
     }
 
-    /**
-     * 获取加载时，刷新圆圈的颜色。
-     */
     @Override
-    protected  void initView() {
-        mSrl.setColorSchemeColors(
+    protected void initView() {
+       /* mSrl.setColorSchemeColors(
                 getResources().getColor(R.color.google_blue),
                 getResources().getColor(R.color.google_green),
                 getResources().getColor(R.color.google_red),
                 getResources().getColor(R.color.google_yellow)
-        );
+        );*/
         llm = new LinearLayoutManager(mContext);
+        mRv = new RecyclerView(mContext);
+        mSrl = new SwipeRefreshLayout(mContext);
         mRv.setLayoutManager(llm);
         mRv.setHasFixedSize(true);
         mRv.setAdapter(mAdapter);
         mRv.addItemDecoration(new SpaceItemDecoration(12));
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
     }
 }

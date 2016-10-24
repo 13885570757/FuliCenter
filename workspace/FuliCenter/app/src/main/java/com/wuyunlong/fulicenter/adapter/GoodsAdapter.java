@@ -17,6 +17,8 @@ import com.wuyunlong.fulicenter.utils.MFGT;
 import com.wuyunlong.fulicenter.view.FooterViewHolder;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import butterknife.Bind;
@@ -24,20 +26,24 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
-/**
- * Created by clawpo on 2016/10/17.
- */
+
 
 public class GoodsAdapter extends Adapter {
     Context mContext;
     List<NewGoodsBean> mList;
     boolean isMore;
-
+    int soryBy = I.SORT_BY_ADDTIME_DESC;
 
     public GoodsAdapter(Context context, List<NewGoodsBean> list) {
         mContext = context;
         mList = new ArrayList<>();
         mList.addAll(list);
+    }
+
+    public void setSoryBy(int soryBy) {
+        this.soryBy = soryBy;
+        sortBy();
+        notifyDataSetChanged();
     }
 
     public boolean isMore() {
@@ -62,22 +68,22 @@ public class GoodsAdapter extends Adapter {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        if (getItemViewType(position) == I.TYPE_FOOTER) {
+        if(getItemViewType(position)==I.TYPE_FOOTER){
             FooterViewHolder vh = (FooterViewHolder) holder;
-            vh.mTvFooter.setText(isMore?"加载中":"没有更多");
-        } else {
+            vh.mTvFooter.setText(getFootString());
+        }else{
             GoodsViewHolder vh = (GoodsViewHolder) holder;
             NewGoodsBean goods = mList.get(position);
-            ImageLoader.downloadImg(mContext, vh.mIvGoodsThumb, goods.getGoodsThumb());
+            ImageLoader.downloadImg(mContext,vh.mIvGoodsThumb,goods.getGoodsThumb());
             vh.mTvGoodsName.setText(goods.getGoodsName());
             vh.mTvGoodsPrice.setText(goods.getCurrencyPrice());
             vh.mLayoutGoods.setTag(goods.getGoodsId());
         }
     }
 
-    //private int getFootString() {
-      //  return isMore ? R.string.load_more : R.string.no_more;
-    //}
+    private int getFootString() {
+        return isMore?R.string.load_more:R.string.no_more;
+    }
 
     @Override
     public int getItemCount() {
@@ -93,7 +99,7 @@ public class GoodsAdapter extends Adapter {
     }
 
     public void initData(ArrayList<NewGoodsBean> list) {
-        if (mList != null) {
+        if(mList!=null){
             mList.clear();
         }
         mList.addAll(list);
@@ -105,7 +111,7 @@ public class GoodsAdapter extends Adapter {
         notifyDataSetChanged();
     }
 
-    class GoodsViewHolder extends ViewHolder {
+    class GoodsViewHolder extends ViewHolder{
         @Bind(R.id.ivGoodsThumb)
         ImageView mIvGoodsThumb;
         @Bind(R.id.tvGoodsName)
@@ -119,12 +125,39 @@ public class GoodsAdapter extends Adapter {
             super(view);
             ButterKnife.bind(this, view);
         }
-
         @OnClick(R.id.layout_goods)
-        public void onGoodsItemClick() {
+        public void onGoodsItemClick(){
             int goodsId = (int) mLayoutGoods.getTag();
-            MFGT.gotoGoodsDetailsActivity(mContext, goodsId);
+            MFGT.gotoGoodsDetailsActivity(mContext,goodsId);
         }
+    }
+
+    private void sortBy(){
+        Collections.sort(mList, new Comparator<NewGoodsBean>() {
+            @Override
+            public int compare(NewGoodsBean left, NewGoodsBean right) {
+                int result=0;
+                switch (soryBy){
+                    case I.SORT_BY_ADDTIME_ASC:
+                        result= (int) (Long.valueOf(left.getAddTime())-Long.valueOf(right.getAddTime()));
+                        break;
+                    case I.SORT_BY_ADDTIME_DESC:
+                        result= (int) (Long.valueOf(right.getAddTime())-Long.valueOf(left.getAddTime()));
+                        break;
+                    case I.SORT_BY_PRICE_ASC:
+                        result = getPrice(left.getCurrencyPrice())-getPrice(right.getCurrencyPrice());
+                        break;
+                    case I.SORT_BY_PRICE_DESC:
+                        result = getPrice(right.getCurrencyPrice())-getPrice(left.getCurrencyPrice());
+                        break;
+                }
+                return result;
+            }
+            private int getPrice(String price){
+                price = price.substring(price.indexOf("￥")+1);
+                return Integer.valueOf(price);
+            }
+        });
     }
 
 }

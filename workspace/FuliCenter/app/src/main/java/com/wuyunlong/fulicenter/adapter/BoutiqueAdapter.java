@@ -27,7 +27,6 @@ public class BoutiqueAdapter extends Adapter<BoutiqueAdapter.BoutiqueViewHolder>
     Context mContext;
     ArrayList<BoutiqueBean> mList;
 
-
     public BoutiqueAdapter(Context context, ArrayList<BoutiqueBean> list) {
         mContext = context;
         mList = new ArrayList<>();
@@ -37,14 +36,14 @@ public class BoutiqueAdapter extends Adapter<BoutiqueAdapter.BoutiqueViewHolder>
     @Override
     public BoutiqueViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         BoutiqueViewHolder holder = new BoutiqueViewHolder(LayoutInflater.from(mContext)
-                .inflate(R.layout.item_boutique, parent, false));
+                    .inflate(R.layout.item_boutique, parent, false));
         return holder;
     }
 
     @Override
     public void onBindViewHolder(BoutiqueViewHolder holder, int position) {
         BoutiqueBean boutiqueBean = mList.get(position);
-        ImageLoader.downloadImg(mContext, holder.mIvBoutiqueImg, boutiqueBean.getImageurl());
+        ImageLoader.downloadImg(mContext,holder.mIvBoutiqueImg,boutiqueBean.getImageurl());
         holder.mTvBoutiqueTitle.setText(boutiqueBean.getTitle());
         holder.mTvBoutiqueName.setText(boutiqueBean.getName());
         holder.mTvBoutiqueDescription.setText(boutiqueBean.getDescription());
@@ -53,11 +52,11 @@ public class BoutiqueAdapter extends Adapter<BoutiqueAdapter.BoutiqueViewHolder>
 
     @Override
     public int getItemCount() {
-        return mList != null ? mList.size() : 0;
+        return mList != null ? mList.size(): 0;
     }
 
     public void initData(ArrayList<BoutiqueBean> list) {
-        if (mList != null) {
+        if(mList!=null){
             mList.clear();
         }
         mList.addAll(list);
@@ -80,11 +79,10 @@ public class BoutiqueAdapter extends Adapter<BoutiqueAdapter.BoutiqueViewHolder>
             super(view);
             ButterKnife.bind(this, view);
         }
-
         @OnClick(R.id.layout_boutique_item)
-        public void onBoutiqueClick() {
+        public void onBoutiqueClick(){
             BoutiqueBean bean = (BoutiqueBean) mLayoutBoutiqueItem.getTag();
-            MFGT.gotoBoutiqueChildActivity(mContext, bean);
+            MFGT.gotoBoutiqueChildActivity(mContext,bean);
         }
     }
 }

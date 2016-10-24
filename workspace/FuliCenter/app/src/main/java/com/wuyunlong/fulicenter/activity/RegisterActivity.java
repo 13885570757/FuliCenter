@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 
 import com.wuyunlong.fulicenter.I;
 import com.wuyunlong.fulicenter.R;
@@ -14,28 +13,29 @@ import com.wuyunlong.fulicenter.bean.Result;
 import com.wuyunlong.fulicenter.net.NetDao;
 import com.wuyunlong.fulicenter.net.OkHttpUtils;
 import com.wuyunlong.fulicenter.utils.CommonUtils;
-import com.wuyunlong.fulicenter.utils.ConvertUtils;
 import com.wuyunlong.fulicenter.utils.L;
 import com.wuyunlong.fulicenter.utils.MFGT;
+import com.wuyunlong.fulicenter.view.DisplayUtils;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class RegisterActivity extends BaseActivity {
 
-    @Bind(R.id.register_back)
-    ImageView registerBack;
-    @Bind(R.id.register_username)
-    EditText registerUsername;
-    @Bind(R.id.register_nick)
-    EditText registerNick;
-    @Bind(R.id.register_password)
-    EditText registerPassword;
-    @Bind(R.id.register_repassword)
-    EditText registerRepassword;
+public class RegisterActivity extends BaseActivity {
+    private static final String TAG = RegisterActivity.class.getSimpleName();
+
+    @Bind(R.id.username)
+    EditText mUsername;
+    @Bind(R.id.nick)
+    EditText mNick;
+    @Bind(R.id.password)
+    EditText mPassword;
+    @Bind(R.id.confirm_password)
+    EditText mConfirmPassword;
     @Bind(R.id.btn_register)
-    Button btnRegister;
+    Button mBtnRegister;
+
 
     String username;
     String nickname;
@@ -44,17 +44,15 @@ public class RegisterActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ButterKnife.bind(this);
-
         setContentView(R.layout.activity_register);
-        mContext  =  this;
+        ButterKnife.bind(this);
+        mContext = this;
         super.onCreate(savedInstanceState);
     }
 
     @Override
     protected void initView() {
-
-
+        DisplayUtils.initBackWithTitle(this, "账户注册");
     }
 
     @Override
@@ -69,28 +67,33 @@ public class RegisterActivity extends BaseActivity {
 
     @OnClick(R.id.btn_register)
     public void checkedInput() {
-        String username = registerUsername.getText().toString().trim();
-        String nickname =registerNick.getText().toString().trim();
-        String password = registerPassword.getText().toString().trim();
-        String repassword = registerRepassword.getText().toString().trim();
-        if (TextUtils.isEmpty(username)){//账号不能为空
+        username = mUsername.getText().toString().trim();
+        nickname = mNick.getText().toString().trim();
+        password = mPassword.getText().toString().trim();
+        String confirmPwd = mConfirmPassword.getText().toString().trim();
+        if(TextUtils.isEmpty(username)){
             CommonUtils.showShortToast(R.string.user_name_connot_be_empty);
-            registerUsername.requestFocus();
+            mUsername.requestFocus();
             return;
-        }else if(!username.matches(("[a-zA-z]\\w{5,15}"))){//密码的范围
+        }else if(!username.matches("[a-zA-Z]\\w{5,15}")){
             CommonUtils.showShortToast(R.string.illegal_user_name);
+            mUsername.requestFocus();
             return;
-        }else if(TextUtils.isEmpty(nickname)){//昵称不能为空
+        }else if(TextUtils.isEmpty(nickname)){
             CommonUtils.showShortToast(R.string.nick_name_connot_be_empty);
+            mNick.requestFocus();
             return;
-        }else if(TextUtils.isEmpty(password)){//密码不能为空
+        }else if(TextUtils.isEmpty(password)){
             CommonUtils.showShortToast(R.string.password_connot_be_empty);
+            mPassword.requestFocus();
             return;
-        }else if(TextUtils.isEmpty(repassword)){
+        }else if(TextUtils.isEmpty(confirmPwd)){
             CommonUtils.showShortToast(R.string.confirm_password_connot_be_empty);
+            mConfirmPassword.requestFocus();
             return;
-        }else if (!password.equals(repassword)){//两次密码不一致
+        }else if(!password.equals(confirmPwd)){
             CommonUtils.showShortToast(R.string.two_input_password);
+            mConfirmPassword.requestFocus();
             return;
         }
         register();
@@ -104,12 +107,17 @@ public class RegisterActivity extends BaseActivity {
             @Override
             public void onSuccess(Result result) {
                 pd.dismiss();
-                if (result==null){//注册失败
+                if(result==null){
                     CommonUtils.showShortToast(R.string.register_fail);
-                    setResult(RESULT_OK,new Intent().putExtra(I.User.USER_NAME,username));
-                    MFGT.finish(mContext);
                 }else{
-                    CommonUtils.showShortToast(R.string.register_fail_exists);
+                    if(result.isRetMsg()){
+                        CommonUtils.showLongToast(R.string.register_success);
+                        setResult(RESULT_OK,new Intent().putExtra(I.User.USER_NAME,username));
+                        MFGT.finish(mContext);
+                    }else{
+                        CommonUtils.showLongToast(R.string.register_fail_exists);
+                        mUsername.requestFocus();
+                    }
                 }
             }
 
@@ -117,11 +125,8 @@ public class RegisterActivity extends BaseActivity {
             public void onError(String error) {
                 pd.dismiss();
                 CommonUtils.showShortToast(error);
-                L.e("注册错误"+error);
-
+                L.e(TAG,"register error="+error);
             }
         });
-
     }
-
 }

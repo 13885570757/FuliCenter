@@ -35,10 +35,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 
-/**
- * Created by yao on 2016/9/16.
- *
- */
+
 public class OkHttpUtils<T> {
     private static String UTF_8 = "utf-8";
     public static final int RESULT_SUCCESS = 0;

@@ -4,9 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
-
 import com.wuyunlong.fulicenter.R;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 

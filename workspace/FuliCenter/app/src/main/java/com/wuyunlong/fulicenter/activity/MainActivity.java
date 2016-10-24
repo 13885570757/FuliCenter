@@ -42,13 +42,13 @@ public class MainActivity extends BaseActivity {
     BoutiqueFragment mBoutiqueFragment;
     CategoryFragment mCategoryFragment;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         L.i("MainActivity onCreate");
         super.onCreate(savedInstanceState);
+        initFragment();
     }
 
     private void initFragment() {
@@ -59,7 +59,6 @@ public class MainActivity extends BaseActivity {
         mFragments[0] = mNewGoodsFragment;
         mFragments[1] = mBoutiqueFragment;
         mFragments[2] = mCategoryFragment;
-
         getSupportFragmentManager()
                 .beginTransaction()
                 .add(R.id.fragment_container,mNewGoodsFragment)
@@ -106,11 +105,10 @@ public class MainActivity extends BaseActivity {
                 index = 3;
                 break;
             case R.id.layout_personal_center:
-                //如果无用户名，跳转到注册界面
-                if(FuLiCenterApplication.getUsername() ==null){
+                if(FuLiCenterApplication.getUsername()==null){
                     MFGT.gotoLogin(this);
-                }else{
-                    index= 4;
+                }else {
+                    index = 4;
                 }
                 break;
         }

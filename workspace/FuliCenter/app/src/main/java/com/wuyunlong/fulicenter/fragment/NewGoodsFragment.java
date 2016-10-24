@@ -28,6 +28,11 @@ import butterknife.ButterKnife;
 
 
 public class NewGoodsFragment extends BaseFragment {
+    MainActivity mContext;
+    GoodsAdapter mAdapter;
+    ArrayList<NewGoodsBean> mList;
+    int pageId = 1;
+    GridLayoutManager glm;
     @Bind(R.id.tv_refresh)
     TextView mTvRefresh;
     @Bind(R.id.rv)
@@ -35,23 +40,19 @@ public class NewGoodsFragment extends BaseFragment {
     @Bind(R.id.srl)
     SwipeRefreshLayout mSrl;
 
-    MainActivity mContext;
-    GoodsAdapter mAdapter;
-    ArrayList<NewGoodsBean> mList;
-    int pageId = 1;
-    GridLayoutManager glm;
-
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,  Bundle savedInstanceState) {
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         L.e("NewGoodsFragment.onCreateView");
         View layout = inflater.inflate(R.layout.fragment_newgoods, container, false);
+        mTvRefresh = (TextView) layout.findViewById(R.id.tv_refresh);
+        mRv = (RecyclerView) layout.findViewById(R.id.rv);
+        mSrl = (SwipeRefreshLayout) layout.findViewById(R.id.srl);
         ButterKnife.bind(this, layout);
         mContext = (MainActivity) getContext();
         mList = new ArrayList<>();
-        mAdapter = new GoodsAdapter(mContext,mList);
-        super.onCreateView(inflater,container,savedInstanceState);
+        mAdapter = new GoodsAdapter(mContext, mList);
+        super.onCreateView(inflater, container, savedInstanceState);
         return layout;
     }
 
@@ -66,6 +67,7 @@ public class NewGoodsFragment extends BaseFragment {
             @Override
             public void onRefresh() {
                 mSrl.setRefreshing(true);
+                mSrl.setEnabled(true);
                 mTvRefresh.setVisibility(View.VISIBLE);
                 pageId = 1;
                 downloadNewGoods(I.ACTION_PULL_DOWN);
@@ -78,20 +80,21 @@ public class NewGoodsFragment extends BaseFragment {
             @Override
             public void onSuccess(NewGoodsBean[] result) {
                 mSrl.setRefreshing(false);
+                mSrl.setEnabled(false);
                 mTvRefresh.setVisibility(View.GONE);
                 mAdapter.setMore(true);
-                L.e("result="+result);
-                if(result!=null && result.length>0){
+                L.e("result=" + result);
+                if (result != null && result.length > 0) {
                     ArrayList<NewGoodsBean> list = ConvertUtils.array2List(result);
-                    if(action==I.ACTION_DOWNLOAD || action == I.ACTION_PULL_DOWN) {
+                    if (action == I.ACTION_DOWNLOAD || action == I.ACTION_PULL_DOWN) {
                         mAdapter.initData(list);
-                    }else{
+                    } else {
                         mAdapter.addData(list);
                     }
-                    if(list.size()<I.PAGE_SIZE_DEFAULT){
+                    if (list.size() < I.PAGE_SIZE_DEFAULT) {
                         mAdapter.setMore(false);
                     }
-                }else{
+                } else {
                     mAdapter.setMore(false);
                 }
             }
@@ -102,7 +105,7 @@ public class NewGoodsFragment extends BaseFragment {
                 mTvRefresh.setVisibility(View.GONE);
                 mAdapter.setMore(false);
                 CommonUtils.showShortToast(error);
-                L.e("error:"+error);
+                L.e("error:" + error);
             }
         });
     }
@@ -113,9 +116,9 @@ public class NewGoodsFragment extends BaseFragment {
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 int lastPosition = glm.findLastVisibleItemPosition();
-                if(newState == RecyclerView.SCROLL_STATE_IDLE
-                        && lastPosition == mAdapter.getItemCount()-1
-                        && mAdapter.isMore()){
+                if (newState == RecyclerView.SCROLL_STATE_IDLE
+                        && lastPosition == mAdapter.getItemCount() - 1
+                        && mAdapter.isMore()) {
                     pageId++;
                     downloadNewGoods(I.ACTION_PULL_UP);
                 }
@@ -125,7 +128,7 @@ public class NewGoodsFragment extends BaseFragment {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 int firstPosition = glm.findFirstVisibleItemPosition();
-                mSrl.setEnabled(firstPosition==0);
+                mSrl.setEnabled(firstPosition == 0);
             }
         });
     }
@@ -148,5 +151,11 @@ public class NewGoodsFragment extends BaseFragment {
         mRv.setHasFixedSize(true);
         mRv.setAdapter(mAdapter);
         mRv.addItemDecoration(new SpaceItemDecoration(12));
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
     }
 }

@@ -22,7 +22,6 @@ import com.wuyunlong.fulicenter.view.SpaceItemDecoration;
 
 import java.util.ArrayList;
 
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -51,12 +50,12 @@ public class BoutiqueChildActivity extends BaseActivity {
         setContentView(R.layout.activity_boutique_child);
         ButterKnife.bind(this);
         boutique = (BoutiqueBean) getIntent().getSerializableExtra(I.Boutique.CAT_ID);
-        if (boutique == null) {
+        if(boutique == null){
             finish();
         }
         mContext = this;
         mList = new ArrayList<>();
-        mAdapter = new GoodsAdapter(mContext, mList);
+        mAdapter = new GoodsAdapter(mContext,mList);
         super.onCreate(savedInstanceState);
     }
 
@@ -96,24 +95,24 @@ public class BoutiqueChildActivity extends BaseActivity {
     }
 
     private void downloadNewGoods(final int action) {
-        NetDao.downloadNewGoods(mContext, boutique.getId(), pageId, new OkHttpUtils.OnCompleteListener<NewGoodsBean[]>() {
+        NetDao.downloadNewGoods(mContext,boutique.getId(), pageId, new OkHttpUtils.OnCompleteListener<NewGoodsBean[]>() {
             @Override
             public void onSuccess(NewGoodsBean[] result) {
                 mSrl.setRefreshing(false);
                 mTvRefresh.setVisibility(View.GONE);
                 mAdapter.setMore(true);
-                L.e("result=" + result);
-                if (result != null && result.length > 0) {
+                L.e("result="+result);
+                if(result!=null && result.length>0){
                     ArrayList<NewGoodsBean> list = ConvertUtils.array2List(result);
-                    if (action == I.ACTION_DOWNLOAD || action == I.ACTION_PULL_DOWN) {
+                    if(action==I.ACTION_DOWNLOAD || action == I.ACTION_PULL_DOWN) {
                         mAdapter.initData(list);
-                    } else {
+                    }else{
                         mAdapter.addData(list);
                     }
-                    if (list.size() < I.PAGE_SIZE_DEFAULT) {
+                    if(list.size()<I.PAGE_SIZE_DEFAULT){
                         mAdapter.setMore(false);
                     }
-                } else {
+                }else{
                     mAdapter.setMore(false);
                 }
             }
@@ -124,7 +123,7 @@ public class BoutiqueChildActivity extends BaseActivity {
                 mTvRefresh.setVisibility(View.GONE);
                 mAdapter.setMore(false);
                 CommonUtils.showShortToast(error);
-                L.e("error:" + error);
+                L.e("error:"+error);
             }
         });
     }
@@ -135,9 +134,9 @@ public class BoutiqueChildActivity extends BaseActivity {
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 int lastPosition = glm.findLastVisibleItemPosition();
-                if (newState == RecyclerView.SCROLL_STATE_IDLE
-                        && lastPosition == mAdapter.getItemCount() - 1
-                        && mAdapter.isMore()) {
+                if(newState == RecyclerView.SCROLL_STATE_IDLE
+                        && lastPosition == mAdapter.getItemCount()-1
+                        && mAdapter.isMore()){
                     pageId++;
                     downloadNewGoods(I.ACTION_PULL_UP);
                 }
@@ -147,7 +146,7 @@ public class BoutiqueChildActivity extends BaseActivity {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 int firstPosition = glm.findFirstVisibleItemPosition();
-                mSrl.setEnabled(firstPosition == 0);
+                mSrl.setEnabled(firstPosition==0);
             }
         });
     }

@@ -13,69 +13,69 @@ import com.wuyunlong.fulicenter.activity.LoginActivity;
 import com.wuyunlong.fulicenter.activity.MainActivity;
 import com.wuyunlong.fulicenter.activity.RegisterActivity;
 import com.wuyunlong.fulicenter.bean.BoutiqueBean;
+import com.wuyunlong.fulicenter.bean.CategoryChildBean;
+
+import java.util.ArrayList;
 
 
 public class MFGT {
-    public static void finish(Activity activity) {
+    public static void finish(Activity activity){
         activity.finish();
-        activity.overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
+        activity.overridePendingTransition(R.anim.push_right_in,R.anim.push_right_out);
     }
-
-    public static void gotoMainActivity(Activity context) {
+    public static void gotoMainActivity(Activity context){
         startActivity(context, MainActivity.class);
     }
-
-    public static void startActivity(Activity context, Class<?> cls) {
+    public static void startActivity(Activity context,Class<?> cls){
         Intent intent = new Intent();
-        intent.setClass(context, cls);
-        startActivity(context, intent);
+        intent.setClass(context,cls);
+        startActivity(context,intent);
     }
 
-    public static void gotoGoodsDetailsActivity(Context context, int goodsId) {
+    public static void gotoGoodsDetailsActivity(Context context, int goodsId){
         Intent intent = new Intent();
         intent.setClass(context, GoodsDetailActivity.class);
-        intent.putExtra(I.GoodsDetails.KEY_GOODS_ID, goodsId);
-        startActivity(context, intent);
+        intent.putExtra(I.GoodsDetails.KEY_GOODS_ID,goodsId);
+        startActivity(context,intent);
     }
 
-    public static void startActivity(Context context, Intent intent) {
+    public static void startActivity(Context context,Intent intent){
         context.startActivity(intent);
-        ((Activity) context).overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+        ((Activity)context).overridePendingTransition(R.anim.push_left_in,R.anim.push_left_out);
     }
 
 
-    public static void gotoBoutiqueChildActivity(Context context, BoutiqueBean bean) {
+    public static void gotoBoutiqueChildActivity(Context context, BoutiqueBean bean){
         Intent intent = new Intent();
         intent.setClass(context, BoutiqueChildActivity.class);
-        intent.putExtra(I.Boutique.CAT_ID, bean);
-        startActivity(context, intent);
+        intent.putExtra(I.Boutique.CAT_ID,bean);
+        startActivity(context,intent);
     }
 
-    public static void gotoCategoryChildActivity(Context context, int catId) {
+
+    public static void gotoCategoryChildActivity(Context context, int catId, String groupName, ArrayList<CategoryChildBean> list){
         Intent intent = new Intent();
         intent.setClass(context, CategoryChildActivity.class);
-        intent.putExtra(I.CategoryChild.CAT_ID, catId);
-        startActivity(context, intent);
+        intent.putExtra(I.CategoryChild.CAT_ID,catId);
+        intent.putExtra(I.CategoryGroup.NAME,groupName);
+        intent.putExtra(I.CategoryChild.ID,list);
+        startActivity(context,intent);
     }
 
-    /**
-     * 跳转到登录界面
-     *
-     * @param context
-     */
-    public static void gotoLogin(Activity context) {
+    public static void gotoLogin(Activity context){
         startActivity(context, LoginActivity.class);
     }
 
-    public static void gotoRegister(Activity context) {
+    public static void gotoRegister(Activity context){
         Intent intent = new Intent();
-        intent.setClass(context, RegisterActivity.class);
-        startActivityForResult(context, intent,I.REQUEST_CODE_REGISTER);//接口
+        intent.setClass(context,RegisterActivity.class);
+        startActivityForResult(context,intent,I.REQUEST_CODE_REGISTER);
     }
 
-    public static void startActivityForResult(Activity context, Intent intent,int requestCode) {
+
+    public static void startActivityForResult(Activity context,Intent intent,int requestCode){
         context.startActivityForResult(intent,requestCode);
         context.overridePendingTransition(R.anim.push_left_in,R.anim.push_left_out);
-
     }
+
 }

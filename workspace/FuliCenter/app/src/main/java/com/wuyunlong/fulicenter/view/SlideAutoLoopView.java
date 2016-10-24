@@ -20,8 +20,6 @@ import java.lang.reflect.Field;
 import java.util.Timer;
 import java.util.TimerTask;
 
-
-
 /**
  * 图片轮播
  * @author yao
