@@ -11,6 +11,7 @@ import android.widget.ImageView;
 
 import com.wuyunlong.fulicenter.I;
 import com.wuyunlong.fulicenter.R;
+import com.wuyunlong.fulicenter.bean.User;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -357,6 +358,24 @@ public class ImageLoader {
                 .defaultPicture(R.drawable.nopic)
                 .imageView(imageView)
                 .setDragging(isDragging)
+                .showImage(context);
+    }
+
+    public static String getAvatarUrl(User user){
+        if (user!=null){
+            String url = I.DOWNLOAD_IMG_URL+I.NAME_OR_HXID+"="+user.getMuserName()
+                    +I.AND+I.AVATAR_TYPE+"="+user.getMavatarPath()
+                   +I.AND+I.AVATAR_SUFFIX_JPG
+                    +"="+user.getMavatarSuffix()+I.AND+"width=200&height=200";
+            return url;
+
+        }
+        return null;
+    }
+    public static void setAvatar(String url,Context context,ImageView imageView){
+        ImageLoader.build(url)
+                .defaultPicture(R.drawable.contactlogo)
+                .imageView(imageView)
                 .showImage(context);
     }
 }
