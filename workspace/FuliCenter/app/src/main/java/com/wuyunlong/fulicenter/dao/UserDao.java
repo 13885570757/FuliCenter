@@ -20,21 +20,18 @@ public class UserDao {
 
 
 
-
-    DBManager dbManager;
-
     public UserDao(Context context) {
-         dbManager = DBManager.onInit(context);
+        DBManager.getInstance().onInit(context);
     }
 
     public boolean saveUser(User user){
-        return dbManager.saveUser(user);
+        return DBManager.getInstance().saveUser(user);
     }
 
     public User getUser(String username){
-        return  dbManager.getUser(username);
+        return  DBManager.getInstance().getUser(username);
     }
     public boolean updateUser(User user){
-        return dbManager.updataUser(user);
+        return DBManager.getInstance().updataUser(user);
     }
 }
