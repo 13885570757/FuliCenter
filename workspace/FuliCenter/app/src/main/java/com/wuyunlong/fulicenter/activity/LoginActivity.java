@@ -7,10 +7,13 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 
+import com.wuyunlong.fulicenter.FuLiCenterApplication;
 import com.wuyunlong.fulicenter.I;
 import com.wuyunlong.fulicenter.R;
 import com.wuyunlong.fulicenter.bean.Result;
 import com.wuyunlong.fulicenter.bean.User;
+import com.wuyunlong.fulicenter.dao.SharePrefrenceUtils;
+import com.wuyunlong.fulicenter.dao.UserDao;
 import com.wuyunlong.fulicenter.net.NetDao;
 import com.wuyunlong.fulicenter.net.OkHttpUtils;
 import com.wuyunlong.fulicenter.utils.CommonUtils;
@@ -21,7 +24,6 @@ import com.wuyunlong.fulicenter.utils.ResultUtils;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
 
 
 public class LoginActivity extends BaseActivity {
@@ -74,11 +76,11 @@ public class LoginActivity extends BaseActivity {
     private void checkedInput() {
         username = mUsername.getText().toString().trim();
         password = mPassword.getText().toString().trim();
-        if(TextUtils.isEmpty(username)){
+        if (TextUtils.isEmpty(username)) {
             CommonUtils.showLongToast(R.string.user_name_connot_be_empty);
             mUsername.requestFocus();
             return;
-        }else if(TextUtils.isEmpty(password)){
+        } else if (TextUtils.isEmpty(password)) {
             CommonUtils.showLongToast(R.string.password_connot_be_empty);
             mPassword.requestFocus();
             return;
@@ -91,26 +93,36 @@ public class LoginActivity extends BaseActivity {
         final ProgressDialog pd = new ProgressDialog(mContext);
         pd.setMessage(getResources().getString(R.string.logining));
         pd.show();
-        L.e(TAG,"username="+username+",password="+password);
+        L.e(TAG, "username=" + username + ",password=" + password);
         NetDao.login(mContext, username, password, new OkHttpUtils.OnCompleteListener<String>() {
             @Override
             public void onSuccess(String s) {
-               Result result= ResultUtils.getResultFromJson(s,User.class);
+                Result result = ResultUtils.getResultFromJson(s, User.class);
 
-                L.e(TAG,"result="+result);
-                if(result==null){
-                    CommonUtils.showLongToast(R.string.login_fail);
-                }else{
-                    if(result.isRetMsg()){
+                L.e(TAG, "result=" + result);
+                if (result == null) {
+                    CommonUtils.showLongToast("登录失败");
+                } else {
+                    if (result.isRetMsg()) {
                         User user = (User) result.getRetData();
-                        L.e(TAG,"user="+user);
-                        MFGT.finish(mContext);
-                    }else{
-                        if(result.getRetCode()== I.MSG_LOGIN_UNKNOW_USER){
+                        L.e(TAG, "user=" + user);
+                        //MFGT.finish(mContext);
+                        UserDao dao = new UserDao(mContext);
+                        boolean isSuccess = dao.saveUser(user);
+                        if (isSuccess) {
+                            SharePrefrenceUtils.getInstance(mContext)
+                                    .saveUser(user.getMuserName());
+                            FuLiCenterApplication.setUser(user);
+                            MFGT.finish(mContext);
+                        } else {
+                            CommonUtils.showLongToast("数据库错误");
+                        }
+                    } else {
+                        if (result.getRetCode() == I.MSG_LOGIN_UNKNOW_USER) {
                             CommonUtils.showLongToast(R.string.login_fail_unknow_user);
-                        }else if(result.getRetCode()==I.MSG_LOGIN_ERROR_PASSWORD){
+                        } else if (result.getRetCode() == I.MSG_LOGIN_ERROR_PASSWORD) {
                             CommonUtils.showLongToast(R.string.login_fail_error_password);
-                        }else{
+                        } else {
                             CommonUtils.showLongToast(R.string.login_fail);
                         }
                     }
@@ -122,7 +134,7 @@ public class LoginActivity extends BaseActivity {
             public void onError(String error) {
                 pd.dismiss();
                 CommonUtils.showLongToast(error);
-                L.e(TAG,"error="+error);
+                L.e(TAG, "error=" + error);
             }
         });
     }
@@ -130,7 +142,7 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK && requestCode == I.REQUEST_CODE_REGISTER){
+        if (resultCode == RESULT_OK && requestCode == I.REQUEST_CODE_REGISTER) {
             String name = data.getStringExtra(I.User.USER_NAME);
             mUsername.setText(name);
         }

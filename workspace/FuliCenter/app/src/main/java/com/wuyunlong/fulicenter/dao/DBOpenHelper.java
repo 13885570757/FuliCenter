@@ -14,21 +14,23 @@ public class DBOpenHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;//版本
     private static DBOpenHelper instance;
 
-    private static final String CREATE_USER_TABLE = "";//数据库语句
-    private static final String FuliCenter_USER_TABLE_CREATE="CREATA TABLE"
-            +UserDao.USER_TABLE_NAME+"("
-            +UserDao.USER_COLUMN_NAME+"TEXT PRIMARY KEY,"
-            +UserDao.USER_COLUMN_NICK+"TEXT,"
-            +UserDao.USER_COLUMN_AVATAR_ID+"INTEGER,"
-            +UserDao.USER_COLUMN_AVATAR_TYPE+"INTEGER,"
-            +UserDao.USER_COLUMN_AVATAR_PATH+"TEXT,"
-            +UserDao.USER_COLUMN_AVATAR_SUFFIX+"TEXT,"
-            +UserDao.USER_COLUMN_AVATAR_LASTUPDATE_TIME+"TEXT;";
+  //  private static final String CREATE_USER_TABLE = "";//数据库语句
+    private static final String FuliCenter_USER_TABLE_CREATE="CREATE TABLE "
+            +UserDao.USER_TABLE_NAME+" ("
+            +UserDao.USER_COLUMN_NAME+" TEXT PRIMARY KEY,"
+            +UserDao.USER_COLUMN_NICK+" TEXT,"
+            +UserDao.USER_COLUMN_AVATAR_ID+" INTEGER,"
+            +UserDao.USER_COLUMN_AVATAR_TYPE+" INTEGER,"
+            +UserDao.USER_COLUMN_AVATAR_PATH+" TEXT,"
+            +UserDao.USER_COLUMN_AVATAR_SUFFIX+" TEXT,"
+            +UserDao.USER_COLUMN_AVATAR_LASTUPDATE_TIME+" TEXT);";
+
+
+    //("数据库语句"+FuliCenter_USER_TABLE_CREATE);
 
 
 
-
-    public static DBOpenHelper onInit(Context context){
+    public static DBOpenHelper getInstance(Context context){
         if (instance==null){
             instance = new DBOpenHelper(context);
         }
@@ -50,7 +52,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
      */
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL(CREATE_USER_TABLE);
+        sqLiteDatabase.execSQL(FuliCenter_USER_TABLE_CREATE);
 
     }
 
@@ -64,7 +66,8 @@ public class DBOpenHelper extends SQLiteOpenHelper {
      */
     public void closeDB(){
         if (instance!=null){
-            instance.close();
+            SQLiteDatabase db = instance.getWritableDatabase();
+            db.close();
             instance=null;//初始化为空
         }
     }

@@ -15,9 +15,6 @@ public class DBManager {
     private static DBManager dbMgr = new DBManager();
     private DBOpenHelper dbHelper;
 
-    public DBManager() {
-    }
-
     void onInit(Context context) {
         dbHelper = new DBOpenHelper(context);
 
