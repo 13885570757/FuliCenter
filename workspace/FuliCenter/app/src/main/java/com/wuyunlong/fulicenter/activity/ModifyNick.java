@@ -75,6 +75,6 @@ public class ModifyNick extends BaseActivity {
     }
 
     private void updateNick(String nick) {
-
+            
     }
 }
