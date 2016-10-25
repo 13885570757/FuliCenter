@@ -327,6 +327,8 @@ public interface I {
     int MSG_UNKNOW=999;//未知错误
     int MSG_ILLEGAL_REQUEST=-1;    //非法请求
 
+    int REQUEST_CODE_NICK = 103;//修改昵称
+
     /** 上传头像图片的类型：user_avatar或group_icon */
     String AVATAR_TYPE = "avatarType";
     /** 用户的账号或群组的环信id */

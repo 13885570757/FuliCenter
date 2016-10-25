@@ -11,6 +11,7 @@ import com.wuyunlong.fulicenter.activity.CategoryChildActivity;
 import com.wuyunlong.fulicenter.activity.GoodsDetailActivity;
 import com.wuyunlong.fulicenter.activity.LoginActivity;
 import com.wuyunlong.fulicenter.activity.MainActivity;
+import com.wuyunlong.fulicenter.activity.ModifyNick;
 import com.wuyunlong.fulicenter.activity.PersonalInfo;
 import com.wuyunlong.fulicenter.activity.QrcodeActivity;
 import com.wuyunlong.fulicenter.activity.RegisterActivity;
@@ -119,5 +120,9 @@ public class MFGT {
          intent.setClass(context,QrcodeActivity.class);
          startActivityForResult(context,intent,0);
      }
+
+    public static void gotoModifyNick(Activity context){
+        startActivityForResult(context,new Intent(context, ModifyNick.class),I.REQUEST_CODE_NICK);
+    }
 
 }

@@ -1,8 +1,6 @@
 package com.wuyunlong.fulicenter.activity;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -39,6 +37,7 @@ public class PersonalInfo extends BaseActivity {
 
     User user;
     PersonalInfo mContext;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -84,7 +83,7 @@ public class PersonalInfo extends BaseActivity {
 
                 break;
             case R.id.rlNick:
-                changeNick();
+                MFGT.gotoModifyNick(mContext);
                 break;
             case R.id.rlQrcode://二维码界面
                 MFGT.gotoQrcodeActivity(this);
@@ -95,37 +94,31 @@ public class PersonalInfo extends BaseActivity {
         }
     }
 
+
     /**
      * 注销账号
      */
     private void loginout() {
-        if (user!=null){
+        if (user != null) {
             SharePrefrenceUtils.getInstance(this).removeUser();
             FuLiCenterApplication.setUser(null);
             MFGT.gotoLogin(this);
         }
         MFGT.finish(this);
-
-
     }
 
-    /**
-     * 修改昵称
-     */
-    private void changeNick() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("修改昵称")
-                .setMessage("确定修改昵称？")
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+    @Override
+    protected void onResume() {
+        super.onResume();
+        showInfo();
+    }
 
-                    }
-                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-            }
-        }).show();
+    private void showInfo() {
+        user = FuLiCenterApplication.getUser();
+        if (user != null) {
+            SharePrefrenceUtils.getInstance(this).removeUser();
+            FuLiCenterApplication.setUser(null);
+            MFGT.gotoLogin(this);
+        }
     }
 }

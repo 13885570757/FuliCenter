@@ -129,7 +129,7 @@ public class NetDao {
                 .execute(listener);
     }
 
-    public static void updateNick(Context context,String nick,
+    public static void updateNick(Context context, String muserName, String nick,
                                   OkHttpUtils.OnCompleteListener<String> listener){
         OkHttpUtils<String> utils = new OkHttpUtils<>(context);
         utils.setRequestUrl(I.REQUEST_UPDATE_USER_NICK)
