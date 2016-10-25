@@ -19,6 +19,7 @@ import com.wuyunlong.fulicenter.utils.CommonUtils;
 import com.wuyunlong.fulicenter.utils.L;
 import com.wuyunlong.fulicenter.utils.MFGT;
 import com.wuyunlong.fulicenter.utils.ResultUtils;
+import com.wuyunlong.fulicenter.view.DisplayUtils;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -49,8 +50,8 @@ public class ModifyNick extends BaseActivity {
     @Override
     protected void initView() {
         //获取标题
-      //  DisplayUtils.initBackWithTitle(mContext,
-              //  getResources().getString(R.string.user_name));
+      DisplayUtils.initBackWithTitle(mContext,
+              getResources().getString(R.string.user_name));
 
     }
 
@@ -87,9 +88,10 @@ public class ModifyNick extends BaseActivity {
 
     private void updateNick(String nick) {
         final ProgressDialog pd = new ProgressDialog(mContext);
-        pd.setMessage(getResources().getString(0));
+        pd.setMessage(getResources().getString(R.string.update_user_nick));
         pd.show();
-        NetDao.updateNick(mContext,user.getMuserName(),nick, new OkHttpUtils.OnCompleteListener<String>() {
+        NetDao.updateNick(mContext,user.getMuserName(),nick,
+                new OkHttpUtils.OnCompleteListener<String>() {
             @Override
             public void onSuccess(String s) {
                     Result result = ResultUtils.getResultFromJson(s, User.class);
