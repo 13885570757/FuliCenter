@@ -12,6 +12,7 @@ import com.wuyunlong.fulicenter.activity.GoodsDetailActivity;
 import com.wuyunlong.fulicenter.activity.LoginActivity;
 import com.wuyunlong.fulicenter.activity.MainActivity;
 import com.wuyunlong.fulicenter.activity.PersonalInfo;
+import com.wuyunlong.fulicenter.activity.QrcodeActivity;
 import com.wuyunlong.fulicenter.activity.RegisterActivity;
 import com.wuyunlong.fulicenter.bean.BoutiqueBean;
 import com.wuyunlong.fulicenter.bean.CategoryChildBean;
@@ -115,7 +116,7 @@ public class MFGT {
      */
      public static void gotoQrcodeActivity(Activity context){
          Intent intent = new Intent();
-         intent.setClass(context,RegisterActivity.class);
+         intent.setClass(context,QrcodeActivity.class);
          startActivityForResult(context,intent,0);
      }
 

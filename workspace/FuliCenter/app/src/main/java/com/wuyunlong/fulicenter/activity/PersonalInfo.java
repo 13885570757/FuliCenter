@@ -38,25 +38,29 @@ public class PersonalInfo extends BaseActivity {
     Button btUnLogin;
 
     User user;
-
+    PersonalInfo mContext;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         setContentView(R.layout.activity_personal_info);
         ButterKnife.bind(this);
+        mContext = this;
         super.onCreate(savedInstanceState);
     }
 
     @Override
     protected void initView() {
+        //DisplayUtils.initBackWithTitle(mContext,getResources().getString());
+
 
     }
 
     @Override
     protected void initData() {
-        user = FuLiCenterApplication.getUser();
+        user = FuLiCenterApplication.getUser();//从Fuli中获取用户信息
         if (user != null) {
-            ImageLoader.setAvatar(ImageLoader.getAvatarUrl(user), this, ivAvatar);
+            ImageLoader.setAvatar(ImageLoader.getAvatarUrl(user), mContext, ivAvatar);
+
             tvNick.setText(user.getMuserNick());
         } else {
             finish();
@@ -82,10 +86,10 @@ public class PersonalInfo extends BaseActivity {
             case R.id.rlNick:
                 changeNick();
                 break;
-            case R.id.rlQrcode:
+            case R.id.rlQrcode://二维码界面
                 MFGT.gotoQrcodeActivity(this);
                 break;
-            case R.id.btUnLogin:
+            case R.id.btUnLogin://注销
                 loginout();
                 break;
         }

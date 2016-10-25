@@ -79,12 +79,11 @@ public class PersonalCenterFragment extends BaseFragment {
     @OnClick({R.id.tv_center_settings, R.id.center_user_info})
     public void onClick(View view) {
         switch (view.getId()) {
-
-            case R.id.tv_center_settings:
+            case R.id.tv_center_settings://跳转到个人信息
                 MFGT.gotoPersonaInfo(mContext);
                 break;
             case R.id.center_user_info:
-                MFGT.gotoPersonaInfo(mContext);
+                MFGT.gotoPersonaInfo(mContext);//跳转到个人信息
                 break;
         }
     }
