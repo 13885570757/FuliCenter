@@ -11,6 +11,7 @@ import com.wuyunlong.fulicenter.activity.CategoryChildActivity;
 import com.wuyunlong.fulicenter.activity.GoodsDetailActivity;
 import com.wuyunlong.fulicenter.activity.LoginActivity;
 import com.wuyunlong.fulicenter.activity.MainActivity;
+import com.wuyunlong.fulicenter.activity.PersonalInfo;
 import com.wuyunlong.fulicenter.activity.RegisterActivity;
 import com.wuyunlong.fulicenter.bean.BoutiqueBean;
 import com.wuyunlong.fulicenter.bean.CategoryChildBean;
@@ -44,6 +45,11 @@ public class MFGT {
         ((Activity)context).overridePendingTransition(R.anim.push_left_in,R.anim.push_left_out);
     }
 
+    /**
+     * 精选详情
+     * @param context
+     * @param bean
+     */
 
     public static void gotoBoutiqueChildActivity(Context context, BoutiqueBean bean){
         Intent intent = new Intent();
@@ -52,7 +58,13 @@ public class MFGT {
         startActivity(context,intent);
     }
 
-
+    /**
+     * 分类详情
+     * @param context
+     * @param catId
+     * @param groupName
+     * @param list
+     */
     public static void gotoCategoryChildActivity(Context context, int catId, String groupName, ArrayList<CategoryChildBean> list){
         Intent intent = new Intent();
         intent.setClass(context, CategoryChildActivity.class);
@@ -62,12 +74,20 @@ public class MFGT {
         startActivity(context,intent);
     }
 
+    /**
+     * 登录
+     * @param context
+     */
     public static void gotoLogin(Activity context){
         Intent intent = new Intent();
         intent.setClass(context,LoginActivity.class);
         startActivityForResult(context,intent,I.REQUEST_CODE_LOGIN);
     }
 
+    /**
+     * 注册
+     * @param context
+     */
     public static void gotoRegister(Activity context){
         Intent intent = new Intent();
         intent.setClass(context,RegisterActivity.class);
@@ -79,5 +99,24 @@ public class MFGT {
         context.startActivityForResult(intent,requestCode);
         context.overridePendingTransition(R.anim.push_left_in,R.anim.push_left_out);
     }
+
+    /**
+     * 跳转到个人信息
+     * @param context
+     */
+    public static void gotoPersonaInfo(Activity context){
+        Intent intent = new Intent();
+        intent.setClass(context, PersonalInfo.class);
+        startActivity(context,intent);
+    }
+
+    /**
+     * 跳转到二维码
+     */
+     public static void gotoQrcodeActivity(Activity context){
+         Intent intent = new Intent();
+         intent.setClass(context,RegisterActivity.class);
+         startActivityForResult(context,intent,0);
+     }
 
 }

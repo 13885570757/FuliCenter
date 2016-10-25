@@ -28,6 +28,10 @@
         <activity android:name=".activity.RegisterActivity"/>
         <activity android:name=".activity.PersonalInfo">
         </activity>
+        <activity android:name=".activity.QrcodeActivity">
+        </activity>
+        <activity android:name=".activity.ModifyNick">
+        </activity>
     </application>
 
 </manifest>
