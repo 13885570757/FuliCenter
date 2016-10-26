@@ -9,12 +9,17 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.wuyunlong.fulicenter.FuLiCenterApplication;
 import com.wuyunlong.fulicenter.I;
 import com.wuyunlong.fulicenter.R;
 import com.wuyunlong.fulicenter.bean.CollectBean;
+import com.wuyunlong.fulicenter.bean.MessageBean;
+import com.wuyunlong.fulicenter.net.NetDao;
+import com.wuyunlong.fulicenter.utils.CommonUtils;
 import com.wuyunlong.fulicenter.utils.ImageLoader;
 import com.wuyunlong.fulicenter.utils.L;
 import com.wuyunlong.fulicenter.utils.MFGT;
+import com.wuyunlong.fulicenter.utils.OkHttpUtils;
 
 import java.util.ArrayList;
 
@@ -34,6 +39,7 @@ public class CollectsAdapter extends RecyclerView.Adapter {
     String tvFooter;
 
     int sortBy = I.SORT_BY_PRICE_DESC;
+
 
     public int getSortBy() {
         return sortBy;
@@ -95,12 +101,9 @@ public class CollectsAdapter extends RecyclerView.Adapter {
         } else {
             CollectsViewHolder goods = (CollectsViewHolder) holder;
             CollectBean collectBean = mList.get(position);
-            goods.lvGoodsIntroduce.setText(collectBean.getGoodsName());
-         //   goods.lvGoodsPrice.setText(goodsBean.getShopPrice());
             ImageLoader.downloadImg(mContext, goods.lvGoodsImage, collectBean.getGoodsThumb(), true);
-            goods.lvLayoutCollects.setTag(collectBean.getGoodsId());
-            L.i("=========ColkectBean:" + collectBean.getGoodsId());
-
+            goods.lvGoodsIntroduce.setText(collectBean.getGoodsName());
+            goods.lvLayoutCollects.setTag(collectBean);
         }
     }
 
@@ -150,11 +153,33 @@ public class CollectsAdapter extends RecyclerView.Adapter {
 
         @OnClick(R.id.layout_goods)
         public void onGoodsItemClick() {
-            int goodsId = (int) lvLayoutCollects.getTag();
-//            mContext.startActivity(new Intent(mContext, GoodsDetailsActivity.class)
-//                    .putExtra(I.GoodsDetails.KEY_GOODS_ID, goodsId));
-            MFGT.gotoGoodsDetailsActivity(mContext, goodsId);
+            CollectBean collectBean = (CollectBean) lvLayoutCollects.getTag();
+            MFGT.gotoGoodsDetailsActivity(mContext, collectBean.getGoodsId());
+        }
+        /**
+         * 删除收藏
+         */
+        @OnClick(R.id.delete_collect)
+        public void deleteCollected() {
+            final CollectBean collectBean = (CollectBean) lvLayoutCollects.getTag();
+            String username = FuLiCenterApplication.getUser().getMuserName();
+            NetDao.deleteCollect(mContext, username, collectBean.getGoodsId(), new OkHttpUtils.OnCompleteListener<MessageBean>() {
+                @Override
+                public void onSuccess(MessageBean result) {
+                    if (result!=null&&result.isSuccess()){
+                        mList.remove(collectBean);
+                        notifyDataSetChanged();
+                    }else {
+                        CommonUtils.showLongToast("删除失败");
+                    }
+                }
 
+                @Override
+                public void onError(String error) {
+                    L.e("删除收藏失败"+error);
+                    CommonUtils.showLongToast("删除失败");
+                }
+            });
         }
     }
 

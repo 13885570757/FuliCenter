@@ -6,7 +6,7 @@ import android.content.Intent;
 
 import com.wuyunlong.fulicenter.I;
 import com.wuyunlong.fulicenter.R;
-import com.wuyunlong.fulicenter.activity.BouTiQueActivity;
+import com.wuyunlong.fulicenter.activity.BoutiqueActivity;
 import com.wuyunlong.fulicenter.activity.CategoryChildActivity;
 import com.wuyunlong.fulicenter.activity.CollectsActivity;
 import com.wuyunlong.fulicenter.activity.GoodsDetailsActivity;
@@ -57,7 +57,7 @@ public class MFGT {
 
     public static void gotoBouTiQueActivity(Context context, BoutiqueBean bean) {
         Intent intent = new Intent();
-        intent.setClass(context, BouTiQueActivity.class);
+        intent.setClass(context, BoutiqueActivity.class);
         intent.putExtra(I.Boutique.ID, bean);
         startActivity(context, intent);
     }

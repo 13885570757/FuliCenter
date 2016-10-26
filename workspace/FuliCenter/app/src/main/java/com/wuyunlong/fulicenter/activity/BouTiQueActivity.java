@@ -31,7 +31,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class BouTiQueActivity extends AppCompatActivity {
+public class BoutiqueActivity extends AppCompatActivity {
 
     @Bind(R.id.lv_details_back)
     ImageView lvDetailsBack;
@@ -76,7 +76,7 @@ public class BouTiQueActivity extends AppCompatActivity {
         lvDetailsBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MFGT.finish(BouTiQueActivity.this);
+                MFGT.finish(BoutiqueActivity.this);
             }
         });
     }
