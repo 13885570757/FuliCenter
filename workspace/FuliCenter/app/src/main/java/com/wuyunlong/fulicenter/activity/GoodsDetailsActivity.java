@@ -12,6 +12,8 @@ import com.wuyunlong.fulicenter.R;
 import com.wuyunlong.fulicenter.bean.AlbumsBean;
 import com.wuyunlong.fulicenter.bean.CartResultBean;
 import com.wuyunlong.fulicenter.bean.GoodsDetailsBean;
+import com.wuyunlong.fulicenter.bean.MessageBean;
+import com.wuyunlong.fulicenter.bean.UserAvatarBean;
 import com.wuyunlong.fulicenter.net.NetDao;
 import com.wuyunlong.fulicenter.utils.CommonUtils;
 import com.wuyunlong.fulicenter.utils.L;
@@ -41,8 +43,6 @@ public class GoodsDetailsActivity extends BaseActivity {
     TextView detailsPrice;
     @Bind(R.id.detailsPriceCurrent)
     TextView detailsPriceCurrent;
-    int goodsId;
-    GoodsDetailsActivity mContext;
     @Bind(R.id.detailsSlideAutoLoopView)
     SlideAutoLoopView detailsSlideAutoLoopView;
     @Bind(R.id.detailsGoods)
@@ -51,14 +51,19 @@ public class GoodsDetailsActivity extends BaseActivity {
     FlowIndicator detailsFlowIndicator;
     @Bind(R.id.lv_details_back)
     ImageView lvDetailsBack;
-    @Bind(R.id.iv_details_cart)
+    @Bind(R.id.iv_details_cart)//加入购物车
     ImageView ivDetailsCart;
-    @Bind(R.id.iv_details_collect)
+    @Bind(R.id.iv_details_collect)//收藏
     ImageView ivDetailsCollect;
-    @Bind(R.id.iv_details_share)
+    @Bind(R.id.iv_details_share)//分享
     ImageView ivDetailsShare;
 
     String userName;
+    int goodsId;
+    GoodsDetailsActivity mContext;
+
+    boolean isCollected = false;//商品是否为收藏状态，默认不收藏
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -177,5 +182,45 @@ public class GoodsDetailsActivity extends BaseActivity {
 
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isCollected();
+    }
+
+    /**
+     * 判断商品是否为收藏状态
+     */
+    private  void isCollected(){
+        UserAvatarBean user = FuLiCenterApplication.getUser();
+        if (user!=null){//判断商品是否收藏
+            NetDao.isCollected(mContext, user.getMuserName(), goodsId, new OkHttpUtils.OnCompleteListener<MessageBean>() {
+                @Override
+                public void onSuccess(MessageBean result) {
+                    if (result!=null&&result.isSuccess()){
+                        isCollected=true;
+                        updateGoodsCollectStatus();
+                    }
+                }
+                @Override
+                public void onError(String error) {
+
+                }
+            });
+        }
+        updateGoodsCollectStatus();
+    }
+
+    /**
+     * 商品是否收藏的显示状态
+     */
+    private void updateGoodsCollectStatus() {
+        if (isCollected){
+            ivDetailsCollect.setImageResource(R.mipmap.bg_collect_out);
+        }else{
+            ivDetailsCollect.setImageResource(R.mipmap.bg_collect_in);
+        }
     }
 }
