@@ -27,7 +27,7 @@ import butterknife.OnClick;
 /**
  * Created by Administrator on 2016/10/17.
  */
-public class GoodsAdapter extends RecyclerView.Adapter {
+public class CollectsAdapter extends RecyclerView.Adapter {
     Context mContext;
     ArrayList<NewGoodsBean> mList;
 
@@ -44,7 +44,7 @@ public class GoodsAdapter extends RecyclerView.Adapter {
     public void setSortBy(int sortBy) {
         this.sortBy = sortBy;
         sortBy();
-        
+
         notifyDataSetChanged();
     }
 
@@ -65,7 +65,7 @@ public class GoodsAdapter extends RecyclerView.Adapter {
         notifyDataSetChanged();
     }
 
-    public GoodsAdapter(Context mContext, ArrayList<NewGoodsBean> mList) {
+    public CollectsAdapter(Context mContext, ArrayList<NewGoodsBean> mList) {
         this.mContext = mContext;
         this.mList = new ArrayList<>();
         mList.addAll(mList);
@@ -83,8 +83,8 @@ public class GoodsAdapter extends RecyclerView.Adapter {
                 holder = new FooterViewHolder(layout);
                 break;
             case I.TYPE_ITEM:
-                layout = inflater.inflate(R.layout.item_newgoods, parent, false);
-                holder = new GoodsViewHolder(layout);
+                layout = inflater.inflate(R.layout.item_collects, parent, false);
+                holder = new CollectsViewHolder(layout);
                 break;
 
         }
@@ -97,7 +97,7 @@ public class GoodsAdapter extends RecyclerView.Adapter {
             FooterViewHolder footer = (FooterViewHolder) holder;
             footer.tvFooter.setText(getTvFooter());
         } else {
-            GoodsViewHolder goods = (GoodsViewHolder) holder;
+            CollectsViewHolder goods = (CollectsViewHolder) holder;
             NewGoodsBean goodsBean = mList.get(position);
             goods.lvGoodsIntroduce.setText(goodsBean.getGoodsName());
             goods.lvGoodsPrice.setText(goodsBean.getShopPrice());
@@ -136,18 +136,18 @@ public class GoodsAdapter extends RecyclerView.Adapter {
         }
     }
 
-    class GoodsViewHolder extends RecyclerView.ViewHolder {
+    class CollectsViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.lv_goods_image)
         ImageView lvGoodsImage;
         @Bind(R.id.lv_goods_introduce)
         TextView lvGoodsIntroduce;
-        @Bind(R.id.lv_goods_price)
-        TextView lvGoodsPrice;
+        @Bind(R.id.delete_collect)
+        TextView ivdelete;
         @Bind(R.id.layout_goods)
         LinearLayout lvLayoutGoods;
 
 
-        public GoodsViewHolder(final View itemView) {
+        public CollectsViewHolder(final View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
