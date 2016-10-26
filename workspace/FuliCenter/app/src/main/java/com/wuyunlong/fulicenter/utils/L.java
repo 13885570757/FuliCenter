@@ -2,6 +2,9 @@ package com.wuyunlong.fulicenter.utils;
 
 import android.util.Log;
 
+/**
+ * Created by clawpo on 16/9/20.
+ */
 public class L {
     public static boolean isDebug = true;
     private static final String TAG = "fulicenter";

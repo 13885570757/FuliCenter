@@ -6,20 +6,32 @@ import android.support.v7.app.AppCompatActivity;
 import com.wuyunlong.fulicenter.utils.MFGT;
 
 
-public abstract class BaseActivity extends AppCompatActivity {
+/**
+ * Created by Administrator on 2016/10/19.
+ */
+public class BaseActivity extends AppCompatActivity {
+
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        initView();
+    public void onCreate(Bundle savedInstanceState) {
         initData();
+        initView();
         setListener();
+        super.onCreate(savedInstanceState);
     }
 
-    protected abstract void initView();
-    protected abstract void initData();
-    protected abstract void setListener();
+    protected void setListener() {
+    }
 
-    public void onBackPressed(){
+    protected void initView() {
+    }
+
+    protected void initData() {
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
         MFGT.finish(this);
     }
 }

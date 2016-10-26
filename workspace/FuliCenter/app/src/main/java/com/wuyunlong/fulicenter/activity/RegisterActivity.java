@@ -1,132 +1,153 @@
 package com.wuyunlong.fulicenter.activity;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.wuyunlong.fulicenter.I;
 import com.wuyunlong.fulicenter.R;
 import com.wuyunlong.fulicenter.bean.Result;
 import com.wuyunlong.fulicenter.net.NetDao;
-import com.wuyunlong.fulicenter.net.OkHttpUtils;
 import com.wuyunlong.fulicenter.utils.CommonUtils;
 import com.wuyunlong.fulicenter.utils.L;
 import com.wuyunlong.fulicenter.utils.MFGT;
-import com.wuyunlong.fulicenter.view.DisplayUtils;
+import com.wuyunlong.fulicenter.utils.OkHttpUtils;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+public class RegisterActivity extends AppCompatActivity {
 
-public class RegisterActivity extends BaseActivity {
-    private static final String TAG = RegisterActivity.class.getSimpleName();
+    @Bind(R.id.backClickArea)
+    ImageView backClickArea;
+    @Bind(R.id.tv_common_title)
+    TextView tvCommonTitle;
+    @Bind(R.id.etRegUserName)
+    EditText etRegUserName;
+    @Bind(R.id.etUserNick)
+    EditText etUserNick;
+    @Bind(R.id.etRegPwd)
+    EditText etRegPwd;
+    @Bind(R.id.etRegRePwd)
+    EditText etRegRePwd;
+    @Bind(R.id.btnEmpty)
+    Button btnEmpty;
+    @Bind(R.id.btnReg)
+    Button btnReg;
 
-    @Bind(R.id.username)
-    EditText mUsername;
-    @Bind(R.id.nick)
-    EditText mNick;
-    @Bind(R.id.password)
-    EditText mPassword;
-    @Bind(R.id.confirm_password)
-    EditText mConfirmPassword;
-    @Bind(R.id.btn_register)
-    Button mBtnRegister;
-
-
-    String username;
-    String nickname;
+    String userName;
+    String userNick;
     String password;
-    RegisterActivity mContext;
+    String rePassword;
+    String mPassUserName;
+
+
+    Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setContentView(R.layout.activity_register);
-        ButterKnife.bind(this);
-        mContext = this;
         super.onCreate(savedInstanceState);
-    }
+        setContentView(R.layout.activity_register);
+        mContext = this;
+        ButterKnife.bind(this);
 
-    @Override
-    protected void initView() {
-        DisplayUtils.initBackWithTitle(this, "账户注册");
-    }
-
-    @Override
-    protected void initData() {
 
     }
 
     @Override
-    protected void setListener() {
-
+    public void onBackPressed() {
+        MFGT.finish(this);
     }
 
-    @OnClick(R.id.btn_register)
-    public void checkedInput() {
-        username = mUsername.getText().toString().trim();
-        nickname = mNick.getText().toString().trim();
-        password = mPassword.getText().toString().trim();
-        String confirmPwd = mConfirmPassword.getText().toString().trim();
-        if(TextUtils.isEmpty(username)){
-            CommonUtils.showShortToast(R.string.user_name_connot_be_empty);
-            mUsername.requestFocus();
-            return;
-        }else if(!username.matches("[a-zA-Z]\\w{5,15}")){
-            CommonUtils.showShortToast(R.string.illegal_user_name);
-            mUsername.requestFocus();
-            return;
-        }else if(TextUtils.isEmpty(nickname)){
-            CommonUtils.showShortToast(R.string.nick_name_connot_be_empty);
-            mNick.requestFocus();
-            return;
-        }else if(TextUtils.isEmpty(password)){
-            CommonUtils.showShortToast(R.string.password_connot_be_empty);
-            mPassword.requestFocus();
-            return;
-        }else if(TextUtils.isEmpty(confirmPwd)){
-            CommonUtils.showShortToast(R.string.confirm_password_connot_be_empty);
-            mConfirmPassword.requestFocus();
-            return;
-        }else if(!password.equals(confirmPwd)){
-            CommonUtils.showShortToast(R.string.two_input_password);
-            mConfirmPassword.requestFocus();
-            return;
+    @OnClick({R.id.btnEmpty, R.id.btnReg})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btnEmpty:
+                onEmpty();
+                break;
+            case R.id.btnReg:
+                userName = etRegUserName.getText().toString().trim();
+                userNick = etUserNick.getText().toString().trim();
+                password = etRegPwd.getText().toString().trim();
+                rePassword = etRegRePwd.getText().toString().trim();
+                if (userName.isEmpty()) {
+                    CommonUtils.showShortToast(R.string.user_name_connot_be_empty);
+                    etRegUserName.requestFocus();
+                    return;
+                } else if (!userName.matches("[a-zA-Z]\\w{5,15}")) {
+                    CommonUtils.showShortToast(R.string.illegal_user_name);
+                    etRegUserName.requestFocus();
+                    return;
+                } else if (userNick.isEmpty()) {
+                    CommonUtils.showShortToast(R.string.nick_name_connot_be_empty);
+                    etRegUserName.requestFocus();
+                    return;
+                } else if (TextUtils.isEmpty(userNick)) {
+                    CommonUtils.showShortToast(R.string.nick_name_connot_be_empty);
+                    etRegUserName.requestFocus();
+                    return;
+                } else if (password.isEmpty()) {
+                    CommonUtils.showShortToast(R.string.password_connot_be_empty);
+                    etRegUserName.requestFocus();
+                    return;
+                } else if (rePassword.isEmpty()) {
+                    CommonUtils.showShortToast(R.string.confirm_password_connot_be_empty);
+                    etRegUserName.requestFocus();
+                    return;
+                } else if (!rePassword.equals(password)) {
+                    CommonUtils.showShortToast(R.string.confirmpassword);
+                    etRegUserName.requestFocus();
+                    return;
+                }
+                register();
+                L.i("" + userName);
+                break;
         }
-        register();
     }
 
     private void register() {
-        final ProgressDialog pd = new ProgressDialog(mContext);
-        pd.setMessage(getResources().getString(R.string.registering));
-        pd.show();
-        NetDao.register(mContext, username, nickname, password, new OkHttpUtils.OnCompleteListener<Result>() {
+        final ProgressDialog bd = new ProgressDialog(mContext);
+        bd.setMessage(getResources().getString(R.string.registering));
+        bd.show();
+        NetDao.register(mContext, userName, userNick, password, new OkHttpUtils.OnCompleteListener<Result>() {
             @Override
             public void onSuccess(Result result) {
-                pd.dismiss();
-                if(result==null){
+                if (result == null) {
                     CommonUtils.showShortToast(R.string.register_fail);
-                }else{
-                    if(result.isRetMsg()){
+                } else {
+                    if (result.isRetMsg()) {
                         CommonUtils.showLongToast(R.string.register_success);
-                        setResult(RESULT_OK,new Intent().putExtra(I.User.USER_NAME,username));
-                        MFGT.finish(mContext);
-                    }else{
+                        setResult(RESULT_OK, new Intent().putExtra(I.User.USER_NAME, userName));
+                        MFGT.finish((Activity) mContext);
+                    } else {
                         CommonUtils.showLongToast(R.string.register_fail_exists);
-                        mUsername.requestFocus();
+                        etRegUserName.requestFocus();
                     }
                 }
             }
 
             @Override
             public void onError(String error) {
-                pd.dismiss();
-                CommonUtils.showShortToast(error);
-                L.e(TAG,"register error="+error);
+                CommonUtils.showShortToast(R.string.register_fail);
+                bd.dismiss();
             }
         });
+    }
+
+    private void onEmpty() {
+        etRegUserName.setText("");
+        etUserNick.setText("");
+        etRegPwd.setText("");
+        etRegRePwd.setText("");
     }
 }

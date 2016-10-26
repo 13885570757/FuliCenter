@@ -5,33 +5,33 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.wuyunlong.fulicenter.bean.User;
+import com.wuyunlong.fulicenter.bean.UserAvatarBean;
+
 
 /**
  * Created by Administrator on 2016/10/24.
- * 执行数据库语句
  */
 public class DBManager {
     private static DBManager dbMgr = new DBManager();
-    private DBOpenHelper dbHelper;
-
-    void onInit(Context context) {
-        dbHelper = new DBOpenHelper(context);
-
-    }
+    private DBOpenHelper mHelper;
 
     public static synchronized DBManager getInstance() {
         return dbMgr;
     }
 
-    /**
-     * 保存信息,既将数据放入表中
-     *
-     * @param user
-     * @return
-     */
-    public synchronized boolean saveUser(User user) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
+    void onInit(Context mContext) {
+        mHelper = new DBOpenHelper(mContext);
+    }
+
+    public synchronized void closeDB() {
+        if (mHelper != null) {
+            mHelper.closeDB();
+        }
+    }
+
+    public synchronized boolean saveUser(UserAvatarBean user) {
+
+        SQLiteDatabase db = mHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(UserDao.USER_COLUMN_NAME, user.getMuserName());
         values.put(UserDao.USER_COLUMN_NICK, user.getMuserNick());
@@ -44,44 +44,31 @@ public class DBManager {
             return db.replace(UserDao.USER_TABLE_NAME, null, values) != -1;
         }
         return false;
-
     }
 
-    /**
-     * 获取用户,既查询数据库
-     *
-     * @param usernname
-     * @return
-     */
-    public synchronized User getUser(String usernname) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        String sql = "select*from" + UserDao.USER_TABLE_NAME + "where"
-                + UserDao.USER_COLUMN_NAME + "=?";
-        User user = null;
-        Cursor cursor = db.rawQuery(sql, new String[]{usernname});
+    public synchronized UserAvatarBean getUser(String userName) {
+        SQLiteDatabase db = mHelper.getReadableDatabase();
+        String sql = "select * from " + UserDao.USER_TABLE_NAME + " where " +
+                UserDao.USER_COLUMN_NAME + " =?";
+        UserAvatarBean user = null;
+        Cursor cursor = db.rawQuery(sql, new String[]{userName});
         if (cursor.moveToNext()) {
-            user = new User();
-            user.setMuserName(cursor.getString(cursor.getColumnIndex(UserDao.USER_COLUMN_NICK)));
+            user = new UserAvatarBean();
+            user.setMuserName(userName);
             user.setMavatarId(cursor.getInt(cursor.getColumnIndex(UserDao.USER_COLUMN_AVATAR_ID)));
-            user.setMavatarType(cursor.getInt(cursor.getColumnIndex(UserDao.USER_COLUMN_AVATAR_TYPE)));
+            user.setMavatarLastUpdateTime(cursor.getString(cursor.getColumnIndex(UserDao.USER_COLUMN_AVATAR_LASTUPDATE_TIME)));
             user.setMavatarPath(cursor.getString(cursor.getColumnIndex(UserDao.USER_COLUMN_AVATAR_PATH)));
             user.setMavatarSuffix(cursor.getString(cursor.getColumnIndex(UserDao.USER_COLUMN_AVATAR_SUFFIX)));
-            user.setMavatarLastUpdateTime(cursor.getString(cursor.getColumnIndex(UserDao.USER_COLUMN_AVATAR_LASTUPDATE_TIME)));
+            user.setMavatarType(cursor.getInt(cursor.getColumnIndex(UserDao.USER_COLUMN_AVATAR_TYPE)));
+            user.setMuserNick(cursor.getString(cursor.getColumnIndex(UserDao.USER_COLUMN_NICK)));
             return user;
         }
-
         return user;
     }
 
-    /**
-     * 更新
-     *
-     * @param user
-     * @return
-     */
-    public boolean updataUser(User user) {
+    public synchronized boolean updateUser(UserAvatarBean user) {
         int resule = -1;
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        SQLiteDatabase db = mHelper.getWritableDatabase();
         String sql = UserDao.USER_COLUMN_NAME + "=?";
         ContentValues values = new ContentValues();
         values.put(UserDao.USER_COLUMN_NICK, user.getMuserNick());

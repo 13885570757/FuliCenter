@@ -1,4 +1,4 @@
-package com.wuyunlong.fulicenter.view;
+package com.wuyunlong.fulicenter.views;
 
 import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;

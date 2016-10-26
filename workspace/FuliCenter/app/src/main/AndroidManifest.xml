@@ -21,17 +21,12 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".activity.GoodsDetailActivity"/>
-        <activity android:name=".activity.BoutiqueChildActivity"/>
         <activity android:name=".activity.CategoryChildActivity"/>
         <activity android:name=".activity.LoginActivity"/>
         <activity android:name=".activity.RegisterActivity"/>
-        <activity android:name=".activity.PersonalInfo">
-        </activity>
-        <activity android:name=".activity.QrcodeActivity">
-        </activity>
-        <activity android:name=".activity.UpdateNickActivity">
-        </activity>
+        <activity android:name=".activity.UpdateNickActivity"/>
+        <activity android:name=".activity.BouTiQueActivity"/>
+        <activity android:name=".activity.SettingActivity"/>
     </application>
 
 </manifest>

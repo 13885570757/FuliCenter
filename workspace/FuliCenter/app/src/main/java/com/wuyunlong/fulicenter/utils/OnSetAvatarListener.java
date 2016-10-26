@@ -45,24 +45,21 @@ import java.io.FileOutputStream;
  *
  */
 public class OnSetAvatarListener implements View.OnClickListener {
+    public static final int REQUEST_CROP_PHOTO=3;
     private static final int REQUEST_TAKE_PICTURE=1;
     private static final int REQUEST_CHOOSE_PHOTO=2;
-    public static final int REQUEST_CROP_PHOTO=3;
-    private Activity mActivity;
-    /** popuWindos的布局view*/
-    private View mLayout;
-
     PopupWindow mPopuWindow;
-
     /**账号*/
     String mUserName;
-
     /**
      * 头像类型：
      * user_avatar:个人头像
      * group_cion:群主logo
      */
     String mAvatarType;
+    private Activity mActivity;
+    /** popuWindos的布局view*/
+    private View mLayout;
 
     /**
      * 构造器
@@ -88,6 +85,70 @@ public class OnSetAvatarListener implements View.OnClickListener {
 
         //显示PopuWindow
         showPopupWindow(parentLayout);
+    }
+
+    /**
+     * 保存头像至sd卡的Android文件夹
+     * @param data
+     */
+    public static File saveCropAndShowAvatar(Intent data, Activity context, String avatarType, String avatarName) {
+        Bundle extras = data.getExtras();
+        Bitmap avatar = extras.getParcelable("data");
+        if (avatar == null) {
+            return null;
+        }
+        File file = FileUtils.getAvatarPath(context,avatarType, avatarName + ".jpg");
+        if(!file.getParentFile().exists()){
+            Toast.makeText(context, "照片保存失败,保存的路径不存在", Toast.LENGTH_LONG).show();
+            return null;
+        }
+        FileOutputStream out = null;
+        try {
+            out = new FileOutputStream(file);
+            avatar.compress(Bitmap.CompressFormat.JPEG,100,out);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            Log.i("main", "头像保存失败");
+        }
+        return file;
+    }
+
+    /**
+     * 返回拍照文件保存的位置
+     * @return
+     */
+    public static File getAvatarFile(Activity activity, String avatar){
+        File dir = activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File file;
+        try {
+            file = new File(dir,avatar);
+            boolean isExists = file.getParentFile().exists();
+            if(!isExists){
+                isExists = file.getParentFile().mkdirs();
+            }
+            if(isExists){
+                return file;
+            }
+        } catch (Exception e) {
+            return null;
+        }
+        return null;
+    }
+
+    /**
+     * 返回头像保存在sd卡的位置:
+     * Android/data/cn.ucai.superwechat/files/pictures/user_avatar
+     * @param context
+     * @param path
+     * @return
+     */
+    public static String getAvatarPath(Context context, String path){
+        File dir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File folder = new File(dir,path);
+        if(!folder.exists()){
+            folder.mkdir();
+        }
+        return folder.getAbsolutePath();
     }
 
     /**
@@ -215,32 +276,6 @@ public class OnSetAvatarListener implements View.OnClickListener {
     }
 
     /**
-     * 保存头像至sd卡的Android文件夹
-     * @param data
-     */
-    public static File saveCropAndShowAvatar(Intent data, Activity context, String avatarType, String avatarName) {
-        Bundle extras = data.getExtras();
-        Bitmap avatar = extras.getParcelable("data");
-        if (avatar == null) {
-            return null;
-        }
-        File file = FileUtils.getAvatarPath(context,avatarType, avatarName + ".jpg");
-        if(!file.getParentFile().exists()){
-            Toast.makeText(context, "照片保存失败,保存的路径不存在", Toast.LENGTH_LONG).show();
-            return null;
-        }
-        FileOutputStream out = null;
-        try {
-            out = new FileOutputStream(file);
-            avatar.compress(Bitmap.CompressFormat.JPEG,100,out);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            Log.i("main", "头像保存失败");
-        }
-        return file;
-    }
-
-    /**
      * 启动裁剪的Activity
      * @param uri
      * @param outputX
@@ -256,43 +291,5 @@ public class OnSetAvatarListener implements View.OnClickListener {
         intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
         intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
         mActivity.startActivityForResult(intent,requestCode);
-    }
-
-    /**
-     * 返回拍照文件保存的位置
-     * @return
-     */
-    public static File getAvatarFile(Activity activity, String avatar){
-        File dir = activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File file;
-        try {
-            file = new File(dir,avatar);
-            boolean isExists = file.getParentFile().exists();
-            if(!isExists){
-                isExists = file.getParentFile().mkdirs();
-            }
-            if(isExists){
-                return file;
-            }
-        } catch (Exception e) {
-            return null;
-        }
-        return null;
-    }
-
-    /**
-     * 返回头像保存在sd卡的位置:
-     * Android/data/cn.ucai.superwechat/files/pictures/user_avatar
-     * @param context
-     * @param path
-     * @return
-     */
-    public static String getAvatarPath(Context context, String path){
-        File dir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File folder = new File(dir,path);
-        if(!folder.exists()){
-            folder.mkdir();
-        }
-        return folder.getAbsolutePath();
     }
 }

@@ -1,10 +1,14 @@
 package com.wuyunlong.fulicenter.bean;
 
-/**
- * Created by clawpo on 2016/10/21.
- */
+import com.wuyunlong.fulicenter.I;
 
-public class User {
+import java.io.Serializable;
+
+
+/**
+ * Created by Administrator on 2016/10/13.
+ */
+public class UserAvatarBean implements Serializable {
 
     /**
      * muserName : a952700
@@ -57,7 +61,7 @@ public class User {
     }
 
     public String getMavatarSuffix() {
-        return mavatarSuffix;
+        return mavatarSuffix != null ? mavatarSuffix : I.AVATAR_SUFFIX_JPG;
     }
 
     public void setMavatarSuffix(String mavatarSuffix) {
@@ -82,7 +86,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
+        return "UserAvatarBean{" +
                 "muserName='" + muserName + '\'' +
                 ", muserNick='" + muserNick + '\'' +
                 ", mavatarId=" + mavatarId +

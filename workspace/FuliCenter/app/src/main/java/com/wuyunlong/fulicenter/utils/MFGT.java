@@ -6,14 +6,13 @@ import android.content.Intent;
 
 import com.wuyunlong.fulicenter.I;
 import com.wuyunlong.fulicenter.R;
-import com.wuyunlong.fulicenter.activity.BoutiqueChildActivity;
+import com.wuyunlong.fulicenter.activity.BouTiQueActivity;
 import com.wuyunlong.fulicenter.activity.CategoryChildActivity;
-import com.wuyunlong.fulicenter.activity.GoodsDetailActivity;
+import com.wuyunlong.fulicenter.activity.GoodsDetailsActivity;
 import com.wuyunlong.fulicenter.activity.LoginActivity;
 import com.wuyunlong.fulicenter.activity.MainActivity;
-import com.wuyunlong.fulicenter.activity.UpdateNickActivity;
-import com.wuyunlong.fulicenter.activity.PersonalInfo;
 import com.wuyunlong.fulicenter.activity.RegisterActivity;
+import com.wuyunlong.fulicenter.activity.UpdateNickActivity;
 import com.wuyunlong.fulicenter.bean.BoutiqueBean;
 import com.wuyunlong.fulicenter.bean.CategoryChildBean;
 
@@ -30,15 +29,22 @@ public class MFGT {
         startActivity(context, MainActivity.class);
     }
 
+    public static void backtoMainActivity(Activity context) {
+        startActivity(context, MainActivity.class);
+    }
+
     public static void startActivity(Activity context, Class<?> cls) {
         Intent intent = new Intent();
         intent.setClass(context, cls);
-        startActivity(context, intent);
+        context.startActivity(intent);
+        context.overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
     }
+
+    //    intent.putExtra(I.GoodsDetails.KEY_GOODS_ID,goodsId);
 
     public static void gotoGoodsDetailsActivity(Context context, int goodsId) {
         Intent intent = new Intent();
-        intent.setClass(context, GoodsDetailActivity.class);
+        intent.setClass(context, GoodsDetailsActivity.class);
         intent.putExtra(I.GoodsDetails.KEY_GOODS_ID, goodsId);
         startActivity(context, intent);
     }
@@ -48,29 +54,14 @@ public class MFGT {
         ((Activity) context).overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
     }
 
-    /**
-     * 精选详情
-     *
-     * @param context
-     * @param bean
-     */
-
-    public static void gotoBoutiqueChildActivity(Context context, BoutiqueBean bean) {
+    public static void gotoBouTiQueActivity(Context context, BoutiqueBean bean) {
         Intent intent = new Intent();
-        intent.setClass(context, BoutiqueChildActivity.class);
-        intent.putExtra(I.Boutique.CAT_ID, bean);
+        intent.setClass(context, BouTiQueActivity.class);
+        intent.putExtra(I.Boutique.ID, bean);
         startActivity(context, intent);
     }
 
-    /**
-     * 分类详情
-     *
-     * @param context
-     * @param catId
-     * @param groupName
-     * @param list
-     */
-    public static void gotoCategoryChildActivity(Context context, int catId, String groupName, ArrayList<CategoryChildBean> list) {
+    public static void gotoCategoryActivity(Context context, int catId, String groupName, ArrayList<CategoryChildBean> list) {
         Intent intent = new Intent();
         intent.setClass(context, CategoryChildActivity.class);
         intent.putExtra(I.CategoryChild.CAT_ID, catId);
@@ -79,59 +70,49 @@ public class MFGT {
         startActivity(context, intent);
     }
 
-    /**
-     * 登录
-     *
-     * @param context
-     */
-    public static void gotoLogin(Activity context) {
+    public static void gotoLoginActivity(Activity mContext) {
+        Intent intent = new Intent(mContext, LoginActivity.class);
+        mContext.startActivity(intent);
+        startActivityForResult(mContext, intent, I.REQUEST_CODE_LOGIN);
+        mContext.overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+    }
+
+    public static void Register2Login() {
+
+    }
+
+    public static void gotoRegister(Activity mContext) {
         Intent intent = new Intent();
-        intent.setClass(context, LoginActivity.class);
-        startActivityForResult(context, intent, I.REQUEST_CODE_LOGIN);
+        intent.setClass(mContext, RegisterActivity.class);
+        startActivityForResult(mContext, intent, I.REQUEST_CODE_REGISTER);
+
     }
 
-    /**
-     * 注册
-     *
-     * @param context
-     */
-    public static void gotoRegister(Activity context) {
+    public static void startActivityForResult(Activity mContext, Intent intent, int requestCode) {
+        mContext.startActivityForResult(intent, requestCode);
+        mContext.overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+
+    }
+
+    public static void gotoMainForResult(Activity mContext) {
         Intent intent = new Intent();
-        intent.setClass(context, RegisterActivity.class);
-        startActivityForResult(context, intent, I.REQUEST_CODE_REGISTER);
+        intent.setClass(mContext, MainActivity.class);
+        startActivityForResult(mContext, intent, I.REQUEST_CODE_LOGIN);
+
     }
 
-
-    public static void startActivityForResult(Activity context, Intent intent, int requestCode) {
-        context.startActivityForResult(intent, requestCode);
-        context.overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-    }
-
-    /**
-     * 跳转到个人信息
-     *
-     * @param context
-     */
-    public static void gotoPersonaInfo(Activity context) {
+    public static void gotoMainResult(Activity mContext) {
         Intent intent = new Intent();
-        intent.setClass(context, PersonalInfo.class);
-        startActivity(context, intent);
+        mContext.setResult(I.REQUEST_CODE_LOGIN, intent);
+        finish(mContext);
+        mContext.overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+
     }
 
-    /**
-     * 跳转到二维码
-     */
-    public static void gotoQrcodeActivity(Activity context) {
-        Intent intent = new Intent();
-        startActivity(context, intent);
-    }
+    public static void gotoUpdateNick(Activity mContext) {
+        startActivityForResult(mContext, new Intent(mContext, UpdateNickActivity.class
+        ), I.REQUEST_CODE_NICK);
 
-    /**
-     * 跳转到修改昵称
-     * @param context
-     */
-    public static void gotoModifyNick(Activity context) {
-        startActivityForResult(context, new Intent(context, UpdateNickActivity.class), I.REQUEST_CODE_NICK);
     }
 
 }

@@ -1,8 +1,8 @@
 package com.wuyunlong.fulicenter.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView.Adapter;
-import android.support.v7.widget.RecyclerView.ViewHolder;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -13,37 +13,47 @@ import com.wuyunlong.fulicenter.I;
 import com.wuyunlong.fulicenter.R;
 import com.wuyunlong.fulicenter.bean.NewGoodsBean;
 import com.wuyunlong.fulicenter.utils.ImageLoader;
+import com.wuyunlong.fulicenter.utils.L;
 import com.wuyunlong.fulicenter.utils.MFGT;
-import com.wuyunlong.fulicenter.view.FooterViewHolder;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-
-
-
-public class GoodsAdapter extends Adapter {
+/**
+ * Created by Administrator on 2016/10/17.
+ */
+public class GoodsAdapter extends RecyclerView.Adapter {
     Context mContext;
-    List<NewGoodsBean> mList;
-    boolean isMore;
-    int soryBy = I.SORT_BY_ADDTIME_DESC;
+    ArrayList<NewGoodsBean> mList;
 
-    public GoodsAdapter(Context context, List<NewGoodsBean> list) {
-        mContext = context;
-        mList = new ArrayList<>();
-        mList.addAll(list);
+    RecyclerView parent;
+    boolean isMore;
+    String tvFooter;
+
+    int sortBy = I.SORT_BY_PRICE_DESC;
+
+    public int getSortBy() {
+        return sortBy;
     }
 
-    public void setSoryBy(int soryBy) {
-        this.soryBy = soryBy;
+    public void setSortBy(int sortBy) {
+        this.sortBy = sortBy;
         sortBy();
+        
         notifyDataSetChanged();
+    }
+
+    public String getTvFooter() {
+        return tvFooter;
+    }
+
+    public void setTvFooter(String tvFooter) {
+        this.tvFooter = tvFooter;
     }
 
     public boolean isMore() {
@@ -55,34 +65,47 @@ public class GoodsAdapter extends Adapter {
         notifyDataSetChanged();
     }
 
+    public GoodsAdapter(Context mContext, ArrayList<NewGoodsBean> mList) {
+        this.mContext = mContext;
+        this.mList = new ArrayList<>();
+        mList.addAll(mList);
+    }
+
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        ViewHolder holder = null;
-        if (viewType == I.TYPE_FOOTER) {
-            holder = new FooterViewHolder(View.inflate(mContext, R.layout.item_footer, null));
-        } else {
-            holder = new GoodsViewHolder(View.inflate(mContext, R.layout.item_goods, null));
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        this.parent = (RecyclerView) parent;
+        RecyclerView.ViewHolder holder = null;
+        LayoutInflater inflater = LayoutInflater.from(mContext);
+        View layout = null;
+        switch (viewType) {
+            case I.TYPE_FOOTER:
+                layout = inflater.inflate(R.layout.item_newgoods_footer, parent, false);
+                holder = new FooterViewHolder(layout);
+                break;
+            case I.TYPE_ITEM:
+                layout = inflater.inflate(R.layout.item_newgoods, parent, false);
+                holder = new GoodsViewHolder(layout);
+                break;
+
         }
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        if(getItemViewType(position)==I.TYPE_FOOTER){
-            FooterViewHolder vh = (FooterViewHolder) holder;
-            vh.mTvFooter.setText(getFootString());
-        }else{
-            GoodsViewHolder vh = (GoodsViewHolder) holder;
-            NewGoodsBean goods = mList.get(position);
-            ImageLoader.downloadImg(mContext,vh.mIvGoodsThumb,goods.getGoodsThumb());
-            vh.mTvGoodsName.setText(goods.getGoodsName());
-            vh.mTvGoodsPrice.setText(goods.getCurrencyPrice());
-            vh.mLayoutGoods.setTag(goods.getGoodsId());
-        }
-    }
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if (getItemViewType(position) == I.TYPE_FOOTER) {
+            FooterViewHolder footer = (FooterViewHolder) holder;
+            footer.tvFooter.setText(getTvFooter());
+        } else {
+            GoodsViewHolder goods = (GoodsViewHolder) holder;
+            NewGoodsBean goodsBean = mList.get(position);
+            goods.lvGoodsIntroduce.setText(goodsBean.getGoodsName());
+            goods.lvGoodsPrice.setText(goodsBean.getShopPrice());
+            ImageLoader.downloadImg(mContext, goods.lvGoodsImage, goodsBean.getGoodsThumb(), true);
+            goods.lvLayoutGoods.setTag(goodsBean.getGoodsId());
+            L.i("goodsBean:" + goodsBean.getGoodsId());
 
-    private int getFootString() {
-        return isMore?R.string.load_more:R.string.no_more;
+        }
     }
 
     @Override
@@ -94,67 +117,87 @@ public class GoodsAdapter extends Adapter {
     public int getItemViewType(int position) {
         if (position == getItemCount() - 1) {
             return I.TYPE_FOOTER;
+        } else {
+            return I.TYPE_ITEM;
         }
-        return I.TYPE_ITEM;
     }
 
-    public void initData(ArrayList<NewGoodsBean> list) {
-        if(mList!=null){
-            mList.clear();
+
+    static class FooterViewHolder extends RecyclerView.ViewHolder {
+        @Bind(R.id.tvFooter)
+        TextView tvFooter;
+
+
+        public FooterViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
         }
-        mList.addAll(list);
-        notifyDataSetChanged();
     }
 
-    public void addData(ArrayList<NewGoodsBean> list) {
-        mList.addAll(list);
-        notifyDataSetChanged();
-    }
-
-    class GoodsViewHolder extends ViewHolder{
-        @Bind(R.id.ivGoodsThumb)
-        ImageView mIvGoodsThumb;
-        @Bind(R.id.tvGoodsName)
-        TextView mTvGoodsName;
-        @Bind(R.id.tvGoodsPrice)
-        TextView mTvGoodsPrice;
+    class GoodsViewHolder extends RecyclerView.ViewHolder {
+        @Bind(R.id.lv_goods_image)
+        ImageView lvGoodsImage;
+        @Bind(R.id.lv_goods_introduce)
+        TextView lvGoodsIntroduce;
+        @Bind(R.id.lv_goods_price)
+        TextView lvGoodsPrice;
         @Bind(R.id.layout_goods)
-        LinearLayout mLayoutGoods;
+        LinearLayout lvLayoutGoods;
 
-        GoodsViewHolder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
+
+        public GoodsViewHolder(final View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
         }
+
         @OnClick(R.id.layout_goods)
-        public void onGoodsItemClick(){
-            int goodsId = (int) mLayoutGoods.getTag();
-            MFGT.gotoGoodsDetailsActivity(mContext,goodsId);
+        public void onGoodsItemClick() {
+            int goodsId = (int) lvLayoutGoods.getTag();
+//            mContext.startActivity(new Intent(mContext, GoodsDetailsActivity.class)
+//                    .putExtra(I.GoodsDetails.KEY_GOODS_ID, goodsId));
+            MFGT.gotoGoodsDetailsActivity(mContext, goodsId);
+
         }
     }
 
-    private void sortBy(){
+    public void initNewGoods(ArrayList<NewGoodsBean> mList) {
+
+        this.mList.clear();
+        this.mList.addAll(mList);
+        notifyDataSetChanged();
+    }
+
+    public void addNewGoods(ArrayList<NewGoodsBean> mList) {
+        this.mList.addAll(mList);
+        notifyDataSetChanged();
+    }
+
+    private void sortBy() {
         Collections.sort(mList, new Comparator<NewGoodsBean>() {
             @Override
-            public int compare(NewGoodsBean left, NewGoodsBean right) {
-                int result=0;
-                switch (soryBy){
+            public int compare(NewGoodsBean lhs, NewGoodsBean rhs) {
+                int result = 0;
+                switch (sortBy) {
                     case I.SORT_BY_ADDTIME_ASC:
-                        result= (int) (Long.valueOf(left.getAddTime())-Long.valueOf(right.getAddTime()));
+                        result = (int) (Long.valueOf(lhs.getAddTime()) - Long.valueOf(rhs.getAddTime()));
                         break;
                     case I.SORT_BY_ADDTIME_DESC:
-                        result= (int) (Long.valueOf(right.getAddTime())-Long.valueOf(left.getAddTime()));
+                        result = (int) (Long.valueOf(rhs.getAddTime()) - Long.valueOf(lhs.getAddTime()));
                         break;
                     case I.SORT_BY_PRICE_ASC:
-                        result = getPrice(left.getCurrencyPrice())-getPrice(right.getCurrencyPrice());
+                        result = getPrice(lhs.getCurrencyPrice()) - getPrice(rhs.getCurrencyPrice());
                         break;
                     case I.SORT_BY_PRICE_DESC:
-                        result = getPrice(right.getCurrencyPrice())-getPrice(left.getCurrencyPrice());
+                        result = getPrice(rhs.getCurrencyPrice()) - getPrice(lhs.getCurrencyPrice());
+
                         break;
+
                 }
                 return result;
             }
-            private int getPrice(String price){
-                price = price.substring(price.indexOf("￥")+1);
+
+            private int getPrice(String price) {
+                price = price.substring(price.indexOf("￥") + 1);
                 return Integer.valueOf(price);
             }
         });

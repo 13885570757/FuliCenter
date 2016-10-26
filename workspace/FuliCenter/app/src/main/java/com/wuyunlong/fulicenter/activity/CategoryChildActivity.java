@@ -1,12 +1,14 @@
 package com.wuyunlong.fulicenter.activity;
 
-import android.graphics.drawable.Drawable;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wuyunlong.fulicenter.I;
@@ -15,13 +17,13 @@ import com.wuyunlong.fulicenter.adapter.GoodsAdapter;
 import com.wuyunlong.fulicenter.bean.CategoryChildBean;
 import com.wuyunlong.fulicenter.bean.NewGoodsBean;
 import com.wuyunlong.fulicenter.net.NetDao;
-import com.wuyunlong.fulicenter.net.OkHttpUtils;
-import com.wuyunlong.fulicenter.utils.CommonUtils;
 import com.wuyunlong.fulicenter.utils.ConvertUtils;
+import com.wuyunlong.fulicenter.utils.ImageLoader;
 import com.wuyunlong.fulicenter.utils.L;
 import com.wuyunlong.fulicenter.utils.MFGT;
-import com.wuyunlong.fulicenter.view.CatChildFilterButton;
-import com.wuyunlong.fulicenter.view.SpaceItemDecoration;
+import com.wuyunlong.fulicenter.utils.OkHttpUtils;
+import com.wuyunlong.fulicenter.views.CatChildFilterButton;
+import com.wuyunlong.fulicenter.views.SpaceItemDecoration;
 
 import java.util.ArrayList;
 
@@ -29,181 +31,212 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+public class CategoryChildActivity extends AppCompatActivity {
 
-public class CategoryChildActivity extends BaseActivity {
 
-    @Bind(R.id.tv_refresh)
-    TextView mTvRefresh;
-    @Bind(R.id.rv)
-    RecyclerView mRv;
-    @Bind(R.id.srl)
-    SwipeRefreshLayout mSrl;
+    @Bind(R.id.new_goods_tv_refresh)
+    TextView newGoodsTvRefresh;
+    @Bind(R.id.new_goods_recycler)
+    RecyclerView newGoodsRecycler;
+    @Bind(R.id.new_goods_swipeRefresh)
+    SwipeRefreshLayout newGoodsSwipeRefresh;
 
-    CategoryChildActivity mContext;
     GoodsAdapter mAdapter;
+    CategoryChildActivity mContext;
     ArrayList<NewGoodsBean> mList;
-    int pageId = 1;
     GridLayoutManager glm;
-    int catId;
-    @Bind(R.id.btn_sort_price)
-    Button mBtnSortPrice;
-    @Bind(R.id.btn_sort_addtime)
-    Button mBtnSortAddtime;
+
+
+    int mPageId = 1;
+    int mNewState;
+    int tag;
+
     boolean addTimeAsc = false;
-    boolean priceAsc = false;
+    boolean priceAsc = true;
+
     int sortBy = I.SORT_BY_ADDTIME_DESC;
-    @Bind(R.id.btnCatChildFilter)
-    CatChildFilterButton mBtnCatChildFilter;
-    String groupName;
+
+    String stringExtra;
     ArrayList<CategoryChildBean> mChildList;
+
+
+    @Bind(R.id.tvPrice)
+    TextView tvPrice;
+    @Bind(R.id.tvTime)
+    TextView tvTime;
+    @Bind(R.id.imPrice)
+    ImageView imPrice;
+    @Bind(R.id.imTime)
+    ImageView imTime;
+    @Bind(R.id.btnCatChildFilter)
+    CatChildFilterButton btnCatChildFilter;
+    @Bind(R.id.lv_details_back)
+    ImageView lvDetailsBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setContentView(R.layout.activity_category_child);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_category_sort);
         ButterKnife.bind(this);
         mContext = this;
-        mList = new ArrayList<>();
+        mList = new ArrayList<NewGoodsBean>();
         mAdapter = new GoodsAdapter(mContext, mList);
-        catId = getIntent().getIntExtra(I.CategoryChild.CAT_ID, 0);
-        if (catId == 0) {
-            finish();
-        }
-        groupName = getIntent().getStringExtra(I.CategoryGroup.NAME);
-        mChildList = (ArrayList<CategoryChildBean>) getIntent().getSerializableExtra(I.CategoryChild.ID);
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    protected void initView() {
-        mSrl.setColorSchemeColors(
-                getResources().getColor(R.color.google_blue),
-                getResources().getColor(R.color.google_green),
-                getResources().getColor(R.color.google_red),
-                getResources().getColor(R.color.google_yellow)
-        );
-        glm = new GridLayoutManager(mContext, I.COLUM_NUM);
-        mRv.setLayoutManager(glm);
-        mRv.setHasFixedSize(true);
-        mRv.setAdapter(mAdapter);
-        mRv.addItemDecoration(new SpaceItemDecoration(12));
-        mBtnCatChildFilter.setText(groupName);
-    }
-
-    @Override
-    protected void setListener() {
-        setPullUpListener();
-        setPullDownListener();
-    }
-
-    private void setPullDownListener() {
-        mSrl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        glm = new GridLayoutManager(mContext, I.COLUM_NUM, LinearLayoutManager.VERTICAL, false);
+        glm.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
-            public void onRefresh() {
-                mSrl.setRefreshing(true);
-                mTvRefresh.setVisibility(View.VISIBLE);
-                pageId = 1;
-                downloadCategoryGoods(I.ACTION_PULL_DOWN);
+            public int getSpanSize(int position) {
+                return position == mAdapter.getItemCount() - 1 ? 2 : 1;
             }
         });
+        newGoodsRecycler.setLayoutManager(glm);
+        newGoodsRecycler.setAdapter(mAdapter);
+        Intent intent = getIntent();
+        tag = intent.getIntExtra(I.CategoryChild.CAT_ID, 0);
+        stringExtra = intent.getStringExtra(I.CategoryGroup.NAME);
+        mChildList = (ArrayList<CategoryChildBean>) intent.getSerializableExtra(I.CategoryChild.ID);
+        initData(I.ACTION_DOWNLOAD, tag, mPageId);
+        initView();
+        setListener();
     }
 
-    private void downloadCategoryGoods(final int action) {
-        NetDao.downloadCategoryGoods(mContext, catId, pageId, new OkHttpUtils.OnCompleteListener<NewGoodsBean[]>() {
-            @Override
-            public void onSuccess(NewGoodsBean[] result) {
-                mSrl.setRefreshing(false);
-                mTvRefresh.setVisibility(View.GONE);
-                mAdapter.setMore(true);
-                L.e("result=" + result);
-                if (result != null && result.length > 0) {
-                    ArrayList<NewGoodsBean> list = ConvertUtils.array2List(result);
-                    if (action == I.ACTION_DOWNLOAD || action == I.ACTION_PULL_DOWN) {
-                        mAdapter.initData(list);
-                    } else {
-                        mAdapter.addData(list);
-                    }
-                    if (list.size() < I.PAGE_SIZE_DEFAULT) {
-                        mAdapter.setMore(false);
-                    }
-                } else {
-                    mAdapter.setMore(false);
-                }
-            }
-
-            @Override
-            public void onError(String error) {
-                mSrl.setRefreshing(false);
-                mTvRefresh.setVisibility(View.GONE);
-                mAdapter.setMore(false);
-                CommonUtils.showShortToast(error);
-                L.e("error:" + error);
-            }
-        });
+    private void setListener() {
+        setOnPullDownListener();
+        setOnPullUpListener();
     }
 
-    private void setPullUpListener() {
-        mRv.setOnScrollListener(new RecyclerView.OnScrollListener() {
+    private void setOnPullUpListener() {
+        newGoodsRecycler.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            int lastIndex;
+
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                int lastPosition = glm.findLastVisibleItemPosition();
-                if (newState == RecyclerView.SCROLL_STATE_IDLE
-                        && lastPosition == mAdapter.getItemCount() - 1
-                        && mAdapter.isMore()) {
-                    pageId++;
-                    downloadCategoryGoods(I.ACTION_PULL_UP);
+                mNewState = newState;
+                lastIndex = glm.findLastVisibleItemPosition();
+                if (lastIndex >= mAdapter.getItemCount() - 1 && newState == RecyclerView.SCROLL_STATE_IDLE &&
+                        mAdapter.isMore()) {
+                    mPageId++;
+                    L.i(mPageId + "");
+                    downloadNewGoods(I.ACTION_PULL_UP, tag, mPageId);
                 }
+                if (newState != RecyclerView.SCROLL_STATE_DRAGGING) {
+                    mAdapter.notifyDataSetChanged();
+                }
+
+
             }
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                int firstPosition = glm.findFirstVisibleItemPosition();
-                mSrl.setEnabled(firstPosition == 0);
+                lastIndex = glm.findFirstVisibleItemPosition();
             }
         });
     }
 
-    @Override
-    protected void initData() {
-        downloadCategoryGoods(I.ACTION_DOWNLOAD);
-        mBtnCatChildFilter.setOnCatFilterClickListener(groupName,mChildList);
+    private void downloadNewGoods(final int downloadStatus, int tag, int mPageId) {
+        NetDao.downloadCategoryChild(mContext, tag, mPageId, new OkHttpUtils.OnCompleteListener<NewGoodsBean[]>() {
+                    @Override
+                    public void onSuccess(NewGoodsBean[] result) {
+                        L.i(result.toString());
+                        if (result != null && result.length > 0) {
+                            mAdapter.setMore(true);
+                            ArrayList<NewGoodsBean> list = ConvertUtils.array2List(result);
+                            switch (downloadStatus) {
+                                case I.ACTION_DOWNLOAD:
+                                    mAdapter.initNewGoods(list);
+                                    mAdapter.setTvFooter("加载更多数据");
+                                    break;
+                                case I.ACTION_PULL_DOWN:
+                                    mAdapter.initNewGoods(list);
+                                    mAdapter.setTvFooter("加载更多数据");
+                                    newGoodsSwipeRefresh.setRefreshing(false);
+                                    newGoodsTvRefresh.setVisibility(View.GONE);
+                                    ImageLoader.release();
+                                    break;
+                                case I.ACTION_PULL_UP:
+                                    mAdapter.addNewGoods(list);
+                                    break;
+
+
+                            }
+                            L.i(list.toString());
+                        }
+                        if (downloadStatus == I.ACTION_PULL_UP) {
+                            mAdapter.setTvFooter("没有更多数据");
+
+                        }
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        newGoodsSwipeRefresh.setRefreshing(false);
+
+                    }
+                }
+
+        );
     }
 
-    @OnClick(R.id.backClickArea)
-    public void onClick() {
-        MFGT.finish(this);
+    private void setOnPullDownListener() {
+        newGoodsSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                newGoodsSwipeRefresh.setEnabled(true);
+                newGoodsSwipeRefresh.setRefreshing(true);
+                newGoodsTvRefresh.setVisibility(View.VISIBLE);
+                mPageId = 1;
+                downloadNewGoods(I.ACTION_PULL_DOWN, tag, mPageId);
+            }
+        });
     }
 
-    @OnClick({R.id.btn_sort_price, R.id.btn_sort_addtime})
+    private void initView() {
+        newGoodsSwipeRefresh.setColorSchemeColors(
+                getResources().getColor(R.color.google_blue),
+                getResources().getColor(R.color.google_green),
+                getResources().getColor(R.color.google_red),
+                getResources().getColor(R.color.google_yellow)
+        );
+        newGoodsRecycler.addItemDecoration(new SpaceItemDecoration(12));
+        btnCatChildFilter.setText(stringExtra);
+    }
+
+    private void initData(int download, int actionDownload, int mPageId) {
+        downloadNewGoods(I.ACTION_DOWNLOAD, tag, mPageId);
+        btnCatChildFilter.setOnCatFilterClickListener(stringExtra, mChildList);
+    }
+
+    @OnClick({R.id.tvPrice, R.id.tvTime})
     public void onClick(View view) {
-        Drawable right;
         switch (view.getId()) {
-            case R.id.btn_sort_price:
+            case R.id.tvPrice:
                 if (priceAsc) {
                     sortBy = I.SORT_BY_PRICE_ASC;
-                    right = getResources().getDrawable(R.mipmap.arrow_order_up);
+                    imPrice.setImageResource(R.drawable.arrow_order_up);
+
                 } else {
                     sortBy = I.SORT_BY_PRICE_DESC;
-                    right = getResources().getDrawable(R.mipmap.arrow_order_down);
+                    imPrice.setImageResource(R.drawable.arrow_order_down);
                 }
-                right.setBounds(0, 0, right.getIntrinsicWidth(), right.getIntrinsicHeight());
-                mBtnSortPrice.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, right, null);
                 priceAsc = !priceAsc;
                 break;
-            case R.id.btn_sort_addtime:
+            case R.id.tvTime:
                 if (addTimeAsc) {
                     sortBy = I.SORT_BY_ADDTIME_ASC;
-                    right = getResources().getDrawable(R.mipmap.arrow_order_up);
+                    imTime.setImageResource(R.drawable.arrow_order_up);
                 } else {
                     sortBy = I.SORT_BY_ADDTIME_DESC;
-                    right = getResources().getDrawable(R.mipmap.arrow_order_down);
+                    imTime.setImageResource(R.drawable.arrow_order_down);
                 }
-                right.setBounds(0, 0, right.getIntrinsicWidth(), right.getIntrinsicHeight());
-                mBtnSortAddtime.setCompoundDrawablesRelativeWithIntrinsicBounds(null, null, right, null);
                 addTimeAsc = !addTimeAsc;
                 break;
         }
-        mAdapter.setSoryBy(sortBy);
+        mAdapter.setSortBy(sortBy);
+
+    }
+
+    @OnClick(R.id.lv_details_back)
+    public void onClick() {
+        MFGT.finish(this);
     }
 }

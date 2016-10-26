@@ -1,11 +1,10 @@
-package com.wuyunlong.fulicenter.view;
+package com.wuyunlong.fulicenter.views;
 
 import android.app.Activity;
 import android.view.View;
 import android.widget.TextView;
 
 import com.wuyunlong.fulicenter.R;
-import com.wuyunlong.fulicenter.utils.MFGT;
 
 
 /**
@@ -16,8 +15,7 @@ public class DisplayUtils {
         activity.findViewById(R.id.backClickArea).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                activity.finish();
-                MFGT.finish(activity);
+                activity.finish();
             }
         });
     }
