@@ -139,4 +139,18 @@ public class NetDao {
                 .execute(listener);
     }
 
+    /**
+     * 同步信息，既同步客户端修改后的昵称，头像等信息
+     * @param context
+     * @param username
+     * @param listener
+     */
+    public static void syncUserInfo(Context context,String username,OkHttpUtils.OnCompleteListener<String> listener){
+        OkHttpUtils<String> utils = new OkHttpUtils(context);
+        utils.setRequestUrl(I.REQUEST_FIND_USER)
+                .addParam(I.User.USER_NAME,username)
+                .targetClass(String.class)
+                .execute(listener);
+    }
+
 }
