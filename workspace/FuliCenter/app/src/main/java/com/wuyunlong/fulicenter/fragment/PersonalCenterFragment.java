@@ -12,10 +12,15 @@ import android.widget.TextView;
 import com.wuyunlong.fulicenter.FuLiCenterApplication;
 import com.wuyunlong.fulicenter.R;
 import com.wuyunlong.fulicenter.activity.MainActivity;
+import com.wuyunlong.fulicenter.bean.Result;
 import com.wuyunlong.fulicenter.bean.User;
+import com.wuyunlong.fulicenter.dao.UserDao;
+import com.wuyunlong.fulicenter.net.NetDao;
+import com.wuyunlong.fulicenter.net.OkHttpUtils;
 import com.wuyunlong.fulicenter.utils.ImageLoader;
 import com.wuyunlong.fulicenter.utils.L;
 import com.wuyunlong.fulicenter.utils.MFGT;
+import com.wuyunlong.fulicenter.utils.ResultUtils;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -36,6 +41,7 @@ public class PersonalCenterFragment extends BaseFragment {
     @Bind(R.id.center_user_info)
     RelativeLayout centerUserInfo;
 
+    User user;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -88,4 +94,45 @@ public class PersonalCenterFragment extends BaseFragment {
         }
     }
 
+    private void syncUsetInfo() {
+        NetDao.syncUserInfo(mContext, user.getMuserName(), new OkHttpUtils.OnCompleteListener<String>() {
+            @Override
+            public void onSuccess(String s) {
+                Result result = ResultUtils.getResultFromJson(s, User.class);
+                if (result != null) {
+                    User u = (User) result.getRetData();
+                    if (!user.equals(u)) {
+                        UserDao dao = new UserDao(mContext);
+                        boolean b = dao.saveUser(u);
+                        if (b) {
+                            FuLiCenterApplication.setUser(u);
+                            user = u;
+                            ImageLoader.setAvatar(ImageLoader.getAvatarUrl(user),
+                                    mContext, mIvUserAvatar);
+                            mTvUserName.setText(user.getMuserNick());
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+
+            }
+        });
+    }
+
+    public void getCollectsCount() {
+        NetDao.getCollectsCount(mContext, user.getMuserName(), new OkHttpUtils.OnCompleteListener<String>() {
+            @Override
+            public void onSuccess(String result) {
+
+            }
+
+            @Override
+            public void onError(String error) {
+
+            }
+        });
+    }
 }

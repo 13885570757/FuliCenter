@@ -19,15 +19,14 @@ import com.wuyunlong.fulicenter.utils.CommonUtils;
 import com.wuyunlong.fulicenter.utils.L;
 import com.wuyunlong.fulicenter.utils.MFGT;
 import com.wuyunlong.fulicenter.utils.ResultUtils;
-import com.wuyunlong.fulicenter.view.DisplayUtils;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ModifyNick extends BaseActivity {
+public class UpdateNickActivity extends BaseActivity {
 
-    private static final String TAG = ModifyNick.class.getSimpleName();
+    private static final String TAG = UpdateNickActivity.class.getSimpleName();
 
     @Bind(R.id.info_nick)
     TextView infoNick;
@@ -35,7 +34,7 @@ public class ModifyNick extends BaseActivity {
     EditText modifyNick;
     @Bind(R.id.modify_btn)
     Button modifyBtn;
-    ModifyNick mContext;
+    UpdateNickActivity mContext;
 
     User user = null;
 
@@ -50,8 +49,7 @@ public class ModifyNick extends BaseActivity {
     @Override
     protected void initView() {
         //获取标题
-      DisplayUtils.initBackWithTitle(mContext,
-              getResources().getString(R.string.user_name));
+     // DisplayUtils.initBackWithTitle(mContext, getResources().getString(R.string.user_name));
 
     }
 

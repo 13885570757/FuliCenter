@@ -8,17 +8,20 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.wuyunlong.fulicenter.FuLiCenterApplication;
+import com.wuyunlong.fulicenter.I;
 import com.wuyunlong.fulicenter.R;
 import com.wuyunlong.fulicenter.bean.User;
 import com.wuyunlong.fulicenter.dao.SharePrefrenceUtils;
 import com.wuyunlong.fulicenter.utils.ImageLoader;
 import com.wuyunlong.fulicenter.utils.MFGT;
+import com.wuyunlong.fulicenter.utils.OnSetAvatarListener;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class PersonalInfo extends BaseActivity {
+
 
     @Bind(R.id.ivBack)
     ImageView ivBack;
@@ -38,6 +41,8 @@ public class PersonalInfo extends BaseActivity {
     User user;
     PersonalInfo mContext;
 
+    OnSetAvatarListener mOnSetAvatarListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -49,7 +54,7 @@ public class PersonalInfo extends BaseActivity {
 
     @Override
     protected void initView() {
-        //DisplayUtils.initBackWithTitle(mContext,getResources().getString());
+        // DisplayUtils.initBackWithTitle(mContext,getResources().getString());
 
 
     }
@@ -80,13 +85,15 @@ public class PersonalInfo extends BaseActivity {
                 break;
             case R.id.rlUserAvatar:
                 //修改头像的方法
-
+                mOnSetAvatarListener = new OnSetAvatarListener(mContext,
+                        R.id.layout_upload_avatar,
+                        user.getMuserName(), I.AVATAR_TYPE_USER_PATH);
                 break;
             case R.id.rlNick:
                 MFGT.gotoModifyNick(mContext);
                 break;
             case R.id.rlQrcode://二维码界面
-                MFGT.gotoQrcodeActivity(this);
+                MFGT.gotoQrcodeActivity(mContext);
                 break;
             case R.id.btUnLogin://注销
                 loginout();

@@ -1,5 +1,6 @@
 package com.wuyunlong.fulicenter.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Environment;
 
@@ -31,4 +32,17 @@ public class FileUtils {
 		File newFile=new File(dir);
 		oldFile.renameTo(newFile);
 	}
+
+	public static File getAvatarPath(Activity activity,String avatarType,String fileName){
+		File dir = activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+		dir = new File(dir,avatarType);
+		if (!dir.exists()){
+			dir.mkdir();
+		}
+		File file = new File(dir,fileName);
+		return file;
+	}
+
+
+
 }
