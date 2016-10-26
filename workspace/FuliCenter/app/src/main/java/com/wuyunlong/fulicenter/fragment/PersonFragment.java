@@ -7,10 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.wuyunlong.fulicenter.FuLiCenterApplication;
 import com.wuyunlong.fulicenter.R;
+import com.wuyunlong.fulicenter.activity.CollectsActivity;
 import com.wuyunlong.fulicenter.activity.MainActivity;
 import com.wuyunlong.fulicenter.activity.SettingActivity;
 import com.wuyunlong.fulicenter.bean.MessageBean;
@@ -44,7 +46,10 @@ public class PersonFragment extends Fragment {
 
     UserAvatarBean user;
     @Bind(R.id.tvCollectGoods)//收藏的商品
-    TextView tvCollectGoods;
+            TextView tvCollectGoods;
+
+    @Bind(R.id.lyCollectGoods)//收藏的商品
+            LinearLayout lyCollectGoods;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -101,6 +106,12 @@ public class PersonFragment extends Fragment {
         MFGT.startActivity(mContext, SettingActivity.class);
     }
 
+    @OnClick(R.id.lyCollectGoods)
+    public void onCollectgoods() {
+        MFGT.startActivity(mContext, CollectsActivity.class);
+    }
+
+
     /**
      * 同步客户端和服务器的个人信息
      */
@@ -138,7 +149,7 @@ public class PersonFragment extends Fragment {
             public void onSuccess(MessageBean result) {
                 if (result != null && result.isSuccess()) {
                     tvCollectGoods.setText(result.getMsg());
-                }else {
+                } else {
                     tvCollectGoods.setText(String.valueOf(0));//不能直接设置为0
                 }
             }
@@ -146,7 +157,7 @@ public class PersonFragment extends Fragment {
             @Override
             public void onError(String error) {
                 tvCollectGoods.setText(String.valueOf(0));
-                L.e("=====收藏的商品错误"+error);
+                L.e("=====收藏的商品错误" + error);
             }
         });
     }

@@ -11,13 +11,12 @@ import android.widget.TextView;
 import com.wuyunlong.fulicenter.FuLiCenterApplication;
 import com.wuyunlong.fulicenter.I;
 import com.wuyunlong.fulicenter.R;
-import com.wuyunlong.fulicenter.adapter.GoodsAdapter;
+import com.wuyunlong.fulicenter.adapter.CollectsAdapter;
 import com.wuyunlong.fulicenter.bean.CollectBean;
 import com.wuyunlong.fulicenter.bean.UserAvatarBean;
 import com.wuyunlong.fulicenter.net.NetDao;
 import com.wuyunlong.fulicenter.utils.ConvertUtils;
 import com.wuyunlong.fulicenter.utils.OkHttpUtils;
-import com.wuyunlong.fulicenter.views.DisplayUtils;
 import com.wuyunlong.fulicenter.views.SpaceItemDecoration;
 
 import java.util.ArrayList;
@@ -36,7 +35,7 @@ public class CollectsActivity extends AppCompatActivity {
 
     GridLayoutManager glm;
 
-    GoodsAdapter mAdapter;
+    CollectsAdapter mAdapter;
     ArrayList<CollectBean> mList;
     int pageId = 1;
 
@@ -46,13 +45,15 @@ public class CollectsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_collects);
         ButterKnife.bind(this);
         mContext = this;
+        mList = new ArrayList<>();
+        mAdapter = new CollectsAdapter(mContext,mList);
         super.onCreate(savedInstanceState);
         initView();
         initData();
         setListener();
     }
     private void initView() {
-        DisplayUtils.initBackWithTitle(mContext, getResources().getString(R.string.mycollects_title));
+//        DisplayUtils.initBackWithTitle(mContext, getResources().getString(0));
         mSrl.setColorSchemeColors(
                 getResources().getColor(R.color.google_blue),
                 getResources().getColor(R.color.google_red),
@@ -95,11 +96,11 @@ public class CollectsActivity extends AppCompatActivity {
                 if (result!=null&&result.length>0){
                     ArrayList<CollectBean> list = ConvertUtils.array2List(result);
                     if (action==I.ACTION_DOWNLOAD||action==I.ACTION_PULL_DOWN){
-                        //mAdapter.initData(list);
+                        mAdapter.initCollects(list);
                     }else {
-                       // mAdapter.addData(list);
+                       mAdapter.addCollects(list);
                     }if (list.size()<I.PAGE_ID_DEFAULT){
-                        //mAdapter.setMore(false);
+                        mAdapter.setMore(false);
                     }
                 }else {
                     mAdapter.setMore(false);

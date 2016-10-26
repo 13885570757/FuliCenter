@@ -8,6 +8,7 @@ import com.wuyunlong.fulicenter.I;
 import com.wuyunlong.fulicenter.R;
 import com.wuyunlong.fulicenter.activity.BouTiQueActivity;
 import com.wuyunlong.fulicenter.activity.CategoryChildActivity;
+import com.wuyunlong.fulicenter.activity.CollectsActivity;
 import com.wuyunlong.fulicenter.activity.GoodsDetailsActivity;
 import com.wuyunlong.fulicenter.activity.LoginActivity;
 import com.wuyunlong.fulicenter.activity.MainActivity;
@@ -81,6 +82,10 @@ public class MFGT {
 
     }
 
+    /**
+     * 注册
+     * @param mContext
+     */
     public static void gotoRegister(Activity mContext) {
         Intent intent = new Intent();
         intent.setClass(mContext, RegisterActivity.class);
@@ -109,9 +114,22 @@ public class MFGT {
 
     }
 
+    /**
+     * 跳转到修改昵称
+     * @param mContext
+     */
     public static void gotoUpdateNick(Activity mContext) {
         startActivityForResult(mContext, new Intent(mContext, UpdateNickActivity.class
         ), I.REQUEST_CODE_NICK);
+
+    }
+
+    /**
+     * 跳转到我收藏的商品
+     * @param mContext
+     */
+    public static void gotoCollects(Activity mContext){
+        startActivity(mContext,new Intent(mContext, CollectsActivity.class));
 
     }
 

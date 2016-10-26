@@ -6,19 +6,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.wuyunlong.fulicenter.I;
 import com.wuyunlong.fulicenter.R;
-import com.wuyunlong.fulicenter.bean.NewGoodsBean;
+import com.wuyunlong.fulicenter.bean.CollectBean;
 import com.wuyunlong.fulicenter.utils.ImageLoader;
 import com.wuyunlong.fulicenter.utils.L;
 import com.wuyunlong.fulicenter.utils.MFGT;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -29,7 +27,7 @@ import butterknife.OnClick;
  */
 public class CollectsAdapter extends RecyclerView.Adapter {
     Context mContext;
-    ArrayList<NewGoodsBean> mList;
+    ArrayList<CollectBean> mList;
 
     RecyclerView parent;
     boolean isMore;
@@ -43,8 +41,6 @@ public class CollectsAdapter extends RecyclerView.Adapter {
 
     public void setSortBy(int sortBy) {
         this.sortBy = sortBy;
-        sortBy();
-
         notifyDataSetChanged();
     }
 
@@ -65,7 +61,7 @@ public class CollectsAdapter extends RecyclerView.Adapter {
         notifyDataSetChanged();
     }
 
-    public CollectsAdapter(Context mContext, ArrayList<NewGoodsBean> mList) {
+    public CollectsAdapter(Context mContext, ArrayList<CollectBean> mList) {
         this.mContext = mContext;
         this.mList = new ArrayList<>();
         mList.addAll(mList);
@@ -98,12 +94,12 @@ public class CollectsAdapter extends RecyclerView.Adapter {
             footer.tvFooter.setText(getTvFooter());
         } else {
             CollectsViewHolder goods = (CollectsViewHolder) holder;
-            NewGoodsBean goodsBean = mList.get(position);
-            goods.lvGoodsIntroduce.setText(goodsBean.getGoodsName());
-            goods.lvGoodsPrice.setText(goodsBean.getShopPrice());
-            ImageLoader.downloadImg(mContext, goods.lvGoodsImage, goodsBean.getGoodsThumb(), true);
-            goods.lvLayoutGoods.setTag(goodsBean.getGoodsId());
-            L.i("goodsBean:" + goodsBean.getGoodsId());
+            CollectBean collectBean = mList.get(position);
+            goods.lvGoodsIntroduce.setText(collectBean.getGoodsName());
+         //   goods.lvGoodsPrice.setText(goodsBean.getShopPrice());
+            ImageLoader.downloadImg(mContext, goods.lvGoodsImage, collectBean.getGoodsThumb(), true);
+            goods.lvLayoutCollects.setTag(collectBean.getGoodsId());
+            L.i("=========ColkectBean:" + collectBean.getGoodsId());
 
         }
     }
@@ -142,9 +138,9 @@ public class CollectsAdapter extends RecyclerView.Adapter {
         @Bind(R.id.lv_goods_introduce)
         TextView lvGoodsIntroduce;
         @Bind(R.id.delete_collect)
-        TextView ivdelete;
+        ImageView ivdelete;
         @Bind(R.id.layout_goods)
-        LinearLayout lvLayoutGoods;
+        RelativeLayout lvLayoutCollects;
 
 
         public CollectsViewHolder(final View itemView) {
@@ -154,7 +150,7 @@ public class CollectsAdapter extends RecyclerView.Adapter {
 
         @OnClick(R.id.layout_goods)
         public void onGoodsItemClick() {
-            int goodsId = (int) lvLayoutGoods.getTag();
+            int goodsId = (int) lvLayoutCollects.getTag();
 //            mContext.startActivity(new Intent(mContext, GoodsDetailsActivity.class)
 //                    .putExtra(I.GoodsDetails.KEY_GOODS_ID, goodsId));
             MFGT.gotoGoodsDetailsActivity(mContext, goodsId);
@@ -162,47 +158,17 @@ public class CollectsAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public void initNewGoods(ArrayList<NewGoodsBean> mList) {
+    public void initCollects(ArrayList<CollectBean> mList) {
 
         this.mList.clear();
         this.mList.addAll(mList);
         notifyDataSetChanged();
     }
 
-    public void addNewGoods(ArrayList<NewGoodsBean> mList) {
+    public void addCollects(ArrayList<CollectBean> mList) {
         this.mList.addAll(mList);
         notifyDataSetChanged();
     }
 
-    private void sortBy() {
-        Collections.sort(mList, new Comparator<NewGoodsBean>() {
-            @Override
-            public int compare(NewGoodsBean lhs, NewGoodsBean rhs) {
-                int result = 0;
-                switch (sortBy) {
-                    case I.SORT_BY_ADDTIME_ASC:
-                        result = (int) (Long.valueOf(lhs.getAddTime()) - Long.valueOf(rhs.getAddTime()));
-                        break;
-                    case I.SORT_BY_ADDTIME_DESC:
-                        result = (int) (Long.valueOf(rhs.getAddTime()) - Long.valueOf(lhs.getAddTime()));
-                        break;
-                    case I.SORT_BY_PRICE_ASC:
-                        result = getPrice(lhs.getCurrencyPrice()) - getPrice(rhs.getCurrencyPrice());
-                        break;
-                    case I.SORT_BY_PRICE_DESC:
-                        result = getPrice(rhs.getCurrencyPrice()) - getPrice(lhs.getCurrencyPrice());
-
-                        break;
-
-                }
-                return result;
-            }
-
-            private int getPrice(String price) {
-                price = price.substring(price.indexOf("￥") + 1);
-                return Integer.valueOf(price);
-            }
-        });
-    }
 
 }

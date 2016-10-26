@@ -27,8 +27,8 @@
         <activity android:name=".activity.UpdateNickActivity"/>
         <activity android:name=".activity.BouTiQueActivity"/>
         <activity android:name=".activity.SettingActivity"/>
-        <activity android:name=".activity.CollectsActivity">
-        </activity>
+        <activity android:name=".activity.CollectsActivity"/>
+        <activity android:name=".activity.GoodsDetailsActivity"/>
     </application>
 
 </manifest>
