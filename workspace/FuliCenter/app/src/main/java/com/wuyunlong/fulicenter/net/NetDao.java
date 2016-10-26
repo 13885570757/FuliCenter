@@ -7,6 +7,7 @@ import com.wuyunlong.fulicenter.bean.BoutiqueBean;
 import com.wuyunlong.fulicenter.bean.CartResultBean;
 import com.wuyunlong.fulicenter.bean.CategoryChildBean;
 import com.wuyunlong.fulicenter.bean.CategoryGroupBean;
+import com.wuyunlong.fulicenter.bean.CollectBean;
 import com.wuyunlong.fulicenter.bean.GoodsDetailsBean;
 import com.wuyunlong.fulicenter.bean.MessageBean;
 import com.wuyunlong.fulicenter.bean.NewGoodsBean;
@@ -86,6 +87,13 @@ public class NetDao {
 
     }
 
+    /**
+     * 登陆
+     * @param mContext
+     * @param userName
+     * @param passWord
+     * @param listener
+     */
     public static void loginSet(Context mContext, String userName, String passWord, OkHttpUtils.OnCompleteListener<String> listener) {
         OkHttpUtils<String> utils = new OkHttpUtils<>(mContext);
         utils.setRequestUrl(I.REQUEST_LOGIN)
@@ -95,6 +103,14 @@ public class NetDao {
                 .execute(listener);
     }
 
+    /**
+     * 注册
+     * @param mContext
+     * @param username
+     * @param usernick
+     * @param password
+     * @param listener
+     */
     public static void register(Context mContext, String username, String usernick, String password, OkHttpUtils.OnCompleteListener<Result> listener) {
         OkHttpUtils<Result> utils = new OkHttpUtils<>(mContext);
         utils.setRequestUrl(I.REQUEST_REGISTER)
@@ -106,6 +122,15 @@ public class NetDao {
                 .execute(listener);
     }
 
+    /**
+     *
+     * @param mContext
+     * @param goodsId
+     * @param userName
+     * @param count
+     * @param isChecked
+     * @param listener
+     */
     public static void downloadCart(Context mContext, int goodsId, String userName, int count, boolean isChecked
             , OkHttpUtils.OnCompleteListener<CartResultBean> listener) {
         OkHttpUtils utils = new OkHttpUtils(mContext);
@@ -154,11 +179,34 @@ public class NetDao {
                 .execute(listener);
     }
 
+    /**
+     * 同步收藏商品的个数
+     * @param context
+     * @param username
+     * @param listener
+     */
     public static void getCollectsCount(Context context, String username, OkHttpUtils.OnCompleteListener<MessageBean> listener){
         OkHttpUtils<MessageBean> utils  = new OkHttpUtils<>(context);
         utils.setRequestUrl(I.REQUEST_FIND_COLLECT_COUNT)
                 .addParam(I.Collect.USER_NAME,username)
                 .targetClass(MessageBean.class)
+                .execute(listener);
+    }
+
+    /**
+     * 下载收藏商品详情
+     * @param context
+     * @param username
+     * @param listener
+     */
+    public static void downloadCollects(Context context, String username,int pageId,
+                                        OkHttpUtils.OnCompleteListener<CollectBean[]>listener){
+        OkHttpUtils<CollectBean[]> utils = new OkHttpUtils<>(context);
+        utils.setRequestUrl(I.REQUEST_FIND_COLLECTS)
+                .addParam(I.Collect.USER_NAME,username)
+                .addParam(I.PAGE_ID,String.valueOf(pageId))
+                .addParam(I.PAGE_SIZE,String.valueOf(I.PAGE_SIZE_DEFAULT))
+                .targetClass(CollectBean[].class)
                 .execute(listener);
     }
 
