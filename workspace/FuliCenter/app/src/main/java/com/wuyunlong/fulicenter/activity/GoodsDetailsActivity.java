@@ -160,10 +160,41 @@ public class GoodsDetailsActivity extends BaseActivity {
                 initCartData(count);
                 break;
             case R.id.iv_details_collect:
+                addCollect();
                 break;
             case R.id.iv_details_share:
                 break;
         }
+    }
+
+    /**
+     * 将商品设为我的收藏
+     */
+    private void addCollect() {
+            UserAvatarBean user = FuLiCenterApplication.getUser();
+            if (user==null){//若user为空，判断为未登录，跳转到登录界面
+                MFGT.gotoLoginActivity(mContext);
+            }else {
+                if (isCollected){
+                    //取消收藏
+                }else{
+                    NetDao.addCollect(mContext,user.getMuserName(),goodsId, new OkHttpUtils.OnCompleteListener<MessageBean>() {
+                        @Override
+                        public void onSuccess(MessageBean result) {
+                            if (result!=null&&result.isSuccess()){
+                                isCollected = !isCollected;
+                                updateGoodsCollectStatus();
+                                CommonUtils.showShortToast("已添加收藏");
+                            }
+                        }
+
+                        @Override
+                        public void onError(String error) {
+
+                        }
+                    });
+                }
+            }
     }
 
     private void initCartData(int count) {

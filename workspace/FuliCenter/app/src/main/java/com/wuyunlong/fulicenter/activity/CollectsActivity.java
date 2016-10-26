@@ -150,6 +150,12 @@ public class CollectsActivity extends AppCompatActivity {
 
     }
 
-
-
+    /**
+     * 同步数据
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initData();
+    }
 }

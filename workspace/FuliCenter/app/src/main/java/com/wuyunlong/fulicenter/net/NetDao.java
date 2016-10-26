@@ -2,7 +2,6 @@ package com.wuyunlong.fulicenter.net;
 
 import android.content.Context;
 
-import com.wuyunlong.fulicenter.FuLiCenterApplication;
 import com.wuyunlong.fulicenter.I;
 import com.wuyunlong.fulicenter.bean.BoutiqueBean;
 import com.wuyunlong.fulicenter.bean.CartResultBean;
@@ -13,7 +12,6 @@ import com.wuyunlong.fulicenter.bean.GoodsDetailsBean;
 import com.wuyunlong.fulicenter.bean.MessageBean;
 import com.wuyunlong.fulicenter.bean.NewGoodsBean;
 import com.wuyunlong.fulicenter.bean.Result;
-import com.wuyunlong.fulicenter.bean.UserAvatarBean;
 import com.wuyunlong.fulicenter.utils.MD5;
 import com.wuyunlong.fulicenter.utils.OkHttpUtils;
 
@@ -220,6 +218,21 @@ public class NetDao {
                 .execute(listener);
     }
 
-
+    /**
+     * 加入购物车
+     * @param context
+     * @param username
+     * @param goodsId
+     * @param listener
+     */
+    public static void addCollect(Context context,String username,int goodsId,
+                              OkHttpUtils.OnCompleteListener<MessageBean>listener){
+    OkHttpUtils<MessageBean> utils = new OkHttpUtils<>(context);
+    utils.setRequestUrl(I.REQUEST_ADD_COLLECT)
+            .addParam(I.Collect.USER_NAME,username)
+            .addParam(I.Collect.GOODS_ID,String.valueOf(goodsId))
+            .targetClass(MessageBean.class)
+            .execute(listener);
+}
 
 }
