@@ -8,6 +8,7 @@ import com.wuyunlong.fulicenter.bean.CartResultBean;
 import com.wuyunlong.fulicenter.bean.CategoryChildBean;
 import com.wuyunlong.fulicenter.bean.CategoryGroupBean;
 import com.wuyunlong.fulicenter.bean.GoodsDetailsBean;
+import com.wuyunlong.fulicenter.bean.MessageBean;
 import com.wuyunlong.fulicenter.bean.NewGoodsBean;
 import com.wuyunlong.fulicenter.bean.Result;
 import com.wuyunlong.fulicenter.utils.MD5;
@@ -150,6 +151,14 @@ public class NetDao {
         utils.setRequestUrl(I.REQUEST_FIND_USER)
                 .addParam(I.User.USER_NAME,username)
                 .targetClass(String.class)
+                .execute(listener);
+    }
+
+    public static void getCollectsCount(Context context, String username, OkHttpUtils.OnCompleteListener<MessageBean> listener){
+        OkHttpUtils<MessageBean> utils  = new OkHttpUtils<>(context);
+        utils.setRequestUrl(I.REQUEST_FIND_COLLECT_COUNT)
+                .addParam(I.Collect.USER_NAME,username)
+                .targetClass(MessageBean.class)
                 .execute(listener);
     }
 

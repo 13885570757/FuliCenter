@@ -13,11 +13,13 @@ import com.wuyunlong.fulicenter.FuLiCenterApplication;
 import com.wuyunlong.fulicenter.R;
 import com.wuyunlong.fulicenter.activity.MainActivity;
 import com.wuyunlong.fulicenter.activity.SettingActivity;
+import com.wuyunlong.fulicenter.bean.MessageBean;
 import com.wuyunlong.fulicenter.bean.Result;
 import com.wuyunlong.fulicenter.bean.UserAvatarBean;
 import com.wuyunlong.fulicenter.dao.UserDao;
 import com.wuyunlong.fulicenter.net.NetDao;
 import com.wuyunlong.fulicenter.utils.ImageLoader;
+import com.wuyunlong.fulicenter.utils.L;
 import com.wuyunlong.fulicenter.utils.MFGT;
 import com.wuyunlong.fulicenter.utils.OkHttpUtils;
 import com.wuyunlong.fulicenter.utils.ResultUtils;
@@ -41,6 +43,8 @@ public class PersonFragment extends Fragment {
     TextView tvUserName;
 
     UserAvatarBean user;
+    @Bind(R.id.tvCollectGoods)//收藏的商品
+    TextView tvCollectGoods;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -80,6 +84,7 @@ public class PersonFragment extends Fragment {
             initData();
         }
         syncUserInfo();
+        getCollectsCount();
     }
 
     @Override
@@ -123,6 +128,25 @@ public class PersonFragment extends Fragment {
             @Override
             public void onError(String error) {
 
+            }
+        });
+    }
+
+    private void getCollectsCount() {
+        NetDao.getCollectsCount(mContext, user.getMuserName(), new OkHttpUtils.OnCompleteListener<MessageBean>() {
+            @Override
+            public void onSuccess(MessageBean result) {
+                if (result != null && result.isSuccess()) {
+                    tvCollectGoods.setText(result.getMsg());
+                }else {
+                    tvCollectGoods.setText(String.valueOf(0));//不能直接设置为0
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+                tvCollectGoods.setText(String.valueOf(0));
+                L.e("=====收藏的商品错误"+error);
             }
         });
     }
