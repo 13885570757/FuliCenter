@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.wuyunlong.fulicenter.I;
 import com.wuyunlong.fulicenter.bean.BoutiqueBean;
+import com.wuyunlong.fulicenter.bean.CartBean;
 import com.wuyunlong.fulicenter.bean.CategoryChildBean;
 import com.wuyunlong.fulicenter.bean.CategoryGroupBean;
 import com.wuyunlong.fulicenter.bean.CollectBean;
@@ -257,5 +258,14 @@ public class NetDao {
                 .targetClass(String.class)
                 .execute(listener);
     }
+
+    /**
+     * 购物车商品刷新
+     * @param context
+     * @param username
+     */
+     public static void updateCart(Context context, String username, OkHttpUtils.OnCompleteListener<CartBean[]>){
+
+     }
 
 }

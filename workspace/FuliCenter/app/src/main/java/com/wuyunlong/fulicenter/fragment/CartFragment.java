@@ -27,6 +27,7 @@ import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -143,6 +144,16 @@ public class CartFragment extends BaseFragment {
         }else {
             tvSumPrice.setText("合计：￥"+0);
             tvSavePrice.setText("合计：￥"+0);
+        }
+    }
+    @OnClick(R.id.delete_collect)
+    public void deleteCart(){
+        final  int position = add_cart.getTag();
+        CartBean cartBean = mList.get(position);
+        if (cartBean.getCount()>1){
+            NetDao.updateCart(mContext,cartBean.getId(),cartBean.getCount()-1,new OkHttpUtils.OnCompleteListener<>()){
+
+            }
         }
     }
 
