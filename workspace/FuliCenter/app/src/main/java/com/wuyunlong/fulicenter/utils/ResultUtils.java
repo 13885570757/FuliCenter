@@ -133,6 +133,7 @@ public class ResultUtils {
             if (jsonStr == null || jsonStr.isEmpty() || jsonStr.length() < 3) return null;
             JSONArray array = new JSONArray(jsonStr);
             if (array != null) {
+                list = new ArrayList<>();
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject jsonObject = array.getJSONObject(i);
                     CartBean cartBean = new CartBean();

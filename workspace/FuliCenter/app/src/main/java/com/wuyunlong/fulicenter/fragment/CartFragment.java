@@ -128,6 +128,24 @@ public class CartFragment extends BaseFragment {
         }
     }
 
+    private  void sumPrice(){
+        int sumPrice = 0;
+        int rankPrice = 0;
+        if (mList!=null&&mList.size()>0){
+            for (CartBean c:mList){
+                if (c.isChecked()){
+                    sumPrice+=getPrice(c.getGoods().getCurrencyPrice())*c.getCount();
+                    rankPrice+=getPrice(c.getGoods().getRankPrice())*c.getCount();
+                }
+            }
+            tvSumPrice.setText("合计：￥"+Double.valueOf(sumPrice));
+            tvSavePrice.setText("合计：￥"+Double.valueOf(sumPrice-rankPrice));
+        }else {
+            tvSumPrice.setText("合计：￥"+0);
+            tvSavePrice.setText("合计：￥"+0);
+        }
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
