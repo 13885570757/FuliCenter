@@ -137,7 +137,12 @@ public class MainActivity extends AppCompatActivity {
                 index = 2;
                 break;
             case R.id.mBtnCart:
-                index = 3;
+                if (FuLiCenterApplication.getUser() == null) {
+                    MFGT.gotoLoginFormCart(this);
+                } else {
+                    index = 3;
+                }
+
                 break;
             case R.id.mBtnPersonal:
                 if (FuLiCenterApplication.getUser() == null) {
@@ -185,8 +190,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == I.REQUEST_CODE_LOGIN && FuLiCenterApplication.getUser() != null) {
-            index = 4;
+        if (FuLiCenterApplication.getUser() != null) {
+            if (requestCode == I.REQUEST_CODE_LOGIN) {
+                index = 4;
+            }
+            if (requestCode == I.REQUEST_CODE_LOGIN_FORM_CART) {
+                index = 3;
+            }
         } else {
             index = 0;
         }

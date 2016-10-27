@@ -117,6 +117,7 @@ public interface I {
     int MSG_REGISTER_USERNAME_EXISTS = 102;//账号已经存在
     int MSG_REGISTER_UPLOAD_AVATAR_FAIL = 103;//上传头像失败
     int MSG_REGISTER_UPLOAD_AVATAR_SUCCESS = 104;//上传头像成功
+    int REQUEST_CODE_LOGIN_FORM_CART = 104;//从购物车中登录
     int MSG_REGISTER_FAIL = 105;//注册失败
     int MSG_UNREGISTER_SUCCESS = 106;//注册成功
     int MSG_UNREGISTER_FAIL = 107;//注册失败
@@ -325,6 +326,7 @@ public interface I {
      */
     String DOWNLOAD_AVATAR_URL = I.SERVER_ROOT + REQUEST_DOWNLOAD_AVATAR
             + I.QUESTION;
+
 
     interface Goods {
         String KEY_RESULT = "result";

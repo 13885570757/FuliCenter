@@ -77,6 +77,12 @@ public class MFGT {
         startActivityForResult(mContext, intent, I.REQUEST_CODE_LOGIN);
         mContext.overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
     }
+    public static void gotoLoginFormCart(Activity mContext) {
+        Intent intent = new Intent(mContext, LoginActivity.class);
+        mContext.startActivity(intent);
+        startActivityForResult(mContext, intent, I.REQUEST_CODE_LOGIN_FORM_CART);
+        mContext.overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+    }
 
     public static void Register2Login() {
 
