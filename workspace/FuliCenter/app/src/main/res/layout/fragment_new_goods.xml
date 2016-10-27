@@ -1,11 +1,16 @@
-<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/new_goods_swipeRefresh"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+<android.support.v4.widget.SwipeRefreshLayout
+    android:id="@+id/new_goods_swipeRefresh"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_above="@+id/suibian">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <TextView
@@ -14,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:gravity="center_horizontal"
-            android:text="正在加载更多商品"
+            android:text="购物车什么都没有，赶紧去添加"
             android:visibility="gone" />
 
         <android.support.v7.widget.RecyclerView
@@ -25,8 +30,56 @@
             android:background="@color/list_background">
 
         </android.support.v7.widget.RecyclerView>
-
     </LinearLayout>
 
-
 </android.support.v4.widget.SwipeRefreshLayout>
+
+    <RelativeLayout
+        android:id="@+id/suibian"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+
+        <TextView
+            android:id="@+id/Sumrice"
+            android:layout_toLeftOf="@+id/tvSumPrice"
+            android:text="合计:"
+            android:layout_marginBottom="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/savePrice"
+            android:layout_below="@+id/Sumrice"
+            android:layout_toLeftOf="@+id/tvSavePrice"
+            android:text="节省:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/tvSumPrice"
+            android:text=" ￥998"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="20dp"
+            android:layout_toLeftOf="@+id/btn_buyIt"
+            android:textColor="@color/orange"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/tvSavePrice"
+            android:textColor="@color/orange"
+            android:layout_below="@id/tvSumPrice"
+            android:text="   ￥98"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@+id/btn_buyIt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:id="@+id/btn_buyIt"
+            android:layout_alignParentRight="true"
+            android:text="买买买"
+            android:background="@color/orange"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"/>
+
+
+    </RelativeLayout>
+</RelativeLayout>

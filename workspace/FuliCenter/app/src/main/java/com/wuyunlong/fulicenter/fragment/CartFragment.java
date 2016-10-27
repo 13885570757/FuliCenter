@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.wuyunlong.fulicenter.FuLiCenterApplication;
@@ -46,18 +47,24 @@ public class CartFragment extends BaseFragment {
     RecyclerView mRv;
     @Bind(R.id.new_goods_swipeRefresh)
     SwipeRefreshLayout mSrl;
-
+    @Bind(R.id.tvSumPrice)
+    TextView tvSumPrice;
+    @Bind(R.id.tvSavePrice)
+    TextView tvSavePrice;
+    @Bind(R.id.btn_buyIt)
+    Button btnBuyIt;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        L.i("=======================购物车适配器onCreate");
         View view = inflater.inflate(R.layout.fragment_new_goods, container, false);
         ButterKnife.bind(this, view);
         mContext = (MainActivity) getContext();
         mList = new ArrayList<>();
-        mAdapter = new CartAdapter(mContext,mList);
-        super.onCreateView(inflater,container,savedInstanceState);
+        mAdapter = new CartAdapter(mContext, mList);
+        super.onCreateView(inflater, container, savedInstanceState);
         return view;
     }
 
@@ -80,6 +87,7 @@ public class CartFragment extends BaseFragment {
 
     @Override
     protected void initView() {
+        
         mSrl.setColorSchemeColors(
                 getResources().getColor(R.color.google_blue),
                 getResources().getColor(R.color.google_green),
@@ -105,7 +113,7 @@ public class CartFragment extends BaseFragment {
                     L.e(TAG);
                     mSrl.setRefreshing(false);
                     tvRefresh.setVisibility(View.GONE);
-                    if (result!=null&&result.length>0){
+                    if (result != null && result.length > 0) {
                         ArrayList<CartBean> list = ConvertUtils.array2List(result);
                         mAdapter.initData(list);
                     }

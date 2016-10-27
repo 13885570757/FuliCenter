@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.wuyunlong.fulicenter.I;
 import com.wuyunlong.fulicenter.R;
 import com.wuyunlong.fulicenter.bean.CartBean;
+import com.wuyunlong.fulicenter.bean.GoodsDetailsBean;
 import com.wuyunlong.fulicenter.utils.ImageLoader;
 
 import java.util.ArrayList;
@@ -66,15 +67,16 @@ public class CartAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof FooterViewHolder) {
-            ((FooterViewHolder) holder).tvFooter.setText("加载更多");
+        CartBean cartBean = mList.get(position);
+        GoodsDetailsBean goods = cartBean.getGoods();
+        if (goods != null) {
+            ImageLoader.downloadImg(mContext, ((CartGoodsViewHolder) holder).imGoodsImage, goods.getGoodsThumb());
+            ((CartGoodsViewHolder) holder).tvGoodsName.setText(goods.getGoodsName());
+            // 价钱holder.
+            ((CartGoodsViewHolder) holder).tvCartPrice.setText(goods.getCurrencyPrice());
         }
-        if (holder instanceof CartGoodsViewHolder) {
-            CartBean cartBean = mList.get(position);
-            ImageLoader.downloadImg(mContext,((CartGoodsViewHolder) holder).imGoodsImage,cartBean.getGoods().getShareUrl());
-            ((CartGoodsViewHolder) holder).rlCart.setTag(cartBean);
-        }
-
+        ((CartGoodsViewHolder) holder).tvCartCount.setText("(" + cartBean.getCount() + ")");
+        ((CartGoodsViewHolder) holder).chkGoods.setChecked(false);
     }
 
     @Override
@@ -88,7 +90,6 @@ public class CartAdapter extends RecyclerView.Adapter {
     }
 
 
-
     class CartGoodsViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.chkGoods)
         CheckBox chkGoods;
@@ -98,6 +99,10 @@ public class CartAdapter extends RecyclerView.Adapter {
         TextView tvGoodsName;
         @Bind(R.id.imAdd)
         ImageView imAdd;
+        @Bind(R.id.tvCartCount)
+        TextView tvCartCount;//商品数量
+        @Bind(R.id.tvCartPrice)
+        TextView tvCartPrice;//商品价格
         @Bind(R.id.imDel)
         ImageView imDel;
         @Bind(R.id.rlCart)
