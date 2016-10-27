@@ -87,6 +87,8 @@ public class CartAdapter extends RecyclerView.Adapter {
         return position;
     }
 
+
+
     class CartGoodsViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.chkGoods)
         CheckBox chkGoods;
@@ -115,5 +117,11 @@ public class CartAdapter extends RecyclerView.Adapter {
             super(view);
             ButterKnife.bind(this, view);
         }
+    }
+
+    public void initData(ArrayList<CartBean> list) {
+        this.mList.clear();
+        mList.addAll(list);
+        notifyDataSetChanged();
     }
 }

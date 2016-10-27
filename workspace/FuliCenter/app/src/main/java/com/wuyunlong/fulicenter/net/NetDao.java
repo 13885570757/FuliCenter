@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.wuyunlong.fulicenter.I;
 import com.wuyunlong.fulicenter.bean.BoutiqueBean;
+import com.wuyunlong.fulicenter.bean.CartBean;
 import com.wuyunlong.fulicenter.bean.CartResultBean;
 import com.wuyunlong.fulicenter.bean.CategoryChildBean;
 import com.wuyunlong.fulicenter.bean.CategoryGroupBean;
@@ -123,7 +124,7 @@ public class NetDao {
     }
 
     /**
-     *
+     *加入购物车
      * @param mContext
      * @param goodsId
      * @param userName
@@ -144,6 +145,13 @@ public class NetDao {
 
     }
 
+    /**
+     * 更新昵称
+     * @param mContext
+     * @param userName 过用户名
+     * @param userNick 昵称
+     * @param listener
+     */
     public static void updateUserNick(Context mContext, String userName, String userNick, OkHttpUtils.OnCompleteListener<String> listener) {
         OkHttpUtils<String> utils = new OkHttpUtils<>(mContext);
         utils.setRequestUrl(I.REQUEST_UPDATE_USER_NICK)
@@ -154,6 +162,13 @@ public class NetDao {
 
     }
 
+    /**
+     * 更新头像
+     * @param mContext
+     * @param userName
+     * @param file
+     * @param listener
+     */
     public static void updateAvatar(Context mContext, String userName, File file, OkHttpUtils.OnCompleteListener<String> listener) {
         OkHttpUtils<String> utils = new OkHttpUtils<>(mContext);
         utils.setRequestUrl(I.REQUEST_UPDATE_AVATAR)
@@ -248,6 +263,21 @@ public class NetDao {
                 .addParam(I.Collect.USER_NAME,username)
                 .addParam(I.Collect.GOODS_ID,String.valueOf(goodId))
                 .targetClass(MessageBean.class)
+                .execute(listener);
+    }
+
+    /**
+     *
+     * @param context
+     * @param username
+     * @param listener
+     */
+    public static void downloadCart(Context context, String username,
+                                    OkHttpUtils.OnCompleteListener<CartBean[]>listener){
+        OkHttpUtils<CartBean[]> utils = new OkHttpUtils<>(context);
+        utils.setRequestUrl(I.REQUEST_FIND_CARTS)
+                .addParam(I.Cart.USER_NAME,username)
+                .targetClass(CartBean[].class)
                 .execute(listener);
     }
 
