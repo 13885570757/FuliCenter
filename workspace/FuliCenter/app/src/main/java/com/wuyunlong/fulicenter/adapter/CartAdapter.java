@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.wuyunlong.fulicenter.I;
 import com.wuyunlong.fulicenter.R;
 import com.wuyunlong.fulicenter.bean.CartBean;
 import com.wuyunlong.fulicenter.bean.GoodsDetailsBean;
@@ -26,8 +25,6 @@ public class CartAdapter extends RecyclerView.Adapter {
     Context mContext;
     ArrayList<CartBean> mList;
 
-    RecyclerView parent;
-
     boolean isMore;
 
 
@@ -40,7 +37,7 @@ public class CartAdapter extends RecyclerView.Adapter {
     }
 
     public CartAdapter(Context mContext, ArrayList<CartBean> list) {
-        mContext = mContext;
+        this.mContext = mContext;
         mList = new ArrayList<>();
         mList.addAll(list);
 
@@ -48,21 +45,10 @@ public class CartAdapter extends RecyclerView.Adapter {
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        this.parent = (RecyclerView) parent;
-        LayoutInflater inflater = LayoutInflater.from(mContext);
-        View layout = null;
-        RecyclerView.ViewHolder holder = new CartGoodsViewHolder(layout);
-        switch (viewType) {
-            case I.TYPE_FOOTER:
-                layout = inflater.inflate(R.layout.item_newgoods_footer, parent, false);
-                holder = new GoodsAdapter.FooterViewHolder(layout);
-                break;
-            case I.TYPE_ITEM:
-                layout = inflater.inflate(R.layout.item_cart_good, parent, false);
-                holder = new CartGoodsViewHolder(layout);
-                break;
-        }
+        CartGoodsViewHolder holder = new CartGoodsViewHolder
+                (LayoutInflater.from(mContext).inflate(R.layout.item_cart_good, parent, false));
         return holder;
+
     }
 
     @Override
@@ -75,7 +61,9 @@ public class CartAdapter extends RecyclerView.Adapter {
             // 价钱holder.
             ((CartGoodsViewHolder) holder).tvCartPrice.setText(goods.getCurrencyPrice());
         }
+        //数量
         ((CartGoodsViewHolder) holder).tvCartCount.setText("(" + cartBean.getCount() + ")");
+        //
         ((CartGoodsViewHolder) holder).chkGoods.setChecked(false);
     }
 
@@ -89,6 +77,14 @@ public class CartAdapter extends RecyclerView.Adapter {
         return position;
     }
 
+    public void initData(ArrayList<CartBean> list) {
+        if (mList != null) {
+            this.mList.clear();
+        }
+        mList.addAll(list);
+        notifyDataSetChanged();
+    }
+
 
     class CartGoodsViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.chkGoods)
@@ -98,13 +94,13 @@ public class CartAdapter extends RecyclerView.Adapter {
         @Bind(R.id.tvGoodsName)
         TextView tvGoodsName;
         @Bind(R.id.imAdd)
-        ImageView imAdd;
+        ImageView imAdd;//添加商品
         @Bind(R.id.tvCartCount)
         TextView tvCartCount;//商品数量
         @Bind(R.id.tvCartPrice)
         TextView tvCartPrice;//商品价格
         @Bind(R.id.imDel)
-        ImageView imDel;
+        ImageView imDel;//减少商品数量
         @Bind(R.id.rlCart)
         RelativeLayout rlCart;
 
@@ -114,19 +110,5 @@ public class CartAdapter extends RecyclerView.Adapter {
         }
     }
 
-    static class FooterViewHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.tvFooter)
-        TextView tvFooter;
 
-        FooterViewHolder(View view) {
-            super(view);
-            ButterKnife.bind(this, view);
-        }
-    }
-
-    public void initData(ArrayList<CartBean> list) {
-        this.mList.clear();
-        mList.addAll(list);
-        notifyDataSetChanged();
-    }
 }

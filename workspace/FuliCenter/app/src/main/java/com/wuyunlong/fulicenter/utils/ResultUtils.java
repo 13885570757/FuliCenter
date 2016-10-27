@@ -4,6 +4,8 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.wuyunlong.fulicenter.I;
+import com.wuyunlong.fulicenter.bean.CartBean;
+import com.wuyunlong.fulicenter.bean.GoodsDetailsBean;
 import com.wuyunlong.fulicenter.bean.Result;
 
 import org.json.JSONArray;
@@ -13,7 +15,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
-
 
 
 public class ResultUtils {
@@ -77,6 +78,7 @@ public class ResultUtils {
         return null;
     }
 
+
     public static <T> Result getListResultFromJson(String jsonStr, Class<T> clazz) {
         Result result = new Result();
         Log.e("Utils", "jsonStr=" + jsonStr);
@@ -123,6 +125,61 @@ public class ResultUtils {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static ArrayList<CartBean> getCartFromJson(String jsonStr) {
+        ArrayList<CartBean> list = null;
+        try {
+            if (jsonStr == null || jsonStr.isEmpty() || jsonStr.length() < 3) return null;
+            JSONArray array = new JSONArray(jsonStr);
+            if (array != null) {
+                for (int i = 0; i < array.length(); i++) {
+                    JSONObject jsonObject = array.getJSONObject(i);
+                    CartBean cartBean = new CartBean();
+                    if (!jsonObject.isNull("id")) {
+                        cartBean.setId(jsonObject.getInt("id"));
+                    }
+                    if (!jsonObject.isNull("userName")) {
+                        cartBean.setUserName(jsonObject.getString("userName"));
+                    }
+                    if (!jsonObject.isNull("goodsId")) {
+                        cartBean.setGoodsId(jsonObject.getInt("goodsId"));
+                    }
+                    if (!jsonObject.isNull("count")) {
+                        cartBean.setCount(jsonObject.getInt("count"));
+                    }
+                    if (!jsonObject.isNull("isChecked")) {
+                        cartBean.setChecked(false);
+                    }
+                    if (!jsonObject.isNull("goods")) {
+                        try {
+                            JSONObject jsonRetData = jsonObject.getJSONObject("goods");
+                            if (jsonRetData != null) {
+                                Log.e("Utils", "jsonRetData=" + jsonRetData);
+                                String date;
+                                try {
+                                    date = URLDecoder.decode(jsonRetData.toString(), I.UTF_8);
+                                    Log.e("Utils", "jsonRetData=" + date);
+                                    GoodsDetailsBean g = new Gson().fromJson(date, GoodsDetailsBean.class);
+                                    cartBean.setGoods(g);
+                                } catch (UnsupportedEncodingException e1) {
+                                    e1.printStackTrace();
+                                }
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    list.add(cartBean);
+                }
+                return list;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
     }
 
 }

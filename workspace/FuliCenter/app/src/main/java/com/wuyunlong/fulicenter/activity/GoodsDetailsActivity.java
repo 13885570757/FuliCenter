@@ -10,7 +10,6 @@ import com.wuyunlong.fulicenter.FuLiCenterApplication;
 import com.wuyunlong.fulicenter.I;
 import com.wuyunlong.fulicenter.R;
 import com.wuyunlong.fulicenter.bean.AlbumsBean;
-import com.wuyunlong.fulicenter.bean.CartResultBean;
 import com.wuyunlong.fulicenter.bean.GoodsDetailsBean;
 import com.wuyunlong.fulicenter.bean.MessageBean;
 import com.wuyunlong.fulicenter.bean.UserAvatarBean;
@@ -157,7 +156,7 @@ public class GoodsDetailsActivity extends BaseActivity {
                 break;
             case R.id.iv_details_cart:
                 int count = 1;
-                initCartData(count);
+                //加入购物车方法
                 break;
             case R.id.iv_details_collect:
                 addCollect();
@@ -197,23 +196,6 @@ public class GoodsDetailsActivity extends BaseActivity {
             }
     }
 
-    private void initCartData(int count) {
-        NetDao.downloadCart(mContext, goodsId, userName, count, true, new OkHttpUtils.OnCompleteListener<CartResultBean>() {
-            @Override
-            public void onSuccess(CartResultBean result) {
-                if (result.getSuccess() == true) {
-                    CommonUtils.showShortToast("已加入购物车");
-                } else {
-                    CommonUtils.showShortToast("加入失败");
-                }
-            }
-
-            @Override
-            public void onError(String error) {
-
-            }
-        });
-    }
 
     @Override
     protected void onResume() {

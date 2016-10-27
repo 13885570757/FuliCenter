@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.wuyunlong.fulicenter.FuLiCenterApplication;
@@ -19,9 +18,9 @@ import com.wuyunlong.fulicenter.adapter.CartAdapter;
 import com.wuyunlong.fulicenter.bean.CartBean;
 import com.wuyunlong.fulicenter.bean.UserAvatarBean;
 import com.wuyunlong.fulicenter.net.NetDao;
-import com.wuyunlong.fulicenter.utils.ConvertUtils;
 import com.wuyunlong.fulicenter.utils.L;
 import com.wuyunlong.fulicenter.utils.OkHttpUtils;
+import com.wuyunlong.fulicenter.utils.ResultUtils;
 import com.wuyunlong.fulicenter.views.SpaceItemDecoration;
 
 import java.util.ArrayList;
@@ -47,12 +46,12 @@ public class CartFragment extends BaseFragment {
     RecyclerView mRv;
     @Bind(R.id.new_goods_swipeRefresh)
     SwipeRefreshLayout mSrl;
-    @Bind(R.id.tvSumPrice)
-    TextView tvSumPrice;
-    @Bind(R.id.tvSavePrice)
-    TextView tvSavePrice;
-    @Bind(R.id.btn_buyIt)
-    Button btnBuyIt;
+//    @Bind(R.id.tvSumPrice)
+//    TextView tvSumPrice;
+//    @Bind(R.id.tvSavePrice)
+//    TextView tvSavePrice;
+//    @Bind(R.id.btn_buyIt)
+//    Button btnBuyIt;
 
 
     @Override
@@ -87,7 +86,7 @@ public class CartFragment extends BaseFragment {
 
     @Override
     protected void initView() {
-        
+
         mSrl.setColorSchemeColors(
                 getResources().getColor(R.color.google_blue),
                 getResources().getColor(R.color.google_green),
@@ -107,14 +106,16 @@ public class CartFragment extends BaseFragment {
     private void downloadCart() {
         UserAvatarBean user = FuLiCenterApplication.getUser();
         if (user != null) {
-            NetDao.downloadCart(mContext, user.getMuserName(), new OkHttpUtils.OnCompleteListener<CartBean[]>() {
+            NetDao.downloadCart(mContext, user.getMuserName(),
+                    new OkHttpUtils.OnCompleteListener<String>() {
                 @Override
-                public void onSuccess(CartBean[] result) {
-                    L.e(TAG);
+                public void onSuccess(String s) {
+                 ArrayList<CartBean> list =    ResultUtils.getCartFromJson(s);
+                    L.e("=========下载购物车"+list);
                     mSrl.setRefreshing(false);
                     tvRefresh.setVisibility(View.GONE);
-                    if (result != null && result.length > 0) {
-                        ArrayList<CartBean> list = ConvertUtils.array2List(result);
+                    if (list!= null && list.size()> 0) {
+                        L.e(TAG,"list[0]"+list.get(0));
                         mAdapter.initData(list);
                     }
                 }

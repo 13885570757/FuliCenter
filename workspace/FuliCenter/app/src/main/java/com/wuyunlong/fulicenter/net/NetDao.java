@@ -4,8 +4,6 @@ import android.content.Context;
 
 import com.wuyunlong.fulicenter.I;
 import com.wuyunlong.fulicenter.bean.BoutiqueBean;
-import com.wuyunlong.fulicenter.bean.CartBean;
-import com.wuyunlong.fulicenter.bean.CartResultBean;
 import com.wuyunlong.fulicenter.bean.CategoryChildBean;
 import com.wuyunlong.fulicenter.bean.CategoryGroupBean;
 import com.wuyunlong.fulicenter.bean.CollectBean;
@@ -123,27 +121,6 @@ public class NetDao {
                 .execute(listener);
     }
 
-    /**
-     *加入购物车
-     * @param mContext
-     * @param goodsId
-     * @param userName
-     * @param count
-     * @param isChecked
-     * @param listener
-     */
-    public static void downloadCart(Context mContext, int goodsId, String userName, int count, boolean isChecked
-            , OkHttpUtils.OnCompleteListener<CartResultBean> listener) {
-        OkHttpUtils utils = new OkHttpUtils(mContext);
-        utils.setRequestUrl(I.REQUEST_ADD_CART)
-                .addParam(I.Cart.GOODS_ID, String.valueOf(goodsId))
-                .addParam(I.Cart.USER_NAME, userName)
-                .addParam(I.Cart.COUNT, String.valueOf(count))
-                .targetClass(CartResultBean.class)
-                .addParam(I.Cart.IS_CHECKED, String.valueOf(isChecked))
-                .execute(listener);
-
-    }
 
     /**
      * 更新昵称
@@ -267,17 +244,17 @@ public class NetDao {
     }
 
     /**
-     *
+     *下载购物车中商品数据
      * @param context
      * @param username
      * @param listener
      */
     public static void downloadCart(Context context, String username,
-                                    OkHttpUtils.OnCompleteListener<CartBean[]>listener){
-        OkHttpUtils<CartBean[]> utils = new OkHttpUtils<>(context);
+                                    OkHttpUtils.OnCompleteListener<String>listener){
+        OkHttpUtils<String> utils = new OkHttpUtils<>(context);
         utils.setRequestUrl(I.REQUEST_FIND_CARTS)
                 .addParam(I.Cart.USER_NAME,username)
-                .targetClass(CartBean[].class)
+                .targetClass(String.class)
                 .execute(listener);
     }
 
