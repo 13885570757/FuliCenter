@@ -263,8 +263,16 @@ public class NetDao {
      * 购物车商品刷新
      * @param context
      * @param username
+     * @param listener
      */
-     public static void updateCart(Context context, String username, OkHttpUtils.OnCompleteListener<CartBean[]>){
+    public static void syncUserCartInfo(Context context,String username,OkHttpUtils.OnCompleteListener<CartBean>listener){}
+
+    /**
+     * 购物车商品增减刷新
+     * @param context
+     * @param username
+     */
+     public static void updateCart(Context context, String username, OkHttpUtils.OnCompleteListener<CartBean[]>listener){
 
      }
 

@@ -129,6 +129,24 @@ public class CartFragment extends BaseFragment {
         }
     }
 
+    /**
+     * 
+     */
+    private void syncUserCartInfo(){
+        UserAvatarBean user = FuLiCenterApplication.getUser();
+        NetDao.syncUserCartInfo(mContext, user.getMuserName(), new OkHttpUtils.OnCompleteListener<CartBean>() {
+            @Override
+            public void onSuccess(CartBean result) {
+
+            }
+
+            @Override
+            public void onError(String error) {
+
+            }
+        });
+    }
+
     private  void sumPrice(){
         int sumPrice = 0;
         int rankPrice = 0;
