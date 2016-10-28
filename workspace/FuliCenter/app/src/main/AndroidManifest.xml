@@ -6,7 +6,6 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
-
     <application
         android:name=".FuLiCenterApplication"
         android:allowBackup="true"
@@ -30,6 +29,8 @@
         <activity android:name=".activity.SettingActivity"/>
         <activity android:name=".activity.CollectsActivity"/>
         <activity android:name=".activity.GoodsDetailsActivity"/>
+        <activity android:name=".activity.OrderActivity">
+        </activity>
     </application>
 
 </manifest>

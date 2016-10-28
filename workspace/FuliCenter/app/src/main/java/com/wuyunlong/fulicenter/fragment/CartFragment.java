@@ -25,6 +25,7 @@ import com.wuyunlong.fulicenter.adapter.CartAdapter;
 import com.wuyunlong.fulicenter.bean.CartBean;
 import com.wuyunlong.fulicenter.bean.UserAvatarBean;
 import com.wuyunlong.fulicenter.net.NetDao;
+import com.wuyunlong.fulicenter.utils.MFGT;
 import com.wuyunlong.fulicenter.utils.OkHttpUtils;
 import com.wuyunlong.fulicenter.utils.ResultUtils;
 import com.wuyunlong.fulicenter.views.SpaceItemDecoration;
@@ -33,6 +34,7 @@ import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 
 /**
@@ -66,6 +68,8 @@ public class CartFragment extends Fragment {
 
 
     updateCartReceiver mReceiver;
+
+    String cartIds = "";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -188,11 +192,13 @@ public class CartFragment extends Fragment {
     }
 
     public void sumPrice() {
+        cartIds = "";
         int sumPrice = 0;
         int rankPrice = 0;
         if (mList != null && mList.size() > 0) {
             for (CartBean c : mList) {
                 if (c.isChecked()) {
+                    cartIds+=c.getId()+",";
                     sumPrice += getPrice(c.getGoods().getCurrencyPrice()) * c.getCount();
                     rankPrice += getPrice(c.getGoods().getRankPrice()) * c.getCount();
                 }
@@ -200,6 +206,7 @@ public class CartFragment extends Fragment {
             currentPrice.setText("合计:￥" + Double.valueOf(sumPrice));
             savePrice.setText("节省：￥" + Double.valueOf(sumPrice - rankPrice));
         } else {
+            cartIds = "";
             setCartLayout(false);
             currentPrice.setText("合计:￥0");
             savePrice.setText("节省:￥0");
@@ -210,7 +217,16 @@ public class CartFragment extends Fragment {
         price = price.substring(price.indexOf("￥") + 1);
         return Integer.valueOf(price);
     }
+    @OnClick(R.id.btnBuy)
+    public void buybuybuy(){
+            if (cartIds!=null&&cartIds.length()>0){
+                MFGT.gotoBuyActivity();
+            }
+    }
 
+    /**
+     * 买
+     */
     @Override
     public void onDestroy() {
         super.onDestroy();

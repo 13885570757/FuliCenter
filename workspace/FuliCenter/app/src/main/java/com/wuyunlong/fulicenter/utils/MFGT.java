@@ -77,6 +77,7 @@ public class MFGT {
         startActivityForResult(mContext, intent, I.REQUEST_CODE_LOGIN);
         mContext.overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
     }
+
     public static void gotoLoginFormCart(Activity mContext) {
         Intent intent = new Intent(mContext, LoginActivity.class);
         mContext.startActivity(intent);
@@ -90,6 +91,7 @@ public class MFGT {
 
     /**
      * 注册
+     *
      * @param mContext
      */
     public static void gotoRegister(Activity mContext) {
@@ -122,6 +124,7 @@ public class MFGT {
 
     /**
      * 跳转到修改昵称
+     *
      * @param mContext
      */
     public static void gotoUpdateNick(Activity mContext) {
@@ -132,11 +135,20 @@ public class MFGT {
 
     /**
      * 跳转到我收藏的商品
+     *
      * @param mContext
      */
-    public static void gotoCollects(Activity mContext){
-        startActivity(mContext,new Intent(mContext, CollectsActivity.class));
+    public static void gotoCollects(Activity mContext) {
+        startActivity(mContext, new Intent(mContext, CollectsActivity.class));
 
     }
 
+    /**
+     *
+     */
+    public static void gotoBuyActivity(Activity context, String cartIds) {
+        Intent intent = new Intent(context, OrderActivity.class)
+                .putExtra(I.Cart.ID, cartIds);
+        startActivity(context, intent);
+    }
 }
