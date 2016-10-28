@@ -11,6 +11,5 @@
     android:layout_below="@+id/collect_above"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <include layout="@layout/fragment_new_goods"/>
 </LinearLayout>
 </RelativeLayout>

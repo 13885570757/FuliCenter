@@ -1,15 +1,11 @@
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-<android.support.v4.widget.SwipeRefreshLayout
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/new_goods_swipeRefresh"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
         <TextView
@@ -18,8 +14,9 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:gravity="center_horizontal"
-            android:text="购物车什么都没有，赶紧去添加"
+            android:text="正在加载更多商品"
             android:visibility="gone" />
+
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/new_goods_recycler"
@@ -29,7 +26,8 @@
             android:background="@color/list_background">
 
         </android.support.v7.widget.RecyclerView>
-    </LinearLayout>
-</android.support.v4.widget.SwipeRefreshLayout>
 
-</RelativeLayout>
+    </LinearLayout>
+
+
+</android.support.v4.widget.SwipeRefreshLayout>

@@ -17,6 +17,7 @@ import com.wuyunlong.fulicenter.bean.UserAvatarBean;
 import com.wuyunlong.fulicenter.net.NetDao;
 import com.wuyunlong.fulicenter.utils.ConvertUtils;
 import com.wuyunlong.fulicenter.utils.OkHttpUtils;
+import com.wuyunlong.fulicenter.views.DisplayUtils;
 import com.wuyunlong.fulicenter.views.SpaceItemDecoration;
 
 import java.util.ArrayList;
@@ -53,7 +54,7 @@ public class CollectsActivity extends AppCompatActivity {
         setListener();
     }
     private void initView() {
-//        DisplayUtils.initBackWithTitle(mContext, getResources().getString(0));
+      DisplayUtils.initBackWithTitle(mContext, getResources().getString(0));
         mSrl.setColorSchemeColors(
                 getResources().getColor(R.color.google_blue),
                 getResources().getColor(R.color.google_red),
@@ -87,7 +88,7 @@ public class CollectsActivity extends AppCompatActivity {
     }
 
     private void downloadCollects(final int action) {
-        NetDao.downloadCollects(mContext, user.getMuserName(), pageId, new OkHttpUtils.OnCompleteListener<CollectBean[]>() {
+        NetDao.downLoadCollect(mContext, user.getMuserName(), pageId, new OkHttpUtils.OnCompleteListener<CollectBean[]>() {
             @Override
             public void onSuccess(CollectBean[] result) {
                 mSrl.setRefreshing(false);

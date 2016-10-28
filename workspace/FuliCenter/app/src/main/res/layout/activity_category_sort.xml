@@ -17,7 +17,7 @@
             android:clickable="true"
             android:src="@mipmap/back_nomal" />
 
-        <com.wuyunlong.fulicenter.views.CatChildFilterButton
+        <cn.ran.flicenter.views.CatChildFilterButton
             android:id="@+id/btnCatChildFilter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:context=".activity.MainActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.MainActivity">
 
 
     <LinearLayout
@@ -17,30 +17,30 @@
             android:id="@+id/mBtnNewGoods"
             style="@style/menu_item_style"
             android:button="@null"
-            android:textColor="@color/black"
             android:checked="true"
             android:drawableTop="@drawable/selector_menu_item_new_good"
             android:gravity="center_horizontal"
-            android:text="新品"/>
+            android:text="新品"
+            android:textColor="@color/black" />
 
         <RadioButton
             android:id="@+id/mBtnBoutique"
             style="@style/menu_item_style"
             android:button="@null"
-            android:textColor="@color/black"
             android:drawableTop="@drawable/selector_menu_item_boutique"
             android:gravity="center_horizontal"
-            android:text="精选"/>
+            android:text="精选"
+            android:textColor="@color/black" />
 
         <RadioButton
-            android:textColor="@color/black"
             android:id="@+id/mBtnCategory"
             style="@style/menu_item_style"
             android:button="@null"
             android:checked="false"
             android:drawableTop="@drawable/selector_menu_item_category"
             android:gravity="center_horizontal"
-            android:text="分类"/>
+            android:text="分类"
+            android:textColor="@color/black" />
 
 
         <RelativeLayout
@@ -57,8 +57,8 @@
                 android:button="@null"
                 android:drawableTop="@drawable/selector_menu_item_cart"
                 android:gravity="center_horizontal"
-                android:textColor="@color/black"
-                android:text="购物车"/>
+                android:text="购物车"
+                android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/tvCartHint"
@@ -69,17 +69,17 @@
                 android:layout_marginTop="4dp"
                 android:background="@drawable/cart_hint"
                 android:text="10"
-                android:textColor="@color/white"/>
+                android:textColor="@color/white" />
         </RelativeLayout>
 
         <RadioButton
             android:id="@+id/mBtnPersonal"
             style="@style/menu_item_style"
             android:button="@null"
-            android:textColor="@color/black"
             android:drawableTop="@drawable/selector_menu_item_personal_center"
             android:gravity="center_horizontal"
-            android:text="个人中心"/>
+            android:text="我"
+            android:textColor="@color/black" />
 
     </LinearLayout>
 
@@ -88,7 +88,8 @@
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_above="@id/radGroup"
-        android:background="#D6DCDC"/>
+        android:background="#D6DCDC" />
+
 
     <LinearLayout
         android:id="@+id/fragment_layout"
@@ -97,7 +98,7 @@
         android:layout_above="@+id/vLine"
         android:background="@color/list_background"
         android:orientation="vertical"
-        tools:layout="@layout/fragment_new_goods"/>
+        tools:layout="@layout/fragment_new_goods" />
 
 
 </RelativeLayout>

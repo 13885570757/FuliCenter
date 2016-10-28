@@ -156,11 +156,11 @@ public class ResultUtils {
                         try {
                             JSONObject jsonRetData = jsonObject.getJSONObject("goods");
                             if (jsonRetData != null) {
-                                Log.e("Utils", "jsonRetData=" + jsonRetData);
+                               // Log.e("Utils", "jsonRetData=" + jsonRetData);
                                 String date;
                                 try {
                                     date = URLDecoder.decode(jsonRetData.toString(), I.UTF_8);
-                                    Log.e("Utils", "jsonRetData=" + date);
+                                 //   Log.e("Utils", "jsonRetData=" + date);
                                     GoodsDetailsBean g = new Gson().fromJson(date, GoodsDetailsBean.class);
                                     cartBean.setGoods(g);
                                 } catch (UnsupportedEncodingException e1) {

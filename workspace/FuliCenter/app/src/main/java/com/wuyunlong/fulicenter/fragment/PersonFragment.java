@@ -116,7 +116,7 @@ public class PersonFragment extends Fragment {
      * 同步客户端和服务器的个人信息
      */
     private void syncUserInfo() {
-        NetDao.syncUserInfo(mContext, user.getMuserName(), new OkHttpUtils.OnCompleteListener<String>() {
+        NetDao.syncUser(mContext, user.getMuserName(), new OkHttpUtils.OnCompleteListener<String>() {
             @Override
             public void onSuccess(String s) {
                 Result result = ResultUtils.getResultFromJson(s, UserAvatarBean.class);
@@ -144,7 +144,7 @@ public class PersonFragment extends Fragment {
     }
 
     private void getCollectsCount() {
-        NetDao.getCollectsCount(mContext, user.getMuserName(), new OkHttpUtils.OnCompleteListener<MessageBean>() {
+        NetDao.downLoadCollectCount(mContext, user.getMuserName(), new OkHttpUtils.OnCompleteListener<MessageBean>() {
             @Override
             public void onSuccess(MessageBean result) {
                 if (result != null && result.isSuccess()) {

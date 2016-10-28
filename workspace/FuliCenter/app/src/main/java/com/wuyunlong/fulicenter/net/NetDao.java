@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.wuyunlong.fulicenter.I;
 import com.wuyunlong.fulicenter.bean.BoutiqueBean;
-import com.wuyunlong.fulicenter.bean.CartBean;
+import com.wuyunlong.fulicenter.bean.CartResultBean;
 import com.wuyunlong.fulicenter.bean.CategoryChildBean;
 import com.wuyunlong.fulicenter.bean.CategoryGroupBean;
 import com.wuyunlong.fulicenter.bean.CollectBean;
@@ -49,6 +49,12 @@ public class NetDao {
 
     }
 
+    /**
+     * 下载商品详情
+     * @param context
+     * @param goodsId
+     * @param listener
+     */
     public static void downloadGoodsDetail(Context context, int goodsId, OkHttpUtils.OnCompleteListener<GoodsDetailsBean> listener) {
         OkHttpUtils<GoodsDetailsBean> utils = new OkHttpUtils<>(context);
         utils.setRequestUrl(I.REQUEST_FIND_GOOD_DETAILS)
@@ -58,6 +64,11 @@ public class NetDao {
 
     }
 
+    /**
+     * 下载精选商品
+     * @param context
+     * @param listener
+     */
     public static void downloadBouTiQue(Context context, OkHttpUtils.OnCompleteListener<BoutiqueBean[]> listener) {
         OkHttpUtils<BoutiqueBean[]> utils = new OkHttpUtils<>(context);
         utils.setRequestUrl(I.REQUEST_FIND_BOUTIQUES)
@@ -65,6 +76,13 @@ public class NetDao {
                 .execute(listener);
     }
 
+    /**
+     * 下载分类大类
+     * @param mContext
+     * @param catId
+     * @param pageId
+     * @param listener
+     */
     public static void downloadBouTiQueChild(Context mContext, int catId, int pageId, OkHttpUtils.OnCompleteListener<GoodsDetailsBean[]> listener) {
         OkHttpUtils<GoodsDetailsBean[]> utils = new OkHttpUtils<>(mContext);
         utils.setRequestUrl(I.REQUEST_FIND_NEW_BOUTIQUE_GOODS)
@@ -75,6 +93,14 @@ public class NetDao {
                 .execute(listener);
 
     }
+
+    /**
+     * 下载分类子类
+     * @param mContext
+     * @param catId
+     * @param pageId
+     * @param listener
+     */
 
     public static void downloadCategoryChild(Context mContext, int catId, int pageId, OkHttpUtils.OnCompleteListener<NewGoodsBean[]> listener) {
         OkHttpUtils<NewGoodsBean[]> utils = new OkHttpUtils<>(mContext);
@@ -88,7 +114,7 @@ public class NetDao {
     }
 
     /**
-     * 登陆
+     * 登录
      * @param mContext
      * @param userName
      * @param passWord
@@ -111,6 +137,7 @@ public class NetDao {
      * @param password
      * @param listener
      */
+
     public static void register(Context mContext, String username, String usernick, String password, OkHttpUtils.OnCompleteListener<Result> listener) {
         OkHttpUtils<Result> utils = new OkHttpUtils<>(mContext);
         utils.setRequestUrl(I.REQUEST_REGISTER)
@@ -122,12 +149,34 @@ public class NetDao {
                 .execute(listener);
     }
 
+    /**
+     * 下载购物车
+     * @param mContext
+     * @param goodsId
+     * @param userName
+     * @param count
+     * @param isChecked
+     * @param listener
+     */
+
+    public static void downloadCart(Context mContext, int goodsId, String userName, int count, boolean isChecked
+            , OkHttpUtils.OnCompleteListener<CartResultBean> listener) {
+        OkHttpUtils<CartResultBean> utils = new OkHttpUtils(mContext);
+        utils.setRequestUrl(I.REQUEST_ADD_CART)
+                .addParam(I.Cart.GOODS_ID, String.valueOf(goodsId))
+                .addParam(I.Cart.USER_NAME, userName)
+                .addParam(I.Cart.COUNT, String.valueOf(count))
+                .targetClass(CartResultBean.class)
+                .addParam(I.Cart.IS_CHECKED, String.valueOf(isChecked))
+                .execute(listener);
+
+    }
 
     /**
      * 更新昵称
      * @param mContext
-     * @param userName 过用户名
-     * @param userNick 昵称
+     * @param userName
+     * @param userNick
      * @param listener
      */
     public static void updateUserNick(Context mContext, String userName, String userNick, OkHttpUtils.OnCompleteListener<String> listener) {
@@ -159,121 +208,141 @@ public class NetDao {
     }
 
     /**
-     * 同步信息，既同步客户端修改后的昵称，头像等信息
-     * @param context
-     * @param username
+     * 同步用户信息
+     * @param mContext
+     * @param userName
      * @param listener
      */
-    public static void syncUserInfo(Context context,String username,OkHttpUtils.OnCompleteListener<String> listener){
-        OkHttpUtils<String> utils = new OkHttpUtils(context);
+    public static void syncUser(Context mContext, String userName, OkHttpUtils.OnCompleteListener<String> listener) {
+        OkHttpUtils<String> utils = new OkHttpUtils<>(mContext);
         utils.setRequestUrl(I.REQUEST_FIND_USER)
-                .addParam(I.User.USER_NAME,username)
+                .addParam(I.User.USER_NAME, userName)
                 .targetClass(String.class)
                 .execute(listener);
+
     }
 
     /**
-     * 同步收藏商品的个数
-     * @param context
-     * @param username
+     * 下载收藏商品数量
+     * @param mContext
+     * @param userName
      * @param listener
      */
-    public static void getCollectsCount(Context context, String username, OkHttpUtils.OnCompleteListener<MessageBean> listener){
-        OkHttpUtils<MessageBean> utils  = new OkHttpUtils<>(context);
+    public static void downLoadCollectCount(Context mContext, String userName, OkHttpUtils.OnCompleteListener<MessageBean> listener) {
+        OkHttpUtils<MessageBean> utils = new OkHttpUtils<>(mContext);
         utils.setRequestUrl(I.REQUEST_FIND_COLLECT_COUNT)
-                .addParam(I.Collect.USER_NAME,username)
+                .addParam(I.Collect.USER_NAME, userName)
                 .targetClass(MessageBean.class)
                 .execute(listener);
+
     }
 
     /**
      * 下载收藏商品详情
-     * @param context
-     * @param username
+     * @param mContext
+     * @param userName
+     * @param pageId
      * @param listener
      */
-    public static void downloadCollects(Context context, String username,int pageId,
-                                        OkHttpUtils.OnCompleteListener<CollectBean[]>listener){
-        OkHttpUtils<CollectBean[]> utils = new OkHttpUtils<>(context);
+    public static void downLoadCollect(Context mContext, String userName, int pageId, OkHttpUtils.OnCompleteListener<CollectBean[]> listener) {
+        OkHttpUtils<CollectBean[]> utils = new OkHttpUtils<>(mContext);
         utils.setRequestUrl(I.REQUEST_FIND_COLLECTS)
-                .addParam(I.Collect.USER_NAME,username)
-                .addParam(I.PAGE_ID,String.valueOf(pageId))
-                .addParam(I.PAGE_SIZE,String.valueOf(I.PAGE_SIZE_DEFAULT))
+                .addParam(I.Collect.USER_NAME, userName)
+                .addParam(I.PAGE_ID, String.valueOf(pageId))
+                .addParam(I.PAGE_SIZE, String.valueOf(I.PAGE_SIZE_DEFAULT))
                 .targetClass(CollectBean[].class)
                 .execute(listener);
     }
-    public static void isCollected(Context context,String username,int goodsId,OkHttpUtils.OnCompleteListener<MessageBean>listener){
-        OkHttpUtils<MessageBean> utils = new OkHttpUtils<>(context);
-        utils.setRequestUrl(I.REQUEST_IS_COLLECT)
-                .addParam(I.Collect.USER_NAME,username)
-                .addParam(I.Collect.GOODS_ID,String.valueOf(goodsId))
-                .targetClass(MessageBean.class)
-                .execute(listener);
-    }
 
     /**
-     * 加入购物车
-     * @param context
-     * @param username
+     *
+     * @param mContext
+     * @param userName
      * @param goodsId
      * @param listener
      */
-    public static void addCollect(Context context,String username,int goodsId,
-                              OkHttpUtils.OnCompleteListener<MessageBean>listener){
-    OkHttpUtils<MessageBean> utils = new OkHttpUtils<>(context);
-    utils.setRequestUrl(I.REQUEST_ADD_COLLECT)
-            .addParam(I.Collect.USER_NAME,username)
-            .addParam(I.Collect.GOODS_ID,String.valueOf(goodsId))
-            .targetClass(MessageBean.class)
-            .execute(listener);
-}
+    public static void deleteCollect(Context mContext, String userName, int goodsId, OkHttpUtils.OnCompleteListener<MessageBean> listener) {
+        OkHttpUtils<MessageBean> utils = new OkHttpUtils<>(mContext);
+        utils.setRequestUrl(I.REQUEST_DELETE_COLLECT)
+                .addParam(I.Collect.GOODS_ID, goodsId + "")
+                .addParam(I.Collect.USER_NAME, userName)
+                .targetClass(MessageBean.class)
+                .execute(listener);
+
+    }
+
+    public static void downloadIsCollect(Context mContext, String userName, int goodsId, OkHttpUtils.OnCompleteListener<MessageBean> listener) {
+        OkHttpUtils<MessageBean> utils = new OkHttpUtils<>(mContext);
+        utils.setRequestUrl(I.REQUEST_IS_COLLECT)
+                .addParam(I.Collect.USER_NAME, userName)
+                .addParam(I.Collect.GOODS_ID, String.valueOf(goodsId))
+                .targetClass(MessageBean.class)
+                .execute(listener);
+
+    }
 
     /**
-     * 删除收藏
-     * @param context
-     * @param username
-     * @param goodId
+     * 增加购物车数量
+     * @param mContext
+     * @param userName
+     * @param goodsId
      * @param listener
      */
-    public  static void deleteCollect(Context context, String username, int goodId, OkHttpUtils.OnCompleteListener<MessageBean>listener){
-        OkHttpUtils<MessageBean> utils = new OkHttpUtils<>(context);
-        utils.setRequestUrl(I.REQUEST_DELETE_COLLECT)
-                .addParam(I.Collect.USER_NAME,username)
-                .addParam(I.Collect.GOODS_ID,String.valueOf(goodId))
+    public static void addCollect(Context mContext, String userName, int goodsId, OkHttpUtils.OnCompleteListener<MessageBean> listener) {
+        OkHttpUtils<MessageBean> utils = new OkHttpUtils<>(mContext);
+        utils.setRequestUrl(I.REQUEST_ADD_COLLECT)
+                .addParam(I.Collect.GOODS_ID, String.valueOf(goodsId))
+                .addParam(I.Collect.USER_NAME, userName)
                 .targetClass(MessageBean.class)
                 .execute(listener);
     }
 
-    /**
-     *下载购物车中商品数据
-     * @param context
-     * @param username
-     * @param listener
-     */
-    public static void downloadCart(Context context, String username,
-                                    OkHttpUtils.OnCompleteListener<String>listener){
-        OkHttpUtils<String> utils = new OkHttpUtils<>(context);
+    public static void isCollected(Context mContext, String userName, int goodsId, OkHttpUtils.OnCompleteListener<MessageBean> listener) {
+        OkHttpUtils<MessageBean> utils = new OkHttpUtils<>(mContext);
+        utils.setRequestUrl(I.REQUEST_ADD_COLLECT)
+                .addParam(I.Collect.GOODS_ID, String.valueOf(goodsId))
+                .addParam(I.Collect.USER_NAME, userName)
+                .targetClass(MessageBean.class)
+                .execute(listener);
+    }
+
+    public static void downloadCarts(Context mContext, String userName, OkHttpUtils.OnCompleteListener<String> listener) {
+        OkHttpUtils<String> utils = new OkHttpUtils<>(mContext);
         utils.setRequestUrl(I.REQUEST_FIND_CARTS)
-                .addParam(I.Cart.USER_NAME,username)
+                .addParam(I.Cart.USER_NAME, userName)
                 .targetClass(String.class)
                 .execute(listener);
     }
 
     /**
-     * 购物车商品刷新
-     * @param context
-     * @param username
+     * 更新购物车
+     * @param mContext
+     * @param count
+     * @param cartId
      * @param listener
      */
-    public static void syncUserCartInfo(Context context,String username,OkHttpUtils.OnCompleteListener<CartBean>listener){}
+    public static void updateCart(Context mContext, int count, int cartId, OkHttpUtils.OnCompleteListener<MessageBean> listener) {
+        OkHttpUtils<MessageBean> utils = new OkHttpUtils<>(mContext);
+        utils.setRequestUrl(I.REQUEST_UPDATE_CART)
+                .addParam(I.Cart.ID, String.valueOf(cartId))
+                .addParam(I.Cart.COUNT, String.valueOf(count))
+                .targetClass(MessageBean.class)
+                .execute(listener);
+    }
 
     /**
-     * 购物车商品增减刷新
-     * @param context
-     * @param username
+     * 删除购物车
+     * @param mContext
+     * @param cartId
+     * @param listener
      */
-     public static void updateCart(Context context, String username, OkHttpUtils.OnCompleteListener<CartBean[]>listener){
+    public static void deleteCart(Context mContext, int cartId, OkHttpUtils.OnCompleteListener<MessageBean> listener) {
+        OkHttpUtils<MessageBean> utils = new OkHttpUtils<>(mContext);
+        utils.setRequestUrl(I.REQUEST_DELETE_CART)
+                .addParam(I.Cart.ID, String.valueOf(cartId))
+                .targetClass(MessageBean.class)
+                .execute(listener);
+    }
 
-     }
 
 }

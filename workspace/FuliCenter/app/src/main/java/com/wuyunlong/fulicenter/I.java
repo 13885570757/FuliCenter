@@ -326,6 +326,8 @@ public interface I {
      */
     String DOWNLOAD_AVATAR_URL = I.SERVER_ROOT + REQUEST_DOWNLOAD_AVATAR
             + I.QUESTION;
+    String BROADCAST_UPDATA_CART ="刷新购物车" ;//刷新购物车
+    String BROADCAST_DELETE_CART = "删除购物车";
 
 
     interface Goods {
